@@ -10,6 +10,8 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        #(os.path.join('share', package_name), glob('launch/*launch.[pxy][yma]*')),
+        #(os.path.join('share', package_name, 'experiments'), glob('experiments/*.[yma]*')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -24,6 +26,11 @@ setup(
     },
     entry_points={
         'console_scripts': [
+            #'mic_pub = my_controll.mic_pub:main',
+            #'museum_sim_discrete = my_controll.museum_sim_discrete:main',
+            #'fake_sim = my_controll.fake_sim:main',
+            #'publish_vlm = my_controll.publish_vlm:main',
+            #'manual_publisher = my_controll.manual_publisher:main',
         ],
     },
 )

@@ -4,10 +4,10 @@ Experiment:
     new_executor: True
     threads: 2
     parameters: 
-        iterations: 10000
+        iterations: 10000 # 100
         trials: 20
         subgoals: False
-        softmax_selection: True
+        softmax_selection: True # False
         softmax_temperature: 0.3
         kill_on_finish: True
 Control:
@@ -16,9 +16,9 @@ Control:
     control_msg: cognitive_processes_interfaces.msg.ControlMsg
     episodes_topic: /main_loop/episodes
     episodes_msg: cognitive_processes_interfaces.msg.Episode
-    executed_policy_service: /emdb/simulator/executed_policy
+    executed_policy_service: /emdb/simulator/executed_policy # Commented
     executed_policy_msg: cognitive_node_interfaces.srv.Policy
-    world_reset_service: /emdb/simulator/world_reset
+    world_reset_service: /emdb/simulator/world_reset # Commented
     world_reset_msg: cognitive_processes_interfaces.srv.WorldReset
 LTM:
     Files:
@@ -30,10 +30,38 @@ LTM:
             id: pnodes_success
             class: core.file.FilePNodesSuccess
             file: pnodes_success.txt
+        -
+            id: pnodes_content
+            class: core.file.FilePNodesContent
+            file: pnodes_content.txt
+        -
+            id: pnodes_content_last_iteration
+            class: core.file.FileLastIterationPNodesContent
+            file: pnodes_content_last_ite.txt
+        -
+            id: goals_content
+            class: core.file.FileGoalsContent
+            file: goals_content.txt
+        -
+            id: goals_content_last_iteration
+            class: core.file.FileLastIterationGoalsContent
+            file: goals_content_last_ite.txt
+        -
+            id: trials
+            class: core.file.FileTrialsSuccess
+            file: trials.txt
+        -
+            id: neighbors
+            class: core.file.FileNeighbors
+            file: neighbors.txt
+        -
+            id: neighbors_full
+            class: core.file.FileNeighborsFull
+            file: neighbors_full.txt
     Connectors:
         -
             data: Space
-            default_class: cognitive_nodes.space.SVMSpace
+            default_class: cognitive_nodes.space.SVMSpace # cognitive_nodes.space.ANNSpace
         -
             data: Perception
             default_class: cognitive_nodes.perception.Perception
@@ -45,11 +73,11 @@ LTM:
             default_class: cognitive_nodes.cnode.CNode
         -
             data: Goal
-            default_class: cognitive_nodes.goal.Goal
+            default_class: cognitive_nodes.goal.Goal # cognitive_nodes.goal.GoalLearnedSpace
         -
             data: WorldModel
             default_class: cognitive_nodes.world_model.WorldModel
         -
             data: Policy
-            default_class: cognitive_nodes.policy.Policy
+            default_class: cognitive_nodes.policy.Policy # cognitive_nodes.policy.PolicyBlocking
     
