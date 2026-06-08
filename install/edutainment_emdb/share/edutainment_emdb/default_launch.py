@@ -1,1 +1,0 @@
-/home/citic_lab/emdb_ws/src/edutainment_emdb/build/edutainment_emdb/launch/default_launch.py
