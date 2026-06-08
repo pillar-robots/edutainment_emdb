@@ -127,3 +127,25 @@ LTM:
                 class_name: cognitive_nodes.novelty.DriveNovelty
                 parameters:
                     neighbors: [{"name": "novelty_need", "node_type": "RobotPurpose"}]
+SimulatedBaxter:
+    Perceptions:
+        -
+            name: cylinders
+            perception_topic: /mdb/baxter/sensor/cylinders
+            perception_msg: simulators_interfaces.msg.ObjectListMsg
+        -
+            name: boxes
+            perception_topic: /mdb/baxter/sensor/boxes
+            perception_msg: simulators_interfaces.msg.ObjectListMsg
+        -
+            name: ball_in_left_hand
+            perception_topic: /mdb/baxter/sensor/ball_in_left_hand
+            perception_msg: std_msgs.msg.Bool
+        -
+            name: ball_in_right_hand
+            perception_topic: /mdb/baxter/sensor/ball_in_right_hand
+            perception_msg: std_msgs.msg.Bool
+        -
+            name: progress_ball_in_box
+            perception_topic: /mdb/baxter/sensor/progress
+            perception_msg: std_msgs.msg.Float32
