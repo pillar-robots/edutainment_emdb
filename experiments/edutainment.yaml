@@ -16,9 +16,9 @@ Control:
     control_msg: cognitive_processes_interfaces.msg.ControlMsg
     episodes_topic: /main_loop/episodes
     episodes_msg: cognitive_processes_interfaces.msg.Episode
-    #executed_policy_service: /emdb/simulator/executed_policy # Commented
+    executed_policy_service: /emdb/simulator/executed_policy # Commented
     executed_policy_msg: cognitive_node_interfaces.srv.Policy
-    #world_reset_service: /emdb/simulator/world_reset # Commented
+    world_reset_service: /emdb/simulator/world_reset # Commented
     world_reset_msg: cognitive_processes_interfaces.srv.WorldReset
 LTM:
     Files:
