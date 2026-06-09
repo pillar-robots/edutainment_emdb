@@ -1,13 +1,10 @@
-import os
-
-from ament_index_python.packages import get_package_share_directory
+#from ament_index_python.packages import get_package_share_directory
+#from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch import LaunchDescription, LaunchContext
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
-from launch.actions import AppendEnvironmentVariable, IncludeLaunchDescription, TimerAction
-from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.actions import DeclareLaunchArgument, ExecuteProcess, OpaqueFunction, RegisterEventHandler, Shutdown
 from launch.event_handlers import OnProcessExit
+from launch.actions import DeclareLaunchArgument, ExecuteProcess, OpaqueFunction, RegisterEventHandler, Shutdown, TimerAction
 from launch.substitutions import (
     LaunchConfiguration,
     FindExecutable,
@@ -79,39 +76,39 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
         shell=True,
     )
 
-    experiment_service_call = ExecuteProcess(
-        cmd=[
-            [
-                FindExecutable(name="ros2"),
-                " ",
-                "service call",
-                " ",
-                "commander/load_experiment",
-                " ",
-                "core_interfaces/srv/LoadConfig",
-                " ",
-                '"{file:',
-                " ",
-                PathJoinSubstitution(
-                    [FindPackageShare(experiment_package), "experiments", experiment_file]
-                ),
-                '}"',
-            ]
-        ],
-        shell=True,
-    )
+    # experiment_service_call = ExecuteProcess(
+    #     cmd=[
+    #         [
+    #             FindExecutable(name="ros2"),
+    #             " ",
+    #             "service call",
+    #             " ",
+    #             "commander/load_experiment",
+    #             " ",
+    #             "core_interfaces/srv/LoadConfig",
+    #             " ",
+    #             '"{file:',
+    #             " ",
+    #             PathJoinSubstitution(
+    #                 [FindPackageShare(experiment_package), "experiments", experiment_file]
+    #             ),
+    #             '}"',
+    #         ]
+    #     ],
+    #     shell=True,
+    # )
 
     shutdown_on_exit = RegisterEventHandler(
         OnProcessExit(
-            target_action=core_node,  # Nodo que supervisar
-            on_exit=[Shutdown()],  # Acción: Cerrar todos los nodos
+            target_action=core_node,
+            on_exit=[Shutdown()],
         )
     )
 
     nodes_to_start = [config_service_call, core_node, ltm_node, shutdown_on_exit] # mic_pub_node, simulator_node
-    load_experiment_after_core = TimerAction(period=5.0, actions=[experiment_service_call])
+    #load_experiment_after_core = TimerAction(period=5.0, actions=[experiment_service_call])
 
-    return nodes_to_start + [load_experiment_after_core]
+    return nodes_to_start #+ [load_experiment_after_core]
 
 def generate_launch_description():
 
