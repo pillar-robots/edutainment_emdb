@@ -28,6 +28,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
+            'edutainment_simulator = edutainment_emdb.edutainment_simulator:main',
             #'mic_pub = my_controll.mic_pub:main',
             #'museum_sim_discrete = my_controll.museum_sim_discrete:main',
             #'fake_sim = my_controll.fake_sim:main',

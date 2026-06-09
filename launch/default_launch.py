@@ -1,11 +1,10 @@
 from ament_index_python.packages import get_package_share_directory
+from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch import LaunchDescription, LaunchContext
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
-from launch.actions import AppendEnvironmentVariable, IncludeLaunchDescription, TimerAction
-from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.actions import DeclareLaunchArgument, ExecuteProcess, OpaqueFunction, RegisterEventHandler, Shutdown
 from launch.event_handlers import OnProcessExit
+from launch.actions import DeclareLaunchArgument, ExecuteProcess, OpaqueFunction, RegisterEventHandler, Shutdown
 from launch.substitutions import (
     LaunchConfiguration,
     FindExecutable,
@@ -38,8 +37,8 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
     )
 
     simulator_node = Node(
-        package="simulators",
-        executable="fruit_shop_simulator",
+        package="edutainment_emdb",
+        executable="edutainment_simulator",
         output="screen",
         parameters=[
             {
@@ -107,7 +106,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "experiment_file",
-            default_value="fruit_shop_experiment.yaml",
+            default_value="default_experiment.yaml",
             description="The file that loads the experiment config",
         )
     )
@@ -131,7 +130,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "experiment_package",
-            default_value="experiments",
+            default_value="edutainment_emdb",
             description="Package where the experiment file is located",
         )
     )
