@@ -73,7 +73,7 @@ LTM:
             default_class: cognitive_nodes.cnode.CNode
         -
             data: Goal
-            default_class: cognitive_nodes.goal.GoalLearnedSpace #Goal # cognitive_nodes.goal.GoalLearnedSpace
+            default_class: cognitive_nodes.goal.Goal # cognitive_nodes.goal.GoalLearnedSpace
         -
             data: WorldModel
             default_class: cognitive_nodes.world_model.WorldModel

@@ -2,14 +2,13 @@ from launch import LaunchDescription, LaunchContext
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 from launch.event_handlers import OnProcessExit
-from launch.actions import DeclareLaunchArgument, ExecuteProcess, OpaqueFunction, RegisterEventHandler, Shutdown, TimerAction
+from launch.actions import DeclareLaunchArgument, ExecuteProcess, OpaqueFunction, RegisterEventHandler, Shutdown
 from launch.substitutions import (
     LaunchConfiguration,
     FindExecutable,
     PathJoinSubstitution,
     Command,
 )
-
 
 def launch_setup(context: LaunchContext, *args, **kwargs):
 
@@ -81,7 +80,6 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
     nodes_to_start = [config_service_call, core_node, ltm_node, simulator_node, shutdown_on_exit]
 
     return nodes_to_start
-
 
 def generate_launch_description():
 

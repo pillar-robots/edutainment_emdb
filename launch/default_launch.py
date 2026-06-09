@@ -1,5 +1,3 @@
-from ament_index_python.packages import get_package_share_directory
-from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch import LaunchDescription, LaunchContext
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
@@ -38,7 +36,7 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
 
     simulator_node = Node(
         package="edutainment_emdb",
-        executable="edutainment_simulator",
+        executable="test_sim",
         output="screen",
         parameters=[
             {

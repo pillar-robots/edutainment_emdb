@@ -4,7 +4,7 @@ from launch import LaunchDescription, LaunchContext
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 from launch.event_handlers import OnProcessExit
-from launch.actions import DeclareLaunchArgument, ExecuteProcess, OpaqueFunction, RegisterEventHandler, Shutdown, TimerAction
+from launch.actions import DeclareLaunchArgument, ExecuteProcess, OpaqueFunction, RegisterEventHandler, Shutdown
 from launch.substitutions import (
     LaunchConfiguration,
     FindExecutable,
@@ -20,10 +20,6 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
     experiment_package = LaunchConfiguration("experiment_package")
     config_package = LaunchConfiguration("config_package")
     config_file = LaunchConfiguration("config_file")
-    #image_topic = LaunchConfiguration("image_topic")
-    #face_publish_every = LaunchConfiguration("face_publish_every")
-
-    # mic_pub_node
 
     core_node = Node(
         package="core",
@@ -105,7 +101,7 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
         )
     )
 
-    nodes_to_start = [config_service_call, core_node, ltm_node, simulator_node, shutdown_on_exit] # mic_pub_node
+    nodes_to_start = [config_service_call, core_node, ltm_node, simulator_node, shutdown_on_exit]
     #load_experiment_after_core = TimerAction(period=5.0, actions=[experiment_service_call])
 
     return nodes_to_start #+ [load_experiment_after_core]
