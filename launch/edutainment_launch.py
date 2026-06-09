@@ -40,19 +40,19 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
         arguments=["0", "--ros-args", "--log-level", logger],
     )
 
-    # simulator_node = Node(
-    #     package="edutainment_emdb",
-    #     executable="edutainment_simulator",
-    #     output="screen",
-    #     parameters=[
-    #         {
-    #             "random_seed": random_seed,
-    #             "config_file": PathJoinSubstitution(
-    #                 [FindPackageShare(experiment_package), "experiments", experiment_file]
-    #             ),
-    #         }
-    #     ],
-    # )
+    simulator_node = Node(
+        package="edutainment_emdb",
+        executable="edutainment_simulator",
+        output="screen",
+        parameters=[
+            {
+                "random_seed": random_seed,
+                "config_file": PathJoinSubstitution(
+                    [FindPackageShare(experiment_package), "experiments", experiment_file]
+                ),
+            }
+        ],
+    )
 
     config_service_call = ExecuteProcess(
         cmd=[
@@ -105,7 +105,7 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
         )
     )
 
-    nodes_to_start = [config_service_call, core_node, ltm_node, shutdown_on_exit] # mic_pub_node, simulator_node
+    nodes_to_start = [config_service_call, core_node, ltm_node, simulator_node, shutdown_on_exit] # mic_pub_node
     #load_experiment_after_core = TimerAction(period=5.0, actions=[experiment_service_call])
 
     return nodes_to_start #+ [load_experiment_after_core]
