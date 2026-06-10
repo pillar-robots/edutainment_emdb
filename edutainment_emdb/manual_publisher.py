@@ -4,42 +4,47 @@ from tkinter import ttk
 
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import Float32
+from std_msgs.msg import Float32, Int32, Bool
 
 
 # ── Topic configuration ──────────────────────────────────────────────────────
 TOPICS = [
-    ("age",          "/vlm/age_composition",        0.0),
-    ("spatial",      "/vlm/spatial_formation",      0.4),
-    ("interpersonal","/vlm/interpersonal_spacing",  0.1),
-    ("postural",     "/vlm/postural_assessment",    0.8),
-    ("area",         "/vlm/blue_area",              0.2),
-    ("engagement",   "/vlm/engagement_rating",      0.2),
-    ("noise",        "/room/noise_level",           0.8),
-    ("guide",        "/exhibition/guide",           0.0),
-    ("timeline",     "/exhibition/timeline",        0.2),
-    ("people",       "/exhibition/people",          0.0),
+    ("student_type",          "/student/type",        1, 0, 5),
+    ("standing",          "/student/standing",        0, 0, 100),
+    ("bored",      "/student/bored",      0, 0, 100),
+    ("python_errors","/student/metrics/python_errors",  0, 0, 100),
+    ("error_streak",     "/student/metrics/error_streak",    0, 0, 100),
+    ("evaluation_error_streak",         "/student/metrics/evaluation_error_streak",              0, 0, 100),
+    ("teacher_present",   "/teacher/is_present",      0, 0, 1),
+    ("teacher_type",        "/teacher/type",           -1, -1, 5),
 ]
 
 
 # ── ROS2 Node ────────────────────────────────────────────────────────────────
 class ManualPublisher(Node):
     def __init__(self):
-        super().__init__("manual_vlm_publisher")
-
+        super().__init__("manual_pillar_publisher")
         self.publishers_ = {}
-        self.values: dict[str, float] = {}
+        self.values: dict[str, int] = {}
 
-        for key, topic, default in TOPICS:
-            self.publishers_[key] = self.create_publisher(Float32, topic, 2)
+        for key, topic, default, min_val, max_val in TOPICS:
+            if (key == "teacher_present"):
+                self.publishers_[key] = self.create_publisher(Bool, topic, False)
+            else:
+                self.publishers_[key] = self.create_publisher(Int32, topic, 2)
             self.values[key] = default
 
         self.create_timer(1.0, self._publish)
 
     def _publish(self):
-        msg = Float32()
         for key, pub in self.publishers_.items():
-            msg.data = float(self.values[key])
+            if (key == "teacher_present"):
+                msg = Bool()
+                msg.data = bool(self.values[key])
+            else:
+                msg = Int32()
+                msg.data = int(self.values[key])
+            print(key, msg, type(msg.data))
             pub.publish(msg)
 
 
@@ -97,8 +102,8 @@ class SliderApp:
 
         self._vars: dict[str, tk.DoubleVar] = {}
 
-        for i, (key, topic, default) in enumerate(TOPICS):
-            self._add_row(container, i, key, topic, default)
+        for i, (key, topic, default, min, max) in enumerate(TOPICS):
+            self._add_row(container, i, key, topic, default, min, max)
 
         # ── Footer ──
         tk.Frame(self.root, bg="#222", height=1).pack(fill="x", padx=24)
@@ -115,7 +120,7 @@ class SliderApp:
         # Blink the status dot
         self._blink()
 
-    def _add_row(self, parent: tk.Frame, row: int, key: str, topic: str, default: float):
+    def _add_row(self, parent: tk.Frame, row: int, key: str, topic: str, default: int, min_val: int, max_val: int):
         # alternating row tint
         row_bg = self.PANEL if row % 2 == 0 else self.BG
 
@@ -135,7 +140,7 @@ class SliderApp:
         lbl.pack(side="left")
 
         # ── Slider ──
-        var = tk.DoubleVar(value=default)
+        var = tk.IntVar(value=default)
         self._vars[key] = var
 
         style_name = f"Accent{row}.Horizontal.TScale"
@@ -151,8 +156,8 @@ class SliderApp:
 
         slider = ttk.Scale(
             frame,
-            from_=0.0,
-            to=1.0,
+            from_=min_val,
+            to=max_val,
             orient="horizontal",
             variable=var,
             length=320,
@@ -164,7 +169,7 @@ class SliderApp:
         # ── Value readout ──
         val_label = tk.Label(
             frame,
-            text=f"{default:.3f}",
+            text=f"{default}",
             font=self.FONT_LABEL,
             fg=self.ACCENT,
             bg=row_bg,
@@ -185,14 +190,7 @@ class SliderApp:
 
     def _update_label(self, key: str, label: tk.Label):
         v = self._vars[key].get()
-        # colour gradient: low→accent2, high→accent
-        r1, g1, b1 = 0xff, 0x40, 0x81   # accent2 (pink)  at 0.0
-        r2, g2, b2 = 0x00, 0xe5, 0xff   # accent  (cyan)  at 1.0
-        t = v
-        r = int(r1 + (r2 - r1) * t)
-        g = int(g1 + (g2 - g1) * t)
-        b = int(b1 + (b2 - b1) * t)
-        label.config(text=f"{v:.3f}", fg=f"#{r:02x}{g:02x}{b:02x}")
+        label.config(text=f"{v}")
 
     def _blink(self):
         current = self._status_dot.cget("fg")
