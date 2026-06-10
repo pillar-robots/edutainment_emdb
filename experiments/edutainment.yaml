@@ -73,7 +73,7 @@ LTM:
             default_class: cognitive_nodes.cnode.CNode
         -
             data: Goal
-            default_class: cognitive_nodes.goal.Goal # cognitive_nodes.goal.GoalLearnedSpace
+            default_class: cognitive_nodes.goal.GoalLearnedSpace # cognitive_nodes.goal.GoalLearnedSpace
         -
             data: WorldModel
             default_class: cognitive_nodes.world_model.WorldModel
@@ -82,6 +82,24 @@ LTM:
             default_class: cognitive_nodes.policy.PolicyBlocking #Policy # cognitive_nodes.policy.PolicyBlocking
     Nodes:
         Perception:
+            -
+                name: studentType
+                class_name: edutainment_emdb.perceptions.EdutainmentPerception
+                parameters:
+                  default_msg: std_msgs.msg.Float32
+                  default_topic: /student/type
+            -
+                name: teacherType
+                class_name: edutainment_emdb.perceptions.EdutainmentPerception
+                parameters:
+                  default_msg: std_msgs.msg.Float32
+                  default_topic: /teacher/type
+            -
+                name: python_errors
+                class_name: edutainment_emdb.perceptions.EdutainmentPerception
+                parameters:
+                  default_msg: std_msgs.msg.Float32
+                  default_topic: /student/metrics/python_errors
             # -
             #     name: age
             #     class_name: my_controll.perceptions.MuseumPerception
@@ -143,6 +161,21 @@ LTM:
             #       default_msg: std_msgs.msg.Float32
             #       default_topic: /exhibition/people
         WorldModel:
+            -
+                name: EXPERT
+                class_name: edutainment_emdb.world_models.EdutainmentStudentExpert
+                parameters:
+                    neighbors: [{"name": "studentType", "node_type": "Perception"}]
+            -
+                name: AMATEUR
+                class_name: edutainment_emdb.world_models.EdutainmentStudentAmateur
+                parameters:
+                    neighbors: [{"name": "studentType", "node_type": "Perception"}]
+            -
+                name: GENERAL
+                class_name: edutainment_emdb.world_models.EdutainmentStudentGeneral
+                parameters:
+                    neighbors: [{"name": "studentType", "node_type": "Perception"}]
             # -
             #     name: GENERAL
             #     class_name: my_controll.world_models.MuseumGeneralPeople
