@@ -102,17 +102,17 @@ LTM:
                   default_topic: /student/metrics/python_errors
         WorldModel:
             -
-                name: EXPERT
+                name: EXPERT #WM1
                 class_name: edutainment_emdb.world_models.EdutainmentStudentExpert
                 parameters:
                     neighbors: [{"name": "studentType", "node_type": "Perception"}]
             -
-                name: AMATEUR
+                name: AMATEUR #WM2
                 class_name: edutainment_emdb.world_models.EdutainmentStudentAmateur
                 parameters:
                     neighbors: [{"name": "studentType", "node_type": "Perception"}]
             -
-                name: GENERAL
+                name: GENERAL #WM3
                 class_name: edutainment_emdb.world_models.EdutainmentStudentGeneral
                 parameters:
                     neighbors: [{"name": "studentType", "node_type": "Perception"}]
@@ -184,13 +184,13 @@ LTM:
                     neighbors: [{"name": "student_exercise_teacher_modern_absent", "node_type": "RobotPurpose"}]
         Goal:
             -
-                name: exercise_finished #G1
+                name: exercise_finished_goal #G1
                 class_name: cognitive_nodes.goal.GoalMotiven
                 parameters:
                     neighbors: [{"name": "student_exercise_teacher_old_present_drive", "node_type": "Drive"}, #D1.1
                                 {"name": "student_exercise_teacher_modern_present_drive", "node_type": "Drive"}, #D2.1
-                                # Needs also D3.1 and D4.1, or is that a different Goal?
-                                ]
+                                {"name": "student_exercise_teacher_old_absent_drive", "node_type": "Drive"}, #D3.1 #Needs also D3.1 and D4.1, or is that a different Goal?
+                                {"name": "student_exercise_teacher_modern_absent_drive", "node_type": "Drive"}] #D4.1 #Needs also D3.1 and D4.1, or is that a different Goal?
         PNode:
             -
                 name: python_errors_pnode #Pn1.1
@@ -203,15 +203,15 @@ LTM:
                 name: python_errors_expert_cnode # C1.1 WM EXPERT (NEED ANOTHER FOR AMATEUR?)
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
-                    neighbors: [{"name": "script_followed_goal", "node_type": "Goal"}, {"name": "EXPERT", "node_type": "WorldModel"}, {"name": "python_errors_pnode", "node_type": "PNode"}]
+                    neighbors: [{"name": "exercise_finished_goal", "node_type": "Goal"}, {"name": "EXPERT", "node_type": "WorldModel"}, {"name": "python_errors_pnode", "node_type": "PNode"}]
             -
                 name: python_errors_amateur_cnode # C1.1 WM AMATEUR (NEEDED?)
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
-                    neighbors: [{"name": "script_followed_goal", "node_type": "Goal"}, {"name": "AMATEUR", "node_type": "WorldModel"}, {"name": "python_errors_pnode", "node_type": "PNode"}]
+                    neighbors: [{"name": "exercise_finished_goal", "node_type": "Goal"}, {"name": "AMATEUR", "node_type": "WorldModel"}, {"name": "python_errors_pnode", "node_type": "PNode"}]
         Policy:
             -
-                name: skill_1
+                name: skill_1 #S1
                 class_name: edutainment_emdb.policies.PolicySkill1 # Create
                 parameters:
                     neighbors: [{"name": "python_errors_expert_cnode", "node_type": "CNode"},
