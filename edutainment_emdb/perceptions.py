@@ -23,9 +23,15 @@ class EdutainmentPerception(Perception):
             for perception in self.reading.data:
                 value.append(
                     dict(
-                            student_type_perception=perception.student_type_perception,
+                            teacher_present_perception=perception.teacher_present_perception,
                             teacher_type_perception=perception.teacher_type_perception,
+                            student_type_perception=perception.student_type_perception,
+                            challenge_completion_perception=perception.challenge_completion_perception,
                             python_errors_perception=perception.python_errors_perception,
+                            evaluation_error_streak_perception=perception.evaluation_error_streak_perception,
+                            error_streak_perception=perception.error_streak_perception,
+                            bored_perception=perception.bored_perception,
+                            standing_perception=perception.standing_perception
                     )
                 )
         else:

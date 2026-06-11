@@ -9,7 +9,7 @@ from rclpy.time import Time
 
 class EdutainmentStudentExpert(WorldModel):
     def __init__(self,
-                 name='EXPERT',
+                 name='EXPERT_WM',
                  class_name='cognitive_nodes.world_model.WorldModel',
                  **params):
         super().__init__(name, class_name, **params)
@@ -76,7 +76,7 @@ class EdutainmentStudentExpert(WorldModel):
 
 class EdutainmentStudentAmateur(WorldModel):
     def __init__(self,
-                 name='AMATEUR',
+                 name='AMATEUR_WM',
                  class_name='cognitive_nodes.world_model.WorldModel',
                  **params):
         super().__init__(name, class_name, **params)
@@ -143,7 +143,7 @@ class EdutainmentStudentAmateur(WorldModel):
 
 class EdutainmentStudentGeneral(WorldModel):
     def __init__(self,
-                 name='GENERAL',
+                 name='GENERAL_WM',
                  class_name='cognitive_nodes.world_model.WorldModel',
                  **params):
         super().__init__(name, class_name, **params)
