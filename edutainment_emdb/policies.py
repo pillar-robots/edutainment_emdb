@@ -10,18 +10,14 @@ from cognitive_node_interfaces.srv import SetActivation
 from trajectory_msgs.msg import JointTrajectoryPoint, JointTrajectory
 from builtin_interfaces.msg import Duration
 from std_msgs.msg import Float32
+import requests
 
 class PolicySkill1(Policy):
     def __init__(self, name='skill_1_python_policy', class_name='cognitive_nodes.policy.Policy', publisher_msg=None, publisher_topic=None, **params):
         super().__init__(name, class_name, publisher_msg, publisher_topic, **params)
     async def execute_callback(self, request, response):
-        #idle_motion = AutonomousIdleMotion()
-        #idle_motion.execute_random_motion()
-        #node_speek_joken = TellJoke()
-        #node_speek_joken.move_joke()
-        #node_speek_joken.destroy_node()
         response.policy = self.name
-        ##time.sleep(5)
+        requests.post("http://localhost:2727/api/skills/1")
         return response
 
 class PolicySkill2(Policy):
@@ -29,6 +25,7 @@ class PolicySkill2(Policy):
         super().__init__(name, class_name, publisher_msg, publisher_topic, **params)
     async def execute_callback(self, request, response):
         response.policy = self.name
+        requests.post("http://localhost:2727/api/skills/2")
         return response
 
 class PolicySkill3(Policy):
@@ -36,6 +33,7 @@ class PolicySkill3(Policy):
         super().__init__(name, class_name, publisher_msg, publisher_topic, **params)
     async def execute_callback(self, request, response):
         response.policy = self.name
+        requests.post("http://localhost:2727/api/skills/3")
         return response
 
 class PolicySkill4(Policy):
@@ -43,6 +41,7 @@ class PolicySkill4(Policy):
         super().__init__(name, class_name, publisher_msg, publisher_topic, **params)
     async def execute_callback(self, request, response):
         response.policy = self.name
+        requests.post("http://localhost:2727/api/skills/4")
         return response
 
 class PolicySkill5(Policy):
@@ -50,6 +49,7 @@ class PolicySkill5(Policy):
         super().__init__(name, class_name, publisher_msg, publisher_topic, **params)
     async def execute_callback(self, request, response):
         response.policy = self.name
+        requests.post("http://localhost:2727/api/skills/5")
         return response
 
 class PolicySkill6(Policy):
@@ -57,6 +57,7 @@ class PolicySkill6(Policy):
         super().__init__(name, class_name, publisher_msg, publisher_topic, **params)
     async def execute_callback(self, request, response):
         response.policy = self.name
+        requests.post("http://localhost:2727/api/skills/6")
         return response
 
 class PolicySkill7(Policy):
@@ -64,4 +65,5 @@ class PolicySkill7(Policy):
         super().__init__(name, class_name, publisher_msg, publisher_topic, **params)
     async def execute_callback(self, request, response):
         response.policy = self.name
+        requests.post("http://localhost:2727/api/skills/7")
         return response

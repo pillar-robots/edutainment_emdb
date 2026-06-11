@@ -7,7 +7,6 @@ class PNodePythonErrors(PNode):
     """
     def __init__(self, name='python_errors_pnode', class_name='cognitive_nodes.pnode.PNode', space_class=None, space=None, history_size=100, **params):
         super().__init__(name, class_name, space_class, space, history_size, **params)
-
     def calculate_activation(self, perception=None, activation_list=None):
         """
         Calculate the new activation value for a given perception.

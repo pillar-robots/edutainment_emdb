@@ -10,13 +10,9 @@ from rclpy.node import Node
 from rclpy.callback_groups import MutuallyExclusiveCallbackGroup
 from rcl_interfaces.msg import ParameterDescriptor
 from core.service_client import ServiceClient
-
 from core_interfaces.srv import LoadConfig
 from core.utils import class_from_classname, actuation_msg_to_dict
-
 from simulators.scenarios_2D import SimpleScenario, EntityType
-
-
 
 class TestSim(Node):
     """
@@ -27,7 +23,6 @@ class TestSim(Node):
         Initialize the 2D simulator node.
         """
         super().__init__("sim_2d")
-
         # Setup parameters
         self.random_seed = (
             self.declare_parameter("random_seed", value=0)
@@ -47,18 +42,14 @@ class TestSim(Node):
             .get_parameter_value()
             .bool_value
         )
-        
         #Callback groups
         self.cbgroup_server=MutuallyExclusiveCallbackGroup()
         self.cbgroup_client=MutuallyExclusiveCallbackGroup()
-
         # Publishers and perception messages
         self.sim_publishers = {}
         self.perceptions = {}
         self.base_messages = {}
-
         self.load_client=ServiceClient(LoadConfig, 'commander/load_experiment')
-
         #Simulator Instance
         self.sim=SimpleScenario(visualize=visualize, logger=self.get_logger())
         self.gripper_l=False
@@ -66,7 +57,6 @@ class TestSim(Node):
         self.changed_grippers=False
 
     ##Methods that access the simulation
-
     def get_perceptions(self):
         """
         Get the current perceptions from the simulation and update the perception messages.
@@ -79,29 +69,23 @@ class TestSim(Node):
         box=self.sim.box1.get_pos()
         left_gripper= bool(self.sim.baxter_left.catched_object)
         right_gripper= bool(self.sim.baxter_right.catched_object)
-
         self.perceptions["left_arm"].data[0].x = float(left_arm[0])
         self.perceptions["left_arm"].data[0].y = float(left_arm[1])
         self.perceptions["left_arm"].data[0].angle = float(left_angle)
         self.perceptions["ball_in_left_hand"].data = left_gripper
-
         self.perceptions["right_arm"].data[0].x = float(right_arm[0])
         self.perceptions["right_arm"].data[0].y = float(right_arm[1])
         self.perceptions["right_arm"].data[0].angle = float(right_angle)
         self.perceptions["ball_in_right_hand"].data = right_gripper
-
         self.perceptions["box"].data[0].x = float(box[0])
         self.perceptions["box"].data[0].y = float(box[1])
-
         self.perceptions["ball"].data[0].x = float(ball[0])
         self.perceptions["ball"].data[0].y = float(ball[1])
-
         #Drive input
         if self.sim.box1.contents:
             self.perceptions["ball_in_box"].data = 1.0
         else:
             self.perceptions["ball_in_box"].data = 0.0
-        
         self.get_logger().info(f"DEBUG - Objects in box= {[obj.name for obj in self.sim.box1.contents]}")
 
     def reset_world(self):
@@ -122,13 +106,10 @@ class TestSim(Node):
         vel_l=action["left_arm"][0]["dist"]
         angle_l=action["left_arm"][0]["angle"]
         #gripper_l=action["left_arm"][0]["gripper"]
-
         vel_r=action["right_arm"][0]["dist"]
         angle_r=action["right_arm"][0]["angle"]
         #gripper_r=action["right_arm"][0]["gripper"]
-
         self.sim.apply_action(angle_l, angle_r, vel_l, vel_r, self.gripper_l, self.gripper_r)
-
         #GRASP OBJECT IF GRIPPER IS CLOSE
         grippers_close = self.sim.filter_entities(self.sim.get_close_entities(self.sim.robots[0], threshold=50), EntityType.ROBOT)
         self.get_logger().info(f"DEBUG - {[ent.name for ent in grippers_close]}")
@@ -142,7 +123,6 @@ class TestSim(Node):
                 self.sim.apply_action(gripper_left=self.gripper_l, gripper_right=self.gripper_r)
                 self.changed_grippers=True
                 self.get_logger().info(f"DEBUG - Change from left to right gripper")
-
             #Ball in right gripper
             if self.sim.robots[1].catched_object and not self.sim.robots[0].catched_object:
                 self.gripper_r=False
@@ -151,7 +131,6 @@ class TestSim(Node):
                 self.sim.apply_action(gripper_left=self.gripper_l, gripper_right=self.gripper_r)
                 self.changed_grippers=True
                 self.get_logger().info(f"DEBUG - Change from right to left gripper")
-            
         if not grippers_close: #Check if objects are close to the grippers
             self.get_logger().info(f"DEBUG - Checking if objects are close to gripper")
             self.changed_grippers=False
@@ -163,7 +142,6 @@ class TestSim(Node):
             if close_r_obj:
                 self.get_logger().info(f"DEBUG - Objects {[obj.name for obj in close_r_obj]} detected close to right gripper")
                 self.gripper_r = True
-        
             #RELEASE OBJECT IF OVER BOX
             left_over_box = self.sim.filter_entities(self.sim.get_close_entities(self.sim.robots[0], threshold=50), EntityType.BOX)
             right_over_box = self.sim.filter_entities(self.sim.get_close_entities(self.sim.robots[1], threshold=50), EntityType.BOX)
@@ -173,14 +151,9 @@ class TestSim(Node):
             if right_over_box:
                 self.get_logger().info(f"DEBUG - Boxes {[box.name for box in right_over_box]} detected close to right gripper")
                 self.gripper_r = False
-            
             self.sim.apply_action(gripper_left=self.gripper_l, gripper_right=self.gripper_r)
 
-
-        
-
     ##Callbacks for the world reset, action and perception services/topics
-
     def world_reset_service_callback(self, request, response):
         """
         Callback for the world reset service.
@@ -210,7 +183,6 @@ class TestSim(Node):
             self.get_logger().info("Ending simulator as requested by LTM...")
             rclpy.shutdown()
 
-
     def new_action_service_callback(self, request, response):
         """
         Execute a policy and publish new perceptions.
@@ -233,10 +205,8 @@ class TestSim(Node):
             self.get_logger().debug("Publishing " + ident + " = " + str(self.perceptions[ident].data))
             publisher.publish(self.perceptions[ident])
 
-
     ##SIMULATION CONFIGURATION FROM YAML: THESE METHODS SHOULD BE GENERIC FOR EVERY SIMULATION
     ##TODO: REFACTOR THESE METHODS BELOW INTO A SINGLE CLASS 
-
     def load_experiment_file_in_commander(self):
         """
         Load the configuration file in the commander node.
@@ -272,7 +242,6 @@ class TestSim(Node):
             self.get_logger().info(f"Setting random number generator with seed {self.random_seed}")
         else:
             self.rng = numpy.random.default_rng()
-        
         self.load_experiment_file_in_commander()
 
     def setup_control_channel(self, simulation):
@@ -291,7 +260,6 @@ class TestSim(Node):
         topic = simulation.get("executed_policy_topic")
         service_action = simulation.get("executed_action_service")
         service_world_reset = simulation.get("world_reset_service")
-
         if topic:
             raise RuntimeError("The 2D Simulator is not compatible with topic-triggered policies. Please define a executed_policy_server parameter")
         if service_action:
@@ -330,19 +298,16 @@ class TestSim(Node):
             self.get_logger().info("I will publish to... " + str(topic))
             self.sim_publishers[sid] = self.create_publisher(message, topic, 0) #TODO: ¿latch in ROS2?
 
-
 def main(args=None):
     rclpy.init(args=args)
     sim = TestSim()
     sim.load_configuration()
-
     try:
         rclpy.spin(sim)
     except KeyboardInterrupt:
         print('Keyboard Interrupt Detected: Shutting down simulator...')
     finally:
         sim.destroy_node()
-
 
 if __name__ == '__main__':
     main()

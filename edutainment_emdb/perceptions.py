@@ -4,7 +4,6 @@ from core.utils import perception_dict_to_msg
 
 class EdutainmentPerception(Perception):
     """Edutainment Perception class"""
-
     def __init__(self, name='perception',
                  class_name='cognitive_nodes.perception.Perception',
                  default_msg=None,
@@ -13,7 +12,6 @@ class EdutainmentPerception(Perception):
                  **params):
         super().__init__(name, class_name, default_msg, default_topic, normalize_data, **params)
         self.value = 0.0
-
     def process_and_send_reading(self):
         """
         Publishes the current perception value (Float32) to its topic.
