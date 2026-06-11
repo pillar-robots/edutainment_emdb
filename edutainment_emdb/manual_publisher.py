@@ -9,14 +9,15 @@ from std_msgs.msg import Float32, Int32, Bool
 
 # ── Topic configuration ──────────────────────────────────────────────────────
 TOPICS = [
-    ("student_type",          "/student/type",        1, 0, 5),
-    ("standing",          "/student/standing",        0, 0, 100),
-    ("bored",      "/student/bored",      0, 0, 100),
-    ("python_errors","/student/metrics/python_errors",  0, 0, 100),
-    ("error_streak",     "/student/metrics/error_streak",    0, 0, 100),
-    ("evaluation_error_streak",         "/student/metrics/evaluation_error_streak",              0, 0, 100),
-    ("teacher_present",   "/teacher/is_present",      0, 0, 1),
-    ("teacher_type",        "/teacher/type",           -1, -1, 5),
+    (Int32,   "student_type", "/student/type", 1, 0, 5),
+    (Int32,   "standing", "/student/standing", 0, 0, 100),
+    (Int32,   "bored", "/student/bored", 0, 0, 100),
+    (Int32,   "python_errors", "/student/metrics/python_errors", 0, 0, 100),
+    (Int32,   "error_streak", "/student/metrics/error_streak", 0, 0, 100),
+    (Int32,   "evaluation_error_streak", "/student/metrics/evaluation_error_streak", 0, 0, 100),
+    (Bool,    "teacher_present", "/teacher/is_present", False, 0, 1),
+    (Int32,   "teacher_type", "/teacher/type", -1, -1, 5),
+    (Float32, "challenge_completion", "/student/challenge_completion", 0.0, 0.0, 1.0),
 ]
 
 
@@ -25,26 +26,32 @@ class ManualPublisher(Node):
     def __init__(self):
         super().__init__("manual_pillar_publisher")
         self.publishers_ = {}
-        self.values: dict[str, int] = {}
+        self.values = {}
+        self.topic_types = {}
 
-        for key, topic, default, min_val, max_val in TOPICS:
-            if (key == "teacher_present"):
-                self.publishers_[key] = self.create_publisher(Bool, topic, False)
-            else:
-                self.publishers_[key] = self.create_publisher(Int32, topic, 2)
+        for msg_type, key, topic, default, min_val, max_val in TOPICS:
+            self.publishers_[key] = self.create_publisher(msg_type, topic, 2)
             self.values[key] = default
+            self.topic_types[key] = msg_type
 
         self.create_timer(1.0, self._publish)
 
     def _publish(self):
         for key, pub in self.publishers_.items():
-            if (key == "teacher_present"):
+            msg_type = self.topic_types[key]
+
+            if msg_type is Bool:
                 msg = Bool()
                 msg.data = bool(self.values[key])
+
+            elif msg_type is Float32:
+                msg = Float32()
+                msg.data = float(self.values[key])
+
             else:
                 msg = Int32()
                 msg.data = int(self.values[key])
-            print(key, msg, type(msg.data))
+
             pub.publish(msg)
 
 
@@ -102,8 +109,17 @@ class SliderApp:
 
         self._vars: dict[str, tk.DoubleVar] = {}
 
-        for i, (key, topic, default, min, max) in enumerate(TOPICS):
-            self._add_row(container, i, key, topic, default, min, max)
+        for i, (msg_type, key, topic, default, min_val, max_val) in enumerate(TOPICS):
+            self._add_row(
+                container,
+                i,
+                msg_type,
+                key,
+                topic,
+                default,
+                min_val,
+                max_val,
+            )
 
         # ── Footer ──
         tk.Frame(self.root, bg="#222", height=1).pack(fill="x", padx=24)
@@ -120,15 +136,23 @@ class SliderApp:
         # Blink the status dot
         self._blink()
 
-    def _add_row(self, parent: tk.Frame, row: int, key: str, topic: str, default: int, min_val: int, max_val: int):
-        # alternating row tint
+    def _add_row(
+        self,
+        parent,
+        row,
+        msg_type,
+        key,
+        topic,
+        default,
+        min_val,
+        max_val,
+    ):
         row_bg = self.PANEL if row % 2 == 0 else self.BG
 
         frame = tk.Frame(parent, bg=row_bg, padx=10, pady=6)
         frame.pack(fill="x", pady=1)
 
-        # ── Topic label (fixed width) ──
-        lbl = tk.Label(
+        tk.Label(
             frame,
             text=f"{topic:<35}",
             font=self.FONT_MONO,
@@ -136,11 +160,48 @@ class SliderApp:
             bg=row_bg,
             anchor="w",
             width=35,
-        )
-        lbl.pack(side="left")
+        ).pack(side="left")
 
-        # ── Slider ──
-        var = tk.IntVar(value=default)
+        # -------------------------
+        # Bool -> checkbox
+        # -------------------------
+        if msg_type is Bool:
+            var = tk.BooleanVar(value=bool(default))
+            self._vars[key] = var
+
+            cb = ttk.Checkbutton(
+                frame,
+                variable=var,
+                command=lambda k=key, v=var: self._on_bool_change(k, v),
+            )
+            cb.pack(side="left", padx=(12, 8))
+
+            val_label = tk.Label(
+                frame,
+                text=str(bool(default)),
+                font=self.FONT_LABEL,
+                fg=self.ACCENT,
+                bg=row_bg,
+                width=6,
+                anchor="e",
+            )
+            val_label.pack(side="left")
+
+            var.trace_add(
+                "write",
+                lambda *_, k=key, lbl=val_label: self._update_label(k, lbl),
+            )
+
+            return
+
+        # -------------------------
+        # Int / Float sliders
+        # -------------------------
+        if msg_type is Float32:
+            var = tk.DoubleVar(value=float(default))
+        else:
+            var = tk.IntVar(value=int(default))
+
         self._vars[key] = var
 
         style_name = f"Accent{row}.Horizontal.TScale"
@@ -166,19 +227,17 @@ class SliderApp:
         )
         slider.pack(side="left", padx=(12, 8))
 
-        # ── Value readout ──
         val_label = tk.Label(
             frame,
             text=f"{default}",
             font=self.FONT_LABEL,
             fg=self.ACCENT,
             bg=row_bg,
-            width=6,
+            width=8,
             anchor="e",
         )
         val_label.pack(side="left")
 
-        # Store label reference so we can update it
         var.trace_add(
             "write",
             lambda *_, k=key, lbl=val_label: self._update_label(k, lbl),
@@ -187,10 +246,17 @@ class SliderApp:
     # ── Callbacks ────────────────────────────────────────────────────────────
     def _on_change(self, key: str, val: str):
         self.node.values[key] = float(val)
+    
+    def _on_bool_change(self, key: str, var: tk.BooleanVar):
+        self.node.values[key] = bool(var.get())
 
     def _update_label(self, key: str, label: tk.Label):
         v = self._vars[key].get()
-        label.config(text=f"{v}")
+
+        if self.node.topic_types[key] is Float32:
+            label.config(text=f"{float(v):.2f}")
+        else:
+            label.config(text=str(v))
 
     def _blink(self):
         current = self._status_dot.cget("fg")
