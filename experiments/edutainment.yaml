@@ -154,33 +154,33 @@ LTM:
                 name: student_exercise_teacher_old_present_drive # D1.1
                 class_name: cognitive_nodes.drive.DriveExponential
                 parameters:
-                    input_topic: /vlm/postural_assessment # Change, needs new topic for how far on the exercise the student is
+                    input_topic: /student/challenge_completion
                     input_msg: std_msgs.msg.Float32
-                    min_eval: 0.8 
+                    min_eval: 0.8
                     neighbors: [{"name": "student_exercise_teacher_old_present_purpose", "node_type": "RobotPurpose"}]
             -
                 name: student_exercise_teacher_modern_present_drive # D2.1
                 class_name: cognitive_nodes.drive.DriveExponential
                 parameters:
-                    input_topic: /vlm/postural_assessment # Change, needs new topic for how far on the exercise the student is
+                    input_topic: /student/challenge_completion
                     input_msg: std_msgs.msg.Float32
-                    min_eval: 0.8 
+                    min_eval: 0.8
                     neighbors: [{"name": "student_exercise_teacher_modern_present_purpose", "node_type": "RobotPurpose"}]
             -
                 name: student_exercise_teacher_old_absent_drive # D3.1
                 class_name: cognitive_nodes.drive.DriveExponential
                 parameters:
-                    input_topic: /vlm/postural_assessment # Change, needs new topic for how far on the exercise the student is
+                    input_topic: /student/challenge_completion
                     input_msg: std_msgs.msg.Float32
-                    min_eval: 0.8 
+                    min_eval: 0.8
                     neighbors: [{"name": "student_exercise_teacher_old_absent_purpose", "node_type": "RobotPurpose"}]
             -
                 name: student_exercise_teacher_modern_absent_drive # D4.1
                 class_name: cognitive_nodes.drive.DriveExponential
                 parameters:
-                    input_topic: /vlm/postural_assessment # Change, needs new topic for how far on the exercise the student is
+                    input_topic: /student/challenge_completion
                     input_msg: std_msgs.msg.Float32
-                    min_eval: 0.8 
+                    min_eval: 0.8
                     neighbors: [{"name": "student_exercise_teacher_modern_absent_purpose", "node_type": "RobotPurpose"}]
         Goal:
             -
@@ -194,7 +194,7 @@ LTM:
         PNode:
             -
                 name: python_errors_pnode #Pn1.1
-                class_name: edutainment_emdb.pnodes.PNodePythonErrors # Create
+                class_name: edutainment_emdb.pnodes.PNodePythonErrors
                 parameters:
                     space_class: cognitive_nodes.space.ActivatedDummySpace
                     neighbors: [{"name": "python_errors_perception", "node_type": "Perception"}]
@@ -212,7 +212,7 @@ LTM:
         Policy:
             -
                 name: skill_1_python_policy #S1
-                class_name: edutainment_emdb.policies.PolicySkill1 # Create
+                class_name: edutainment_emdb.policies.PolicySkill1
                 parameters:
                     neighbors: [{"name": "python_errors_expert_cnode", "node_type": "CNode"},
                                 {"name": "python_errors_amateur_cnode", "node_type": "CNode"}]

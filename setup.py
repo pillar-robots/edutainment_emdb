@@ -17,9 +17,9 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='ubuntu',
-    maintainer_email='ubuntu@todo.todo',
-    description='TODO: Package description',
+    maintainer='AntonioLeis',
+    maintainer_email='antonio.leis@udc.es',
+    description='Edutainment experiment for the PILLAR project',
     license='Apache-2.0',
     extras_require={
         'test': [
@@ -29,12 +29,7 @@ setup(
     entry_points={
         'console_scripts': [
             'edutainment_simulator = edutainment_emdb.edutainment_simulator:main',
-            'test_sim = edutainment_emdb.test_sim:main',
-            #'mic_pub = my_controll.mic_pub:main',
-            #'museum_sim_discrete = my_controll.museum_sim_discrete:main',
-            #'fake_sim = my_controll.fake_sim:main',
-            #'publish_vlm = my_controll.publish_vlm:main',
-            #'manual_publisher = my_controll.manual_publisher:main',
+            'test_sim = edutainment_emdb.test_sim:main'
         ],
     },
 )
