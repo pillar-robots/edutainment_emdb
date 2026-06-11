@@ -1,8 +1,7 @@
 import math
 from cognitive_nodes.pnode import PNode
 
-
-class PNodePython(PNode):
+class PNodePythonErrors(PNode):
     """
     PNode that represents Python errors
     """
@@ -28,7 +27,7 @@ class PNodePython(PNode):
                 perception[sensor]=activation_list[sensor]['data']
 
         if perception:
-            value_raw = perception.get('python_errors_percpetion')
+            value_raw = perception.get('python_errors_perception')
             value = round(value_raw[0]['data'], 1)
             #value_raw_2 = perception.get('guide')
             #value_2 = round(value_raw_2[0]['data'], 1)

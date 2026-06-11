@@ -83,17 +83,17 @@ LTM:
     Nodes:
         Perception:
             -
-                name: student_type_perception
-                class_name: edutainment_emdb.perceptions.EdutainmentPerception
-                parameters:
-                  default_msg: std_msgs.msg.Float32
-                  default_topic: /student/type
-            -
                 name: teacher_type_perception
                 class_name: edutainment_emdb.perceptions.EdutainmentPerception
                 parameters:
                   default_msg: std_msgs.msg.Float32
                   default_topic: /teacher/type
+            -
+                name: student_type_perception
+                class_name: edutainment_emdb.perceptions.EdutainmentPerception
+                parameters:
+                  default_msg: std_msgs.msg.Float32
+                  default_topic: /student/type
             -
                 name: python_errors_perception
                 class_name: edutainment_emdb.perceptions.EdutainmentPerception
@@ -194,7 +194,7 @@ LTM:
         PNode:
             -
                 name: python_errors_pnode #Pn1.1
-                class_name: edutainment_emdb.pnodes.PNodePython # Create
+                class_name: edutainment_emdb.pnodes.PNodePythonErrors # Create
                 parameters:
                     space_class: cognitive_nodes.space.ActivatedDummySpace
                     neighbors: [{"name": "python_errors_perception", "node_type": "Perception"}]

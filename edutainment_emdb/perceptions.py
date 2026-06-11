@@ -28,21 +28,10 @@ class EdutainmentPerception(Perception):
                             student_type_perception=perception.student_type_perception,
                             teacher_type_perception=perception.teacher_type_perception,
                             python_errors_perception=perception.python_errors_perception,
-                            # noise_level=perception.noise_level,
-                            # age=perception.age,
-                            # blue_area=perception.blue_area,
-                            # spatial=perception.spatial,
-                            # posture_state=perception.posture_state,
-                            # interpersonal_spacing=perception.interpersonal_spacing,
-                            # guide=perception.guide,
-                            # engage=perception.engage,
-                            # timeline=perception.timeline,
-                            # people=perception.people
                     )
                 )
         else:
             value.append(dict(data=self.reading.data))
-        
         sensor[self.name] = value
         self.get_logger().debug("Publishing normalized " + self.name + " = " + str(sensor))
         sensor_msg = perception_dict_to_msg(sensor)
