@@ -153,6 +153,7 @@ LTM:
                 parameters:
                     neighbors: [{"name": "student_type_perception", "node_type": "Perception"}]
         RobotPurpose: 
+            ### MX.1
             -
                 name: student_exercise_teacher_old_present_purpose # M1.1
                 class_name: cognitive_nodes.robot_purpose.RobotPurpose
@@ -185,7 +186,74 @@ LTM:
                     drive_id: 'student_exercise_teacher_modern_absent_drive'
                     purpose_type: 'Mission'
                     terminal: False
+            ### MX.2
+            -
+                name: student_awake_teacher_old_present_purpose # M1.2
+                class_name: cognitive_nodes.robot_purpose.RobotPurpose
+                parameters:
+                    weight: 1.0 #0.9
+                    drive_id: 'student_awake_teacher_old_present_drive'
+                    purpose_type: 'Mission'
+                    terminal: False
+            -
+                name: student_awake_teacher_modern_present_purpose # M2.2
+                class_name: cognitive_nodes.robot_purpose.RobotPurpose
+                parameters:
+                    weight: 0.0 #0.9
+                    drive_id: 'student_awake_teacher_modern_present_drive'
+                    purpose_type: 'Mission'
+                    terminal: False
+            -
+                name: student_awake_teacher_old_absent_purpose # M3.2
+                class_name: cognitive_nodes.robot_purpose.RobotPurpose
+                parameters:
+                    weight: 0.0 #0.9
+                    drive_id: 'student_awake_teacher_old_absent_drive'
+                    purpose_type: 'Mission'
+                    terminal: False
+            -
+                name: student_awake_teacher_modern_absent_purpose # M4.2
+                class_name: cognitive_nodes.robot_purpose.RobotPurpose
+                parameters:
+                    weight: 0.0 #0.9
+                    drive_id: 'student_awake_teacher_modern_absent_drive'
+                    purpose_type: 'Mission'
+                    terminal: False
+            ### MX.3
+            -
+                name: student_seated_teacher_old_present_purpose # M1.3
+                class_name: cognitive_nodes.robot_purpose.RobotPurpose
+                parameters:
+                    weight: 1.0 #0.9
+                    drive_id: 'student_seated_teacher_old_present_drive'
+                    purpose_type: 'Mission'
+                    terminal: False
+            -
+                name: student_seated_teacher_modern_present_purpose # M2.3
+                class_name: cognitive_nodes.robot_purpose.RobotPurpose
+                parameters:
+                    weight: 0.0 #0.9
+                    drive_id: 'student_seated_teacher_modern_present_drive'
+                    purpose_type: 'Mission'
+                    terminal: False
+            -
+                name: student_seated_teacher_old_absent_purpose # M3.3
+                class_name: cognitive_nodes.robot_purpose.RobotPurpose
+                parameters:
+                    weight: 0.0 #0.9
+                    drive_id: 'student_seated_teacher_old_absent_drive'
+                    purpose_type: 'Mission'
+                    terminal: False
+            -
+                name: student_seated_teacher_modern_absent_purpose # M4.3
+                class_name: cognitive_nodes.robot_purpose.RobotPurpose
+                parameters:
+                    weight: 0.0 #0.9
+                    drive_id: 'student_seated_teacher_modern_absent_drive'
+                    purpose_type: 'Mission'
+                    terminal: False
         Drive:
+            ### DX.1
             -
                 name: student_exercise_teacher_old_present_drive # D1.1
                 class_name: cognitive_nodes.drive.DriveExponential
@@ -218,6 +286,72 @@ LTM:
                     input_msg: std_msgs.msg.Float32
                     min_eval: 0.8
                     neighbors: [{"name": "student_exercise_teacher_modern_absent_purpose", "node_type": "RobotPurpose"}]
+            ### DX.2
+            -
+                name: student_awake_teacher_old_present_drive # D1.2
+                class_name: cognitive_nodes.drive.DriveExponential
+                parameters:
+                    input_topic: /student/bored
+                    input_msg: std_msgs.msg.Float32
+                    min_eval: 0.8
+                    neighbors: [{"name": "student_awake_teacher_old_present_purpose", "node_type": "RobotPurpose"}]
+            -
+                name: student_awake_teacher_modern_present_drive # D2.2
+                class_name: cognitive_nodes.drive.DriveExponential
+                parameters:
+                    input_topic: /student/bored
+                    input_msg: std_msgs.msg.Float32
+                    min_eval: 0.8
+                    neighbors: [{"name": "student_awake_teacher_modern_present_purpose", "node_type": "RobotPurpose"}]
+            -
+                name: student_awake_teacher_old_absent_drive # D3.2
+                class_name: cognitive_nodes.drive.DriveExponential
+                parameters:
+                    input_topic: /student/bored
+                    input_msg: std_msgs.msg.Float32
+                    min_eval: 0.8
+                    neighbors: [{"name": "student_awake_teacher_old_absent_purpose", "node_type": "RobotPurpose"}]
+            -
+                name: student_awake_teacher_modern_absent_drive # D4.2
+                class_name: cognitive_nodes.drive.DriveExponential
+                parameters:
+                    input_topic: /student/bored
+                    input_msg: std_msgs.msg.Float32
+                    min_eval: 0.8
+                    neighbors: [{"name": "student_awake_teacher_modern_absent_purpose", "node_type": "RobotPurpose"}]
+            ### DX.3
+            -
+                name: student_seated_teacher_old_present_drive # D1.3
+                class_name: cognitive_nodes.drive.DriveExponential
+                parameters:
+                    input_topic: /student/standing
+                    input_msg: std_msgs.msg.Float32
+                    min_eval: 0.8
+                    neighbors: [{"name": "student_seated_teacher_old_present_purpose", "node_type": "RobotPurpose"}]
+            -
+                name: student_seated_teacher_modern_present_drive # D2.3
+                class_name: cognitive_nodes.drive.DriveExponential
+                parameters:
+                    input_topic: /student/standing
+                    input_msg: std_msgs.msg.Float32
+                    min_eval: 0.8
+                    neighbors: [{"name": "student_seated_teacher_modern_present_purpose", "node_type": "RobotPurpose"}]
+            -
+                name: student_seated_teacher_old_absent_drive # D3.3
+                class_name: cognitive_nodes.drive.DriveExponential
+                parameters:
+                    input_topic: /student/standing
+                    input_msg: std_msgs.msg.Float32
+                    min_eval: 0.8
+                    neighbors: [{"name": "student_seated_teacher_old_absent_purpose", "node_type": "RobotPurpose"}]
+            -
+                name: student_seated_teacher_modern_absent_drive # D4.3
+                class_name: cognitive_nodes.drive.DriveExponential
+                parameters:
+                    input_topic: /student/standing
+                    input_msg: std_msgs.msg.Float32
+                    min_eval: 0.8
+                    neighbors: [{"name": "student_seated_teacher_modern_absent_purpose", "node_type": "RobotPurpose"}]
         Goal:
             -
                 name: exercise_finished_goal #G1 #Needs also D3.1 and D4.1, or is that a different Goal?
@@ -227,7 +361,24 @@ LTM:
                                 {"name": "student_exercise_teacher_modern_present_drive", "node_type": "Drive"}, #D2.1
                                 {"name": "student_exercise_teacher_old_absent_drive", "node_type": "Drive"}, #D3.1
                                 {"name": "student_exercise_teacher_modern_absent_drive", "node_type": "Drive"}] #D4.1
+            -
+                name: awake_goal #G2
+                class_name: cognitive_nodes.goal.GoalMotiven
+                parameters:
+                    neighbors: [{"name": "student_awake_teacher_old_present_drive", "node_type": "Drive"}, #D1.2
+                                {"name": "student_awake_teacher_modern_present_drive", "node_type": "Drive"}, #D2.2
+                                {"name": "student_awake_teacher_old_absent_drive", "node_type": "Drive"}, #D3.2
+                                {"name": "student_awake_teacher_modern_absent_drive", "node_type": "Drive"}] #D4.2
+            -
+                name: seated_goal #G2
+                class_name: cognitive_nodes.goal.GoalMotiven
+                parameters:
+                    neighbors: [{"name": "student_seated_teacher_old_present_drive", "node_type": "Drive"}, #D1.3
+                                {"name": "student_seated_teacher_modern_present_drive", "node_type": "Drive"}, #D2.3
+                                {"name": "student_seated_teacher_old_absent_drive", "node_type": "Drive"}, #D3.3
+                                {"name": "student_seated_teacher_modern_absent_drive", "node_type": "Drive"}] #D4.3
         PNode:
+            ### Pn1.X
             -
                 name: python_errors_pnode #Pn1.1
                 class_name: edutainment_emdb.pnodes.PNodePythonErrors
@@ -247,6 +398,7 @@ LTM:
                     space_class: cognitive_nodes.space.ActivatedDummySpace
                     neighbors: [{"name": "python_errors_perception", "node_type": "Perception"}, {"name": "evaluation_errors_perception", "node_type": "Perception"}, {"name": "teacher_present_perception", "node_type": "Perception"}]
         CNode:
+            ### C1.X
             -
                 name: python_errors_expert_cnode # C1.1 EXPERT_WM
                 class_name: cognitive_nodes.cnode.CNode

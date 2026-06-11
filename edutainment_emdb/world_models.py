@@ -26,7 +26,7 @@ class EdutainmentStudentExpert(WorldModel):
             value_raw = perception.get('student_type_perception')
             value = round(value_raw[0]['data'], 1)
 
-            # Apply your activation logic
+            # WM 1
             if value > 0.5:
                 self.activation.activation = 1.0
                 self.selected_behavior = "expert_student"
@@ -93,7 +93,7 @@ class EdutainmentStudentAmateur(WorldModel):
             value_raw = perception.get('student_type_perception')
             value = round(value_raw[0]['data'], 1)
 
-            # Apply your activation logic
+            # WM 2
             if value <= 0.25:
                 self.activation.activation = 1.0
                 self.selected_behavior = "amateur_student"
@@ -160,7 +160,7 @@ class EdutainmentStudentGeneral(WorldModel):
             value_raw = perception.get('student_type_perception')
             value = round(value_raw[0]['data'], 1)
 
-            # Apply your activation logic
+            # WM 3
             if 0.25 < value <= 0.5:
                 self.activation.activation = 1.0
                 self.selected_behavior = "general_student"
