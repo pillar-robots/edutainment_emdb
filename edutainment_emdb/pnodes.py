@@ -36,7 +36,7 @@ class PNodePython(PNode):
             # Apply your activation logic
             if value < 0.5: #and value_2 < 0.5:
                 self.activation.activation = 0.95
-                self.get_logger().debug(f"PNODE DEBUG: value: {value}")
+                self.get_logger().debug(f"PNODE DEBUG: python_errors_pnode: {value}")
             else:
                 self.activation.activation = 0.0
             

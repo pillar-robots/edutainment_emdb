@@ -27,7 +27,7 @@ class EdutainmentStudentExpert(WorldModel):
                 perception[sensor]=activation_list[sensor]['data']
 
         if perception:
-            value_raw = perception.get('studentType')
+            value_raw = perception.get('studentType_perception')
             value = round(value_raw[0]['data'], 1)
 
             # Apply your activation logic
@@ -98,7 +98,7 @@ class EdutainmentStudentAmateur(WorldModel):
                 perception[sensor]=activation_list[sensor]['data']
 
         if perception:
-            value_raw = perception.get('studentType')
+            value_raw = perception.get('studentType_perception')
             value = round(value_raw[0]['data'], 1)
 
             # Apply your activation logic
@@ -169,7 +169,7 @@ class EdutainmentStudentGeneral(WorldModel):
                 perception[sensor]=activation_list[sensor]['data']
 
         if perception:
-            value_raw = perception.get('studentType')
+            value_raw = perception.get('studentType_perception')
             value = round(value_raw[0]['data'], 1)
 
             # Apply your activation logic
