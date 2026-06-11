@@ -6,7 +6,7 @@ class PNodePython(PNode):
     """
     PNode that represents Python errors
     """
-    def __init__(self, name='python', class_name='cognitive_nodes.pnode.PNode', space_class=None, space=None, history_size=100, **params):
+    def __init__(self, name='python_errors_pnode', class_name='cognitive_nodes.pnode.PNode', space_class=None, space=None, history_size=100, **params):
         super().__init__(name, class_name, space_class, space, history_size, **params)
 
     def calculate_activation(self, perception=None, activation_list=None):
@@ -28,7 +28,7 @@ class PNodePython(PNode):
                 perception[sensor]=activation_list[sensor]['data']
 
         if perception:
-            value_raw = perception.get('python_errors')
+            value_raw = perception.get('python_errors_percpetion')
             value = round(value_raw[0]['data'], 1)
             #value_raw_2 = perception.get('guide')
             #value_2 = round(value_raw_2[0]['data'], 1)

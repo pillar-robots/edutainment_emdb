@@ -16,9 +16,9 @@ Control:
     control_msg: cognitive_processes_interfaces.msg.ControlMsg
     episodes_topic: /main_loop/episodes
     episodes_msg: cognitive_processes_interfaces.msg.Episode
-    executed_policy_service: /emdb/simulator/executed_policy # Commented
+    #executed_policy_service: /emdb/simulator/executed_policy # Commented
     executed_policy_msg: cognitive_node_interfaces.srv.Policy
-    world_reset_service: /emdb/simulator/world_reset # Commented
+    #world_reset_service: /emdb/simulator/world_reset # Commented
     world_reset_msg: cognitive_processes_interfaces.srv.WorldReset
 LTM:
     Files:
@@ -83,42 +83,42 @@ LTM:
     Nodes:
         Perception:
             -
-                name: studentType
+                name: studentType_perception
                 class_name: edutainment_emdb.perceptions.EdutainmentPerception
                 parameters:
                   default_msg: std_msgs.msg.Float32
                   default_topic: /student/type
             -
-                name: teacherType
+                name: teacherType_perception
                 class_name: edutainment_emdb.perceptions.EdutainmentPerception
                 parameters:
                   default_msg: std_msgs.msg.Float32
                   default_topic: /teacher/type
             -
-                name: python_errors
+                name: python_errors_perception
                 class_name: edutainment_emdb.perceptions.EdutainmentPerception
                 parameters:
                   default_msg: std_msgs.msg.Float32
                   default_topic: /student/metrics/python_errors
         WorldModel:
             -
-                name: EXPERT #WM1
+                name: EXPERT_WM #WM1
                 class_name: edutainment_emdb.world_models.EdutainmentStudentExpert
                 parameters:
-                    neighbors: [{"name": "studentType", "node_type": "Perception"}]
+                    neighbors: [{"name": "studentType_perception", "node_type": "Perception"}]
             -
-                name: AMATEUR #WM2
+                name: AMATEUR_WM #WM2
                 class_name: edutainment_emdb.world_models.EdutainmentStudentAmateur
                 parameters:
-                    neighbors: [{"name": "studentType", "node_type": "Perception"}]
+                    neighbors: [{"name": "studentType_perception", "node_type": "Perception"}]
             -
-                name: GENERAL #WM3
+                name: GENERAL_WM #WM3
                 class_name: edutainment_emdb.world_models.EdutainmentStudentGeneral
                 parameters:
-                    neighbors: [{"name": "studentType", "node_type": "Perception"}]
+                    neighbors: [{"name": "studentType_perception", "node_type": "Perception"}]
         RobotPurpose: 
             -
-                name: student_exercise_teacher_old_present # M1.1
+                name: student_exercise_teacher_old_present_purpose # M1.1
                 class_name: cognitive_nodes.robot_purpose.RobotPurpose
                 parameters:
                     weight: 1.0 #0.9
@@ -126,7 +126,7 @@ LTM:
                     purpose_type: 'Mission'
                     terminal: False
             -
-                name: student_exercise_teacher_modern_present # M2.1
+                name: student_exercise_teacher_modern_present_purpose # M2.1
                 class_name: cognitive_nodes.robot_purpose.RobotPurpose
                 parameters:
                     weight: 0.0 #0.9
@@ -134,7 +134,7 @@ LTM:
                     purpose_type: 'Mission'
                     terminal: False
             -
-                name: student_exercise_teacher_old_absent # M3.1
+                name: student_exercise_teacher_old_absent_purpose # M3.1
                 class_name: cognitive_nodes.robot_purpose.RobotPurpose
                 parameters:
                     weight: 0.0 #0.9
@@ -142,7 +142,7 @@ LTM:
                     purpose_type: 'Mission'
                     terminal: False
             -
-                name: student_exercise_teacher_modern_absent # M4.1
+                name: student_exercise_teacher_modern_absent_purpose # M4.1
                 class_name: cognitive_nodes.robot_purpose.RobotPurpose
                 parameters:
                     weight: 0.0 #0.9
@@ -157,7 +157,7 @@ LTM:
                     input_topic: /vlm/postural_assessment # Change, needs new topic for how far on the exercise the student is
                     input_msg: std_msgs.msg.Float32
                     min_eval: 0.8 
-                    neighbors: [{"name": "student_exercise_teacher_old_present", "node_type": "RobotPurpose"}]
+                    neighbors: [{"name": "student_exercise_teacher_old_present_purpose", "node_type": "RobotPurpose"}]
             -
                 name: student_exercise_teacher_modern_present_drive # D2.1
                 class_name: cognitive_nodes.drive.DriveExponential
@@ -165,7 +165,7 @@ LTM:
                     input_topic: /vlm/postural_assessment # Change, needs new topic for how far on the exercise the student is
                     input_msg: std_msgs.msg.Float32
                     min_eval: 0.8 
-                    neighbors: [{"name": "student_exercise_teacher_modern_present", "node_type": "RobotPurpose"}]
+                    neighbors: [{"name": "student_exercise_teacher_modern_present_purpose", "node_type": "RobotPurpose"}]
             -
                 name: student_exercise_teacher_old_absent_drive # D3.1
                 class_name: cognitive_nodes.drive.DriveExponential
@@ -173,7 +173,7 @@ LTM:
                     input_topic: /vlm/postural_assessment # Change, needs new topic for how far on the exercise the student is
                     input_msg: std_msgs.msg.Float32
                     min_eval: 0.8 
-                    neighbors: [{"name": "student_exercise_teacher_old_absent", "node_type": "RobotPurpose"}]
+                    neighbors: [{"name": "student_exercise_teacher_old_absent_purpose", "node_type": "RobotPurpose"}]
             -
                 name: student_exercise_teacher_modern_absent_drive # D4.1
                 class_name: cognitive_nodes.drive.DriveExponential
@@ -181,7 +181,7 @@ LTM:
                     input_topic: /vlm/postural_assessment # Change, needs new topic for how far on the exercise the student is
                     input_msg: std_msgs.msg.Float32
                     min_eval: 0.8 
-                    neighbors: [{"name": "student_exercise_teacher_modern_absent", "node_type": "RobotPurpose"}]
+                    neighbors: [{"name": "student_exercise_teacher_modern_absent_purpose", "node_type": "RobotPurpose"}]
         Goal:
             -
                 name: exercise_finished_goal #G1
@@ -197,21 +197,21 @@ LTM:
                 class_name: edutainment_emdb.pnodes.PNodePython # Create
                 parameters:
                     space_class: cognitive_nodes.space.ActivatedDummySpace
-                    neighbors: [{"name": "python_errors", "node_type": "Perception"}]
+                    neighbors: [{"name": "python_errors_perception", "node_type": "Perception"}]
         CNode:
             -
-                name: python_errors_expert_cnode # C1.1 WM EXPERT (NEED ANOTHER FOR AMATEUR?)
+                name: python_errors_expert_cnode # C1.1 EXPERT_WM (NEED ANOTHER FOR AMATEUR?)
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
-                    neighbors: [{"name": "exercise_finished_goal", "node_type": "Goal"}, {"name": "EXPERT", "node_type": "WorldModel"}, {"name": "python_errors_pnode", "node_type": "PNode"}]
+                    neighbors: [{"name": "exercise_finished_goal", "node_type": "Goal"}, {"name": "EXPERT_WM", "node_type": "WorldModel"}, {"name": "python_errors_pnode", "node_type": "PNode"}]
             -
-                name: python_errors_amateur_cnode # C1.1 WM AMATEUR (NEEDED?)
+                name: python_errors_amateur_cnode # C1.1 AMATEUR_WM (NEEDED?)
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
-                    neighbors: [{"name": "exercise_finished_goal", "node_type": "Goal"}, {"name": "AMATEUR", "node_type": "WorldModel"}, {"name": "python_errors_pnode", "node_type": "PNode"}]
+                    neighbors: [{"name": "exercise_finished_goal", "node_type": "Goal"}, {"name": "AMATEUR_WM", "node_type": "WorldModel"}, {"name": "python_errors_pnode", "node_type": "PNode"}]
         Policy:
             -
-                name: skill_1 #S1
+                name: skill_1_python_policy #S1
                 class_name: edutainment_emdb.policies.PolicySkill1 # Create
                 parameters:
                     neighbors: [{"name": "python_errors_expert_cnode", "node_type": "CNode"},

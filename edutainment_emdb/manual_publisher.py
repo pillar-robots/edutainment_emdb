@@ -8,18 +8,18 @@ from std_msgs.msg import Float32, Int32, Bool
 
 
 # ── Topic configuration ──────────────────────────────────────────────────────
+# msg_type, key, topic, default, min_val, max_val
 TOPICS = [
-    (Int32,   "student_type", "/student/type", 1, 0, 5),
-    (Int32,   "standing", "/student/standing", 0, 0, 100),
-    (Int32,   "bored", "/student/bored", 0, 0, 100),
-    (Int32,   "python_errors", "/student/metrics/python_errors", 0, 0, 100),
-    (Int32,   "error_streak", "/student/metrics/error_streak", 0, 0, 100),
-    (Int32,   "evaluation_error_streak", "/student/metrics/evaluation_error_streak", 0, 0, 100),
-    (Bool,    "teacher_present", "/teacher/is_present", False, 0, 1),
+    (Bool,    "teacher_present", "/teacher/is_present", True, 0, 1),
     (Int32,   "teacher_type", "/teacher/type", -1, -1, 5),
+    (Int32,   "student_type", "/student/type", 5, -1, 5),
     (Float32, "challenge_completion", "/student/challenge_completion", 0.0, 0.0, 1.0),
+    (Int32,   "python_errors", "/student/metrics/python_errors", 0, 0, 100),
+    (Int32,   "evaluation_error_streak", "/student/metrics/evaluation_error_streak", 0, 0, 100),
+    (Int32,   "error_streak", "/student/metrics/error_streak", 0, 0, 100),
+    (Int32,   "bored", "/student/bored", 0, 0, 100),
+    (Int32,   "standing", "/student/standing", 0, 0, 100),
 ]
-
 
 # ── ROS2 Node ────────────────────────────────────────────────────────────────
 class ManualPublisher(Node):
@@ -53,7 +53,6 @@ class ManualPublisher(Node):
                 msg.data = int(self.values[key])
 
             pub.publish(msg)
-
 
 # ── Tkinter GUI ──────────────────────────────────────────────────────────────
 class SliderApp:
@@ -264,7 +263,6 @@ class SliderApp:
         self._status_dot.config(fg=next_color)
         self.root.after(800, self._blink)
 
-
 # ── Entry-point ──────────────────────────────────────────────────────────────
 def main(args=None):
     rclpy.init(args=args)
@@ -283,7 +281,6 @@ def main(args=None):
     finally:
         node.destroy_node()
         rclpy.shutdown()
-
 
 if __name__ == "__main__":
     main()
