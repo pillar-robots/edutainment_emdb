@@ -10,15 +10,15 @@ from std_msgs.msg import Float32, Int32, Bool
 # ── Topic configuration ──────────────────────────────────────────────────────
 # msg_type, key, topic, default, min_val, max_val
 TOPICS = [
-    (Bool,    "teacher_present", "/teacher/is_present", True, 0, 1),
-    (Int32,   "teacher_type", "/teacher/type", 5, 0, 5),
-    (Int32,   "student_type", "/student/type", 5, 0, 5),
-    (Float32, "challenge_completion", "/student/challenge_completion", 0.0, 0.0, 1.0),
-    (Int32,   "python_errors", "/student/metrics/python_errors", 0, 0, 100),
-    (Int32,   "evaluation_error_streak", "/student/metrics/evaluation_error_streak", 0, 0, 100),
-    (Int32,   "error_streak", "/student/metrics/error_streak", 0, 0, 100),
-    (Int32,   "bored", "/student/bored", 0, 0, 100),
-    (Int32,   "standing", "/student/standing", 0, 0, 100),
+    (Bool,    "teacher_present_perception", "/teacher/is_present", True, 0, 1),
+    (Int32,   "teacher_type_perception", "/teacher/type", 5, 0, 5),
+    (Int32,   "student_type_perception", "/student/type", 5, 0, 5),
+    (Float32, "challenge_completion_perception", "/student/challenge_completion", 0.0, 0.0, 1.0),
+    (Int32,   "python_errors_perception", "/student/metrics/python_errors", 0, 0, 100),
+    (Int32,   "evaluation_error_streak_perception", "/student/metrics/evaluation_error_streak", 0, 0, 100),
+    (Int32,   "error_streak_perception", "/student/metrics/error_streak", 0, 0, 100),
+    (Int32,   "bored_perception", "/student/bored", 0, 0, 100),
+    (Int32,   "standing_perception", "/student/standing", 0, 0, 100),
 ]
 
 # ── ROS2 Node ────────────────────────────────────────────────────────────────

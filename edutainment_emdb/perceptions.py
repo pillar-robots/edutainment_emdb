@@ -25,8 +25,8 @@ class EdutainmentPerception(Perception):
             for perception in self.reading.data:
                 value.append(
                     dict(
-                            studentType_perception=perception.studentType_perception,
-                            teacherType_perception=perception.teacherType_perception,
+                            student_type_perception=perception.student_type_perception,
+                            teacher_type_perception=perception.teacher_type_perception,
                             python_errors_perception=perception.python_errors_perception,
                             # noise_level=perception.noise_level,
                             # age=perception.age,

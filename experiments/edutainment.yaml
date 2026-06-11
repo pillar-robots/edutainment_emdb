@@ -83,13 +83,13 @@ LTM:
     Nodes:
         Perception:
             -
-                name: studentType_perception
+                name: student_type_perception
                 class_name: edutainment_emdb.perceptions.EdutainmentPerception
                 parameters:
                   default_msg: std_msgs.msg.Float32
                   default_topic: /student/type
             -
-                name: teacherType_perception
+                name: teacher_type_perception
                 class_name: edutainment_emdb.perceptions.EdutainmentPerception
                 parameters:
                   default_msg: std_msgs.msg.Float32
@@ -105,17 +105,17 @@ LTM:
                 name: EXPERT_WM #WM1
                 class_name: edutainment_emdb.world_models.EdutainmentStudentExpert
                 parameters:
-                    neighbors: [{"name": "studentType_perception", "node_type": "Perception"}]
+                    neighbors: [{"name": "student_type_perception", "node_type": "Perception"}]
             -
                 name: AMATEUR_WM #WM2
                 class_name: edutainment_emdb.world_models.EdutainmentStudentAmateur
                 parameters:
-                    neighbors: [{"name": "studentType_perception", "node_type": "Perception"}]
+                    neighbors: [{"name": "student_type_perception", "node_type": "Perception"}]
             -
                 name: GENERAL_WM #WM3
                 class_name: edutainment_emdb.world_models.EdutainmentStudentGeneral
                 parameters:
-                    neighbors: [{"name": "studentType_perception", "node_type": "Perception"}]
+                    neighbors: [{"name": "student_type_perception", "node_type": "Perception"}]
         RobotPurpose: 
             -
                 name: student_exercise_teacher_old_present_purpose # M1.1
