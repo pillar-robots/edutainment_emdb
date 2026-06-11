@@ -1,7 +1,5 @@
 import rclpy
 from copy import deepcopy
-
-
 from cognitive_nodes.world_model import WorldModel
 from std_msgs.msg import Float32
 from rclpy.callback_groups import ReentrantCallbackGroup, MutuallyExclusiveCallbackGroup
@@ -15,7 +13,6 @@ class EdutainmentStudentExpert(WorldModel):
                  class_name='cognitive_nodes.world_model.WorldModel',
                  **params):
         super().__init__(name, class_name, **params)
-
         self.selected_behavior = None
         self.configure_activation_inputs(self.neighbors)
 
@@ -25,7 +22,6 @@ class EdutainmentStudentExpert(WorldModel):
             for sensor in activation_list:
                 activation_list[sensor]['updated']=False
                 perception[sensor]=activation_list[sensor]['data']
-
         if perception:
             value_raw = perception.get('student_type_perception')
             value = round(value_raw[0]['data'], 1)
@@ -35,7 +31,6 @@ class EdutainmentStudentExpert(WorldModel):
                 self.activation.activation = 1.0
                 self.selected_behavior = "expert_student"
                 self.get_logger().debug(f"[{self.name}] Selected behavior: {self.selected_behavior}")
-
             else:
                 self.activation.activation = 0.0
 
@@ -59,7 +54,6 @@ class EdutainmentStudentExpert(WorldModel):
             new_input=dict(subscriber=subscriber, data=data, updated=updated, timestamp=timestamp)
             self.activation_inputs[name]=new_input
             self.get_logger().debug(f'{self.name} -- Created new activation input: {name} of type {node_type}')
-
 
     def read_activation_callback(self, msg: PerceptionStamped):
         """
@@ -86,7 +80,6 @@ class EdutainmentStudentAmateur(WorldModel):
                  class_name='cognitive_nodes.world_model.WorldModel',
                  **params):
         super().__init__(name, class_name, **params)
-
         self.selected_behavior = None
         self.configure_activation_inputs(self.neighbors)
 
@@ -96,7 +89,6 @@ class EdutainmentStudentAmateur(WorldModel):
             for sensor in activation_list:
                 activation_list[sensor]['updated']=False
                 perception[sensor]=activation_list[sensor]['data']
-
         if perception:
             value_raw = perception.get('student_type_perception')
             value = round(value_raw[0]['data'], 1)
@@ -106,10 +98,9 @@ class EdutainmentStudentAmateur(WorldModel):
                 self.activation.activation = 1.0
                 self.selected_behavior = "amateur_student"
                 self.get_logger().debug(f"[{self.name}] Selected behavior: {self.selected_behavior}")
-
             else:
                 self.activation.activation = 0.0
-
+            
             self.activation.timestamp = self.get_clock().now().to_msg()
         return self.activation
     
@@ -130,7 +121,6 @@ class EdutainmentStudentAmateur(WorldModel):
             new_input=dict(subscriber=subscriber, data=data, updated=updated, timestamp=timestamp)
             self.activation_inputs[name]=new_input
             self.get_logger().debug(f'{self.name} -- Created new activation input: {name} of type {node_type}')
-
 
     def read_activation_callback(self, msg: PerceptionStamped):
         """
@@ -157,7 +147,6 @@ class EdutainmentStudentGeneral(WorldModel):
                  class_name='cognitive_nodes.world_model.WorldModel',
                  **params):
         super().__init__(name, class_name, **params)
-
         self.selected_behavior = None
         self.configure_activation_inputs(self.neighbors)
 
@@ -167,7 +156,6 @@ class EdutainmentStudentGeneral(WorldModel):
             for sensor in activation_list:
                 activation_list[sensor]['updated']=False
                 perception[sensor]=activation_list[sensor]['data']
-
         if perception:
             value_raw = perception.get('student_type_perception')
             value = round(value_raw[0]['data'], 1)
@@ -177,7 +165,6 @@ class EdutainmentStudentGeneral(WorldModel):
                 self.activation.activation = 1.0
                 self.selected_behavior = "general_student"
                 self.get_logger().debug(f"[{self.name}] Selected behavior: {self.selected_behavior}")
-
             else:
                 self.activation.activation = 0.0
 
@@ -201,7 +188,6 @@ class EdutainmentStudentGeneral(WorldModel):
             new_input=dict(subscriber=subscriber, data=data, updated=updated, timestamp=timestamp)
             self.activation_inputs[name]=new_input
             self.get_logger().debug(f'{self.name} -- Created new activation input: {name} of type {node_type}')
-
 
     def read_activation_callback(self, msg: PerceptionStamped):
         """

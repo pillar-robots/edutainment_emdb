@@ -1,11 +1,9 @@
 import threading
 import tkinter as tk
 from tkinter import ttk
-
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import Float32, Int32, Bool
-
 
 # ── Topic configuration ──────────────────────────────────────────────────────
 # msg_type, key, topic, default, min_val, max_val
@@ -18,8 +16,8 @@ TOPICS = [
     (Int32,   "evaluation_error_streak_perception", "/student/metrics/evaluation_error_streak", 0, 0, 100),
     (Int32,   "error_streak_perception", "/student/metrics/error_streak", 0, 0, 100),
     (Int32,   "bored_perception", "/student/bored", 0, 0, 100),
-    (Int32,   "standing_perception", "/student/standing", 0, 0, 100),
-]
+    (Int32,   "standing_perception", "/student/standing", 0, 0, 100)
+    ]
 
 # ── ROS2 Node ────────────────────────────────────────────────────────────────
 class ManualPublisher(Node):
@@ -28,30 +26,24 @@ class ManualPublisher(Node):
         self.publishers_ = {}
         self.values = {}
         self.topic_types = {}
-
         for msg_type, key, topic, default, min_val, max_val in TOPICS:
             self.publishers_[key] = self.create_publisher(msg_type, topic, 2)
             self.values[key] = default
             self.topic_types[key] = msg_type
-
         self.create_timer(1.0, self._publish)
 
     def _publish(self):
         for key, pub in self.publishers_.items():
             msg_type = self.topic_types[key]
-
             if msg_type is Bool:
                 msg = Bool()
                 msg.data = bool(self.values[key])
-
             elif msg_type is Float32:
                 msg = Float32()
                 msg.data = float(self.values[key])
-
             else:
                 msg = Int32()
                 msg.data = int(self.values[key])
-
             pub.publish(msg)
 
 # ── Tkinter GUI ──────────────────────────────────────────────────────────────
@@ -71,11 +63,9 @@ class SliderApp:
     def __init__(self, root: tk.Tk, node: ManualPublisher):
         self.root = root
         self.node = node
-
         root.title("ROS2 Manual Publisher")
         root.configure(bg=self.BG)
         root.resizable(False, False)
-
         self._build_ui()
 
     # ── Layout ────────────────────────────────────────────────────────────────
@@ -83,7 +73,6 @@ class SliderApp:
         # ── Header ──
         header = tk.Frame(self.root, bg=self.BG)
         header.pack(fill="x", padx=24, pady=(20, 4))
-
         tk.Label(
             header,
             text="Topic  Publisher",
@@ -91,23 +80,18 @@ class SliderApp:
             fg=self.ACCENT,
             bg=self.BG,
         ).pack(side="left")
-
         self._status_dot = tk.Label(
             header, text="●", font=("Courier New", 14), fg="#444", bg=self.BG
         )
         self._status_dot.pack(side="right", padx=(0, 4))
         tk.Label(header, text="publishing", font=self.FONT_MONO,
                  fg=self.SUBTEXT, bg=self.BG).pack(side="right")
-
         # separator
         tk.Frame(self.root, bg=self.ACCENT, height=1).pack(fill="x", padx=24, pady=(0, 16))
-
         # ── Slider rows ──
         container = tk.Frame(self.root, bg=self.BG)
         container.pack(padx=24, pady=(0, 20))
-
         self._vars: dict[str, tk.DoubleVar] = {}
-
         for i, (msg_type, key, topic, default, min_val, max_val) in enumerate(TOPICS):
             self._add_row(
                 container,
@@ -119,7 +103,6 @@ class SliderApp:
                 min_val,
                 max_val,
             )
-
         # ── Footer ──
         tk.Frame(self.root, bg="#222", height=1).pack(fill="x", padx=24)
         footer = tk.Frame(self.root, bg=self.BG)
@@ -131,7 +114,6 @@ class SliderApp:
             fg=self.SUBTEXT,
             bg=self.BG,
         ).pack(side="left")
-
         # Blink the status dot
         self._blink()
 
@@ -147,10 +129,8 @@ class SliderApp:
         max_val,
     ):
         row_bg = self.PANEL if row % 2 == 0 else self.BG
-
         frame = tk.Frame(parent, bg=row_bg, padx=10, pady=6)
         frame.pack(fill="x", pady=1)
-
         tk.Label(
             frame,
             text=f"{topic:<35}",
@@ -160,21 +140,18 @@ class SliderApp:
             anchor="w",
             width=35,
         ).pack(side="left")
-
         # -------------------------
         # Bool -> checkbox
         # -------------------------
         if msg_type is Bool:
             var = tk.BooleanVar(value=bool(default))
             self._vars[key] = var
-
             cb = ttk.Checkbutton(
                 frame,
                 variable=var,
                 command=lambda k=key, v=var: self._on_bool_change(k, v),
             )
             cb.pack(side="left", padx=(12, 8))
-
             val_label = tk.Label(
                 frame,
                 text=str(bool(default)),
@@ -185,12 +162,10 @@ class SliderApp:
                 anchor="e",
             )
             val_label.pack(side="left")
-
             var.trace_add(
                 "write",
                 lambda *_, k=key, lbl=val_label: self._update_label(k, lbl),
             )
-
             return
 
         # -------------------------
@@ -200,9 +175,7 @@ class SliderApp:
             var = tk.DoubleVar(value=float(default))
         else:
             var = tk.IntVar(value=int(default))
-
         self._vars[key] = var
-
         style_name = f"Accent{row}.Horizontal.TScale"
         style = ttk.Style()
         style.theme_use("clam")
@@ -213,7 +186,6 @@ class SliderApp:
             sliderthickness=16,
             sliderrelief="flat",
         )
-
         slider = ttk.Scale(
             frame,
             from_=min_val,
@@ -225,7 +197,6 @@ class SliderApp:
             command=lambda val, k=key: self._on_change(k, val),
         )
         slider.pack(side="left", padx=(12, 8))
-
         val_label = tk.Label(
             frame,
             text=f"{default}",
@@ -236,12 +207,10 @@ class SliderApp:
             anchor="e",
         )
         val_label.pack(side="left")
-
         var.trace_add(
             "write",
             lambda *_, k=key, lbl=val_label: self._update_label(k, lbl),
         )
-
     # ── Callbacks ────────────────────────────────────────────────────────────
     def _on_change(self, key: str, val: str):
         self.node.values[key] = float(val)
@@ -251,7 +220,6 @@ class SliderApp:
 
     def _update_label(self, key: str, label: tk.Label):
         v = self._vars[key].get()
-
         if self.node.topic_types[key] is Float32:
             label.config(text=f"{float(v):.2f}")
         else:
@@ -267,15 +235,12 @@ class SliderApp:
 def main(args=None):
     rclpy.init(args=args)
     node = ManualPublisher()
-
     # Spin ROS2 in a background daemon thread
     ros_thread = threading.Thread(target=rclpy.spin, args=(node,), daemon=True)
     ros_thread.start()
-
     # Run tkinter on the main thread (required on most platforms)
     root = tk.Tk()
     SliderApp(root, node)
-
     try:
         root.mainloop()
     finally:

@@ -14,7 +14,6 @@ from std_msgs.msg import Float32
 class PolicySkill1(Policy):
     def __init__(self, name='skill_1_python_policy', class_name='cognitive_nodes.policy.Policy', publisher_msg=None, publisher_topic=None, **params):
         super().__init__(name, class_name, publisher_msg, publisher_topic, **params)
-
     async def execute_callback(self, request, response):
         #idle_motion = AutonomousIdleMotion()
         #idle_motion.execute_random_motion()
