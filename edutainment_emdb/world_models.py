@@ -27,7 +27,7 @@ class EdutainmentStudentExpert(WorldModel):
             value = round(value_raw[0]['data'], 1)
 
             # WM 1
-            if value > 0.5:
+            if value >= 0.75:
                 self.activation.activation = 1.0
                 self.selected_behavior = "expert_student"
                 self.get_logger().debug(f"[{self.name}] Selected behavior: {self.selected_behavior}")
@@ -161,7 +161,7 @@ class EdutainmentStudentGeneral(WorldModel):
             value = round(value_raw[0]['data'], 1)
 
             # WM 3
-            if 0.25 < value <= 0.5:
+            if 0.25 < value < 0.75:
                 self.activation.activation = 1.0
                 self.selected_behavior = "general_student"
                 self.get_logger().debug(f"[{self.name}] Selected behavior: {self.selected_behavior}")

@@ -77,17 +77,185 @@ class PNodePythonEvaluationErrorsPresent(PNode): #Pn1.3
                 activation_list[sensor]['updated']=False
                 perception[sensor]=activation_list[sensor]['data']
         if perception:
-            value_raw = perception.get('python_errors_perception')
+            value_raw = perception.get('teacher_present_perception')
             value = round(value_raw[0]['data'], 1)
-            value_raw_2 = perception.get('evaluation_errors_perception')
+            value_raw_2 = perception.get('python_errors_perception')
             value_2 = round(value_raw_2[0]['data'], 1)
-            value_raw_3 = perception.get('teacher_present_perception')
+            value_raw_3 = perception.get('evaluation_errors_perception')
             value_3 = round(value_raw_3[0]['data'], 1)
 
             # P1.3: any USER present & Python errors or evaluation errors > high threshold
-            if value >= 0.75 and value_2 >= 0.75 and value_3 == 1.0:
+            if  value == 1.0 and value_2 >= 0.75 and value_3 >= 0.75:
                 self.activation.activation = 0.95
                 self.get_logger().debug(f"PNODE DEBUG: python_evaluation_errors_present_pnode: {value}")
+            else:
+                self.activation.activation = 0.0
+            
+            self.activation.timestamp = self.get_clock().now().to_msg()
+        return self.activation
+
+class PNodeBoredLow(PNode): #Pn2.1 and Pn2.2
+    """
+    PNode that represents the student being bored
+    """
+    def __init__(self, name='bored_low_pnode', class_name='cognitive_nodes.pnode.PNode', space_class=None, space=None, history_size=100, **params):
+        super().__init__(name, class_name, space_class, space, history_size, **params)
+    def calculate_activation(self, perception=None, activation_list=None):
+        if activation_list!=None:
+            perception={}
+            for sensor in activation_list:
+                activation_list[sensor]['updated']=False
+                perception[sensor]=activation_list[sensor]['data']
+        if perception:
+            value_raw = perception.get('bored_perception')
+            value = round(value_raw[0]['data'], 1)
+
+            # Pn2.1 and Pn2.2: student not engaged > low threshold
+            if value <= 0.5:
+                self.activation.activation = 0.95
+                self.get_logger().debug(f"PNODE DEBUG: bored_low_pnode: {value}")
+            else:
+                self.activation.activation = 0.0
+            
+            self.activation.timestamp = self.get_clock().now().to_msg()
+        return self.activation
+
+class PNodeBoredHigh(PNode): # Pn2.3
+    """
+    PNode that represents the student being highly bored
+    """
+    def __init__(self, name='bored_high_pnode', class_name='cognitive_nodes.pnode.PNode', space_class=None, space=None, history_size=100, **params):
+        super().__init__(name, class_name, space_class, space, history_size, **params)
+    def calculate_activation(self, perception=None, activation_list=None):
+        if activation_list!=None:
+            perception={}
+            for sensor in activation_list:
+                activation_list[sensor]['updated']=False
+                perception[sensor]=activation_list[sensor]['data']
+        if perception:
+            value_raw = perception.get('teacher_type_perception')
+            value = round(value_raw[0]['data'], 1)
+            value_raw_2 = perception.get('bored_perception')
+            value_2 = round(value_raw_2[0]['data'], 1)
+
+            # Pn2.3: USER2 & student not engaged > high threshold
+            if value <= 0.25 and value_2 > 0.5:
+                self.activation.activation = 0.95
+                self.get_logger().debug(f"PNODE DEBUG: bored_high_pnode: {value}")
+            else:
+                self.activation.activation = 0.0
+            
+            self.activation.timestamp = self.get_clock().now().to_msg()
+        return self.activation
+
+class PNodeStandingLow(PNode): # Pn3.1
+    """
+    PNode that represents the student standing
+    """
+    def __init__(self, name='standing_low_pnode', class_name='cognitive_nodes.pnode.PNode', space_class=None, space=None, history_size=100, **params):
+        super().__init__(name, class_name, space_class, space, history_size, **params)
+    def calculate_activation(self, perception=None, activation_list=None):
+        if activation_list!=None:
+            perception={}
+            for sensor in activation_list:
+                activation_list[sensor]['updated']=False
+                perception[sensor]=activation_list[sensor]['data']
+        if perception:
+            value_raw = perception.get('standing_perception')
+            value = round(value_raw[0]['data'], 1)
+
+            # Pn3.1: student standing up > low threshold
+            if value <= 0.5:
+                self.activation.activation = 0.95
+                self.get_logger().debug(f"PNODE DEBUG: standing_low_pnode: {value}")
+            else:
+                self.activation.activation = 0.0
+            
+            self.activation.timestamp = self.get_clock().now().to_msg()
+        return self.activation
+
+class PNodeStandingHighPresent(PNode): # Pn3.2
+    """
+    PNode that represents the student standing for a long time with teacher present
+    """
+    def __init__(self, name='standing_high_present_pnode', class_name='cognitive_nodes.pnode.PNode', space_class=None, space=None, history_size=100, **params):
+        super().__init__(name, class_name, space_class, space, history_size, **params)
+    def calculate_activation(self, perception=None, activation_list=None):
+        if activation_list!=None:
+            perception={}
+            for sensor in activation_list:
+                activation_list[sensor]['updated']=False
+                perception[sensor]=activation_list[sensor]['data']
+        if perception:
+            value_raw = perception.get('teacher_present_perception')
+            value = round(value_raw[0]['data'], 1)
+            value_raw_2 = perception.get('standing_perception')
+            value_2 = round(value_raw_2[0]['data'], 1)
+
+            # Pn3.2: any USER present & student standing up > high threshold
+            if value == 1.0 and value_2 > 0.5:
+                self.activation.activation = 0.95
+                self.get_logger().debug(f"PNODE DEBUG: standing_high_present_pnode: {value}")
+            else:
+                self.activation.activation = 0.0
+            
+            self.activation.timestamp = self.get_clock().now().to_msg()
+        return self.activation
+
+class PNodeStandingHighAbsentOld(PNode): # Pn3.3
+    """
+    PNode that represents the student standing for a long time with an old-school teacher absent
+    """
+    def __init__(self, name='standing_high_absent_old_pnode', class_name='cognitive_nodes.pnode.PNode', space_class=None, space=None, history_size=100, **params):
+        super().__init__(name, class_name, space_class, space, history_size, **params)
+    def calculate_activation(self, perception=None, activation_list=None):
+        if activation_list!=None:
+            perception={}
+            for sensor in activation_list:
+                activation_list[sensor]['updated']=False
+                perception[sensor]=activation_list[sensor]['data']
+        if perception:
+            value_raw = perception.get('teacher_type_perception')
+            value = round(value_raw[0]['data'], 1)
+            value_raw_2 = perception.get('teacher_present_perception')
+            value_2 = round(value_raw_2[0]['data'], 1)
+            value_raw_3 = perception.get('standing_perception')
+            value_3 = round(value_raw_3[0]['data'], 1)
+
+            # Pn3.3: USER1 & no USER present & student standing up > high threshold
+            if value >= 0.75 and value_2 == 0.0 and value_3 > 0.5:
+                self.activation.activation = 0.95
+                self.get_logger().debug(f"PNODE DEBUG: standing_high_absent_old_pnode: {value}")
+            else:
+                self.activation.activation = 0.0
+            
+            self.activation.timestamp = self.get_clock().now().to_msg()
+        return self.activation
+    
+class PNodeStandingHighAbsentModern(PNode): # Pn3.4
+    """
+    PNode that represents the student standing for a long time with a modern teacher absent
+    """
+    def __init__(self, name='standing_high_absent_modern_pnode', class_name='cognitive_nodes.pnode.PNode', space_class=None, space=None, history_size=100, **params):
+        super().__init__(name, class_name, space_class, space, history_size, **params)
+    def calculate_activation(self, perception=None, activation_list=None):
+        if activation_list!=None:
+            perception={}
+            for sensor in activation_list:
+                activation_list[sensor]['updated']=False
+                perception[sensor]=activation_list[sensor]['data']
+        if perception:
+            value_raw = perception.get('teacher_type_perception')
+            value = round(value_raw[0]['data'], 1)
+            value_raw_2 = perception.get('teacher_present_perception')
+            value_2 = round(value_raw_2[0]['data'], 1)
+            value_raw_3 = perception.get('standing_perception')
+            value_3 = round(value_raw_3[0]['data'], 1)
+
+            # Pn3.4: USER2 & not USER present & student standing up > high threshold
+            if value <= 0.25 and value_2 == 0.0 and value_3 > 0.5:
+                self.activation.activation = 0.95
+                self.get_logger().debug(f"PNODE DEBUG: standing_high_absent_modern_pnode: {value}")
             else:
                 self.activation.activation = 0.0
             
