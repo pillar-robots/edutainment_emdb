@@ -1,6 +1,21 @@
 import math
 from cognitive_nodes.pnode import PNode
 
+# Global variables for the thresholds
+TEACHER_ABSENT_THRESHOLD = 0.0
+TEACHER_PRESENT_THRESHOLD = 1.0
+TEACHER_TYPE_UNDEFINED_THRESHOLD = 0.0
+TEACHER_TYPE_MODERN_THRESHOLD = 0.2
+TEACHER_TYPE_OLD_THRESHOLD = 0.8
+PYTHON_ERRORS_LOW_THRESHOLD = 0.5
+PYTHON_ERRORS_HIGH_THRESHOLD = 0.75
+EVALUATION_ERRORS_LOW_THRESHOLD = 0.5
+EVALUATION_ERRORS_HIGH_THRESHOLD = 0.75
+BORED_LOW_THRESHOLD = 0.5
+BORED_HIGH_THRESHOLD = 0.75
+STANDING_LOW_THRESHOLD = 0.5
+STANDING_HIGH_THRESHOLD = 0.75
+
 class PNodePythonErrors(PNode): #Pn1.1
     """
     PNode that represents Python errors
@@ -29,7 +44,7 @@ class PNodePythonErrors(PNode): #Pn1.1
             value = round(value_raw[0]['data'], 1)
 
             # Pn1.1: Python errors > low threshold
-            if value >= 0.5:
+            if value >= PYTHON_ERRORS_LOW_THRESHOLD and value < PYTHON_ERRORS_HIGH_THRESHOLD:
                 self.activation.activation = 0.95
                 self.get_logger().debug(f"PNODE DEBUG: python_errors_pnode: {value}")
             else:
@@ -55,7 +70,7 @@ class PNodeEvaluationErrors(PNode): #Pn1.2
             value = round(value_raw[0]['data'], 1)
 
             # Pn1.2: evaluation errors > low threshold
-            if value >= 0.5:
+            if value >= EVALUATION_ERRORS_LOW_THRESHOLD and value < EVALUATION_ERRORS_HIGH_THRESHOLD:
                 self.activation.activation = 0.95
                 self.get_logger().debug(f"PNODE DEBUG: evaluation_errors_pnode: {value}")
             else:
@@ -85,7 +100,7 @@ class PNodePythonEvaluationErrorsPresent(PNode): #Pn1.3
             value_3 = round(value_raw_3[0]['data'], 1)
 
             # P1.3: any USER present & Python errors or evaluation errors > high threshold
-            if  value == 1.0 and value_2 >= 0.75 and value_3 >= 0.75:
+            if  value == TEACHER_PRESENT_THRESHOLD and (value_2 >= PYTHON_ERRORS_HIGH_THRESHOLD or value_3 >= EVALUATION_ERRORS_HIGH_THRESHOLD):
                 self.activation.activation = 0.95
                 self.get_logger().debug(f"PNODE DEBUG: python_evaluation_errors_present_pnode: {value}")
             else:
@@ -111,7 +126,7 @@ class PNodeBoredLow(PNode): #Pn2.1 and Pn2.2
             value = round(value_raw[0]['data'], 1)
 
             # Pn2.1 and Pn2.2: student not engaged > low threshold
-            if value >= 0.5:
+            if value >= BORED_LOW_THRESHOLD and value < BORED_HIGH_THRESHOLD:
                 self.activation.activation = 0.95
                 self.get_logger().debug(f"PNODE DEBUG: bored_low_pnode: {value}")
             else:
@@ -139,7 +154,7 @@ class PNodeBoredHigh(PNode): # Pn2.3
             value_2 = round(value_raw_2[0]['data'], 1)
 
             # Pn2.3: USER2 & student not engaged > high threshold
-            if 0.0 < value <= 0.2 and value_2 >= 0.75:
+            if TEACHER_TYPE_UNDEFINED_THRESHOLD < value <= TEACHER_TYPE_MODERN_THRESHOLD and value_2 >= BORED_HIGH_THRESHOLD:
                 self.activation.activation = 0.95
                 self.get_logger().debug(f"PNODE DEBUG: bored_high_pnode: {value}")
             else:
@@ -165,7 +180,7 @@ class PNodeStandingLow(PNode): # Pn3.1
             value = round(value_raw[0]['data'], 1)
 
             # Pn3.1: student standing up > low threshold
-            if value >= 0.5:
+            if value >= STANDING_LOW_THRESHOLD and value < STANDING_HIGH_THRESHOLD:
                 self.activation.activation = 0.95
                 self.get_logger().debug(f"PNODE DEBUG: standing_low_pnode: {value}")
             else:
@@ -193,7 +208,7 @@ class PNodeStandingHighPresent(PNode): # Pn3.2
             value_2 = round(value_raw_2[0]['data'], 1)
 
             # Pn3.2: any USER present & student standing up > high threshold
-            if value == 1.0 and value_2 >= 0.75:
+            if value == TEACHER_PRESENT_THRESHOLD and value_2 >= STANDING_HIGH_THRESHOLD:
                 self.activation.activation = 0.95
                 self.get_logger().debug(f"PNODE DEBUG: standing_high_present_pnode: {value}")
             else:
@@ -223,7 +238,7 @@ class PNodeStandingHighAbsentOld(PNode): # Pn3.3
             value_3 = round(value_raw_3[0]['data'], 1)
 
             # Pn3.3: USER1 & no USER present & student standing up > high threshold
-            if value >= 0.8 and value_2 == 0.0 and value_3 >= 0.75:
+            if value >= TEACHER_TYPE_OLD_THRESHOLD and value_2 == TEACHER_ABSENT_THRESHOLD and value_3 >= STANDING_HIGH_THRESHOLD:
                 self.activation.activation = 0.95
                 self.get_logger().debug(f"PNODE DEBUG: standing_high_absent_old_pnode: {value}")
             else:
@@ -253,7 +268,7 @@ class PNodeStandingHighAbsentModern(PNode): # Pn3.4
             value_3 = round(value_raw_3[0]['data'], 1)
 
             # Pn3.4: USER2 & not USER present & student standing up > high threshold
-            if 0.0 < value <= 0.2 and value_2 == 0.0 and value_3 >= 0.75:
+            if TEACHER_TYPE_UNDEFINED_THRESHOLD < value <= TEACHER_TYPE_MODERN_THRESHOLD and value_2 == TEACHER_ABSENT_THRESHOLD and value_3 >= STANDING_HIGH_THRESHOLD:
                 self.activation.activation = 0.95
                 self.get_logger().debug(f"PNODE DEBUG: standing_high_absent_modern_pnode: {value}")
             else:

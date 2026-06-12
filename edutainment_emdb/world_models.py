@@ -7,6 +7,11 @@ from core.utils import class_from_classname, perception_msg_to_dict, separate_pe
 from cognitive_node_interfaces.msg import Perception, PerceptionStamped
 from rclpy.time import Time
 
+# Global variables for the thresholds
+STUDENT_TYPE_UNDEFINED_THRESHOLD = 0.0
+STUDENT_TYPE_AMATEUR_THRESHOLD = 0.2
+STUDENT_TYPE_EXPERT_THRESHOLD = 0.8
+
 class EdutainmentStudentExpert(WorldModel):
     def __init__(self,
                  name='EXPERT_WM',
@@ -27,7 +32,7 @@ class EdutainmentStudentExpert(WorldModel):
             value = round(value_raw[0]['data'], 1)
 
             # WM 1
-            if value >= 0.8:
+            if value >= STUDENT_TYPE_EXPERT_THRESHOLD:
                 self.activation.activation = 1.0
                 self.selected_behavior = "expert_student"
                 self.get_logger().debug(f"[{self.name}] Selected behavior: {self.selected_behavior}")
@@ -94,7 +99,7 @@ class EdutainmentStudentAmateur(WorldModel):
             value = round(value_raw[0]['data'], 1)
 
             # WM 2
-            if 0.0 < value <= 0.2:
+            if STUDENT_TYPE_UNDEFINED_THRESHOLD < value <= STUDENT_TYPE_AMATEUR_THRESHOLD:
                 self.activation.activation = 1.0
                 self.selected_behavior = "amateur_student"
                 self.get_logger().debug(f"[{self.name}] Selected behavior: {self.selected_behavior}")
@@ -161,7 +166,7 @@ class EdutainmentStudentGeneral(WorldModel):
             value = round(value_raw[0]['data'], 1)
 
             # WM 3
-            if 0.2 < value < 0.8:
+            if STUDENT_TYPE_AMATEUR_THRESHOLD < value < STUDENT_TYPE_EXPERT_THRESHOLD:
                 self.activation.activation = 1.0
                 self.selected_behavior = "general_student"
                 self.get_logger().debug(f"[{self.name}] Selected behavior: {self.selected_behavior}")
