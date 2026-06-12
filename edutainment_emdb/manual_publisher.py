@@ -8,15 +8,15 @@ from std_msgs.msg import Float32, Int32, Bool
 # ── Topic configuration ──────────────────────────────────────────────────────
 # msg_type, key, topic, default, min_val, max_val
 TOPICS = [
-    (Bool,    "teacher_present_perception", "/teacher/is_present", True, 0, 1),
-    (Int32,   "teacher_type_perception", "/teacher/type", 5, 0, 5),
-    (Int32,   "student_type_perception", "/student/type", 5, 0, 5),
-    (Float32, "challenge_completion_perception", "/student/challenge_completion", 0.0, 0.0, 1.0),
-    (Int32,   "python_errors_perception", "/student/metrics/python_errors", 0, 0, 100),
-    (Int32,   "evaluation_errors_perception", "/student/metrics/evaluation_error_streak", 0, 0, 100),
-    (Int32,   "error_streak_perception", "/student/metrics/error_streak", 0, 0, 100),
-    (Int32,   "bored_perception", "/student/bored", 0, 0, 100),
-    (Int32,   "standing_perception", "/student/standing", 0, 0, 100)
+    (Float32,   "teacher_present_perception", "/teacher/is_present", 0.0, 0.0, 1.0),
+    (Float32,   "teacher_type_perception", "/teacher/type", 0.0, 0.0, 1.0),
+    (Float32,   "student_type_perception", "/student/type", 0.0, 0.0, 1.0),
+    (Float32,   "challenge_completion_perception", "/student/challenge_completion", 0.0, 0.0, 1.0),
+    (Float32,   "python_errors_perception", "/student/metrics/python_errors", 0.0, 0.0, 1.0),
+    (Float32,   "evaluation_errors_perception", "/student/metrics/evaluation_error_streak", 0.0, 0.0, 1.0),
+    (Float32,   "error_streak_perception", "/student/metrics/error_streak", 0.0, 0.0, 1.0),
+    (Float32,   "bored_perception", "/student/bored", 0.0, 0.0, 1.0),
+    (Float32,   "standing_perception", "/student/standing", 0.0, 0.0, 1.0)
     ]
 
 # ── ROS2 Node ────────────────────────────────────────────────────────────────
@@ -143,7 +143,7 @@ class SliderApp:
         # -------------------------
         # Bool -> checkbox
         # -------------------------
-        if msg_type is Bool:
+        if key == "teacher_present_perception":
             var = tk.BooleanVar(value=bool(default))
             self._vars[key] = var
             cb = ttk.Checkbutton(
@@ -216,7 +216,7 @@ class SliderApp:
         self.node.values[key] = float(val)
     
     def _on_bool_change(self, key: str, var: tk.BooleanVar):
-        self.node.values[key] = bool(var.get())
+        self.node.values[key] = float(bool(var.get()))
 
     def _update_label(self, key: str, label: tk.Label):
         v = self._vars[key].get()
