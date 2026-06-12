@@ -94,7 +94,7 @@ class EdutainmentStudentAmateur(WorldModel):
             value = round(value_raw[0]['data'], 1)
 
             # WM 2
-            if value <= 0.2:
+            if 0.0 < value <= 0.2:
                 self.activation.activation = 1.0
                 self.selected_behavior = "amateur_student"
                 self.get_logger().debug(f"[{self.name}] Selected behavior: {self.selected_behavior}")
