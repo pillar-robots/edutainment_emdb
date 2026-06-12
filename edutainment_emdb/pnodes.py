@@ -139,7 +139,7 @@ class PNodeBoredHigh(PNode): # Pn2.3
             value_2 = round(value_raw_2[0]['data'], 1)
 
             # Pn2.3: USER2 & student not engaged > high threshold
-            if value <= 0.25 and value_2 >= 0.75:
+            if value <= 0.2 and value_2 >= 0.75:
                 self.activation.activation = 0.95
                 self.get_logger().debug(f"PNODE DEBUG: bored_high_pnode: {value}")
             else:
@@ -223,7 +223,7 @@ class PNodeStandingHighAbsentOld(PNode): # Pn3.3
             value_3 = round(value_raw_3[0]['data'], 1)
 
             # Pn3.3: USER1 & no USER present & student standing up > high threshold
-            if value >= 0.75 and value_2 == 0.0 and value_3 >= 0.75:
+            if value >= 0.8 and value_2 == 0.0 and value_3 >= 0.75:
                 self.activation.activation = 0.95
                 self.get_logger().debug(f"PNODE DEBUG: standing_high_absent_old_pnode: {value}")
             else:
@@ -253,7 +253,7 @@ class PNodeStandingHighAbsentModern(PNode): # Pn3.4
             value_3 = round(value_raw_3[0]['data'], 1)
 
             # Pn3.4: USER2 & not USER present & student standing up > high threshold
-            if value <= 0.25 and value_2 == 0.0 and value_3 >= 0.75:
+            if value <= 0.2 and value_2 == 0.0 and value_3 >= 0.75:
                 self.activation.activation = 0.95
                 self.get_logger().debug(f"PNODE DEBUG: standing_high_absent_modern_pnode: {value}")
             else:
