@@ -150,11 +150,13 @@ class PNodeBoredHigh(PNode): # Pn2.3
         if perception:
             value_raw = perception.get('teacher_type_perception')
             value = round(value_raw[0]['data'], 1)
-            value_raw_2 = perception.get('bored_perception')
+            value_raw_2 = perception.get('teacher_present_perception')
             value_2 = round(value_raw_2[0]['data'], 1)
+            value_raw_3 = perception.get('bored_perception')
+            value_3 = round(value_raw_3[0]['data'], 1)
 
-            # Pn2.3: USER2 & student not engaged > high threshold
-            if TEACHER_TYPE_UNDEFINED_THRESHOLD < value <= TEACHER_TYPE_MODERN_THRESHOLD and value_2 >= BORED_HIGH_THRESHOLD:
+            # Pn2.3: USER2 & any USER present & student not engaged > high threshold
+            if TEACHER_TYPE_UNDEFINED_THRESHOLD < value <= TEACHER_TYPE_MODERN_THRESHOLD and value_3 >= BORED_HIGH_THRESHOLD:
                 self.activation.activation = 0.95
                 self.get_logger().debug(f"PNODE DEBUG: bored_high_pnode: {value}")
             else:
