@@ -156,7 +156,7 @@ class PNodeBoredHigh(PNode): # Pn2.3
             value_3 = round(value_raw_3[0]['data'], 1)
 
             # Pn2.3: USER2 & any USER present & student not engaged > high threshold
-            if TEACHER_TYPE_UNDEFINED_THRESHOLD < value <= TEACHER_TYPE_MODERN_THRESHOLD and value_3 >= BORED_HIGH_THRESHOLD:
+            if TEACHER_TYPE_UNDEFINED_THRESHOLD < value <= TEACHER_TYPE_MODERN_THRESHOLD and value_2 == 1 and value_3 >= BORED_HIGH_THRESHOLD:
                 self.activation.activation = 0.95
                 self.get_logger().debug(f"PNODE DEBUG: bored_high_pnode: {value}")
             else:
