@@ -61,7 +61,7 @@ LTM:
     Connectors:
         -
             data: Space
-            default_class: cognitive_nodes.space.ANNSpace #SVMSpace # cognitive_nodes.space.ANNSpace
+            default_class: cognitive_nodes.space.ANNSpace #cognitive_nodes.space.SVMSpace # cognitive_nodes.space.ANNSpace
         -
             data: Perception
             default_class: cognitive_nodes.perception.Perception
@@ -73,13 +73,13 @@ LTM:
             default_class: cognitive_nodes.cnode.CNode
         -
             data: Goal
-            default_class: cognitive_nodes.goal.GoalLearnedSpace # cognitive_nodes.goal.GoalLearnedSpace
+            default_class: cognitive_nodes.goal.GoalLearnedSpace # cognitive_nodes.goal.Goal #cognitive_nodes.goal.GoalLearnedSpace
         -
             data: WorldModel
             default_class: cognitive_nodes.world_model.WorldModel
         -
             data: Policy
-            default_class: cognitive_nodes.policy.PolicyBlocking #Policy # cognitive_nodes.policy.PolicyBlocking
+            default_class: cognitive_nodes.policy.PolicyBlocking #cognitive_nodes.policy.Policy # cognitive_nodes.policy.PolicyBlocking
     Nodes:
         Perception:
             -
@@ -158,7 +158,7 @@ LTM:
                 name: student_exercise_teacher_old_present_purpose # M1.1
                 class_name: cognitive_nodes.robot_purpose.RobotPurpose
                 parameters:
-                    weight: 1.0 #0.9
+                    weight: 1.0 #0.9 # The weight of the RobotPurpose.
                     drive_id: 'student_exercise_teacher_old_present_drive' # D1.1
                     purpose_type: 'Mission'
                     terminal: False
@@ -258,9 +258,9 @@ LTM:
                 name: student_exercise_teacher_old_present_drive # D1.1
                 class_name: cognitive_nodes.drive.DriveExponential
                 parameters:
-                    input_topic: /student/challenge_completion
-                    input_msg: std_msgs.msg.Float32
-                    min_eval: 0.8
+                    input_topic: /student/challenge_completion # Topic where the input will be published.
+                    input_msg: std_msgs.msg.Float32 # Message type of the input topic.
+                    min_eval: 0.8 # Minimum evaluation value as input reaches 1.0, defaults to 0.0.
                     neighbors: [{"name": "student_exercise_teacher_old_present_purpose", "node_type": "RobotPurpose"}] # M1.1
             -
                 name: student_exercise_teacher_modern_present_drive # D2.1
