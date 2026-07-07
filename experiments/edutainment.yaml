@@ -593,11 +593,10 @@ LTM:
                 parameters:
                     neighbors: [{"name": "python_evaluation_errors_present_expert_cnode", "node_type": "CNode"}, # C1.3 EXPERT_WM
                                 {"name": "python_evaluation_errors_present_amateur_cnode", "node_type": "CNode"}, # C1.3 AMATEUR_WM
-                                {"name": "bored_high_amateur_cnode", "node_type": "CNode"}, # C2.3 EXPERT_WM
+                                {"name": "bored_high_expert_cnode", "node_type": "CNode"}, # C2.3 EXPERT_WM
                                 {"name": "bored_high_amateur_cnode", "node_type": "CNode"}, # C2.3 AMATEUR_WM
                                 {"name": "standing_high_present_expert_cnode", "node_type": "CNode"}, # C3.2 EXPERT_WM
                                 {"name": "standing_high_present_amateur_cnode", "node_type": "CNode"},] # C3.2 AMATEUR_WM
-            ####
             -
                 name: skill_4_sit_policy #S4
                 class_name: edutainment_emdb.policies.PolicySkill4
