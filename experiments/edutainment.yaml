@@ -7,7 +7,7 @@ Experiment:
         iterations: 100 #10000 # 100
         trials: 20
         subgoals: False
-        softmax_selection: False #True # False
+        softmax_selection: False #True # False # TODO: review this parameter.
         softmax_temperature: 0.3
         kill_on_finish: True
 Control:
@@ -16,12 +16,12 @@ Control:
     control_msg: cognitive_processes_interfaces.msg.ControlMsg
     episodes_topic: /main_loop/episodes
     episodes_msg: cognitive_processes_interfaces.msg.Episode
-    #executed_policy_service: /emdb/simulator/executed_policy # Commented
+    #executed_policy_service: /emdb/simulator/executed_policy # Commented # TODO: review this service, used only by simulator.
     executed_policy_msg: cognitive_node_interfaces.srv.Policy
-    #world_reset_service: /emdb/simulator/world_reset # Commented
+    #world_reset_service: /emdb/simulator/world_reset # Commented # TODO: review this service, used only by simulator.
     world_reset_msg: cognitive_processes_interfaces.srv.WorldReset
 LTM:
-    Files:
+    Files: # TODO: review them, they are not writing anything.
         -
             id: goodness
             class: core.file.FileGoodness
@@ -158,10 +158,10 @@ LTM:
                 name: student_exercise_teacher_old_present_purpose # M1.1
                 class_name: cognitive_nodes.robot_purpose.RobotPurpose
                 parameters:
-                    weight: 1.0 #0.9 # The weight of the RobotPurpose.
+                    weight: 1.0 #0.9 # The weight of the RobotPurpose. # TODO: review weights, check diagram.
                     drive_id: 'student_exercise_teacher_old_present_drive' # D1.1
                     purpose_type: 'Mission'
-                    terminal: False
+                    terminal: False # The terminal flag indicates if a world reset is required after satisfying the purpose.
             -
                 name: student_exercise_teacher_modern_present_purpose # M2.1
                 class_name: cognitive_nodes.robot_purpose.RobotPurpose
@@ -256,11 +256,11 @@ LTM:
             ### DX.1
             -
                 name: student_exercise_teacher_old_present_drive # D1.1
-                class_name: cognitive_nodes.drive.DriveExponential
+                class_name: cognitive_nodes.drive.DriveExponential # TODO: review type of Drive, check DriveDummy, DriveExponentialOpo and MyControll.DriveExponential.
                 parameters:
                     input_topic: /student/challenge_completion # Topic where the input will be published.
                     input_msg: std_msgs.msg.Float32 # Message type of the input topic.
-                    min_eval: 0.8 # Minimum evaluation value as input reaches 1.0, defaults to 0.0.
+                    min_eval: 0.8 # Minimum evaluation value as input reaches 1.0, defaults to 0.0. # TODO: review this parameter.
                     neighbors: [{"name": "student_exercise_teacher_old_present_purpose", "node_type": "RobotPurpose"}] # M1.1
             -
                 name: student_exercise_teacher_modern_present_drive # D2.1
@@ -354,7 +354,7 @@ LTM:
                     neighbors: [{"name": "student_seated_teacher_modern_absent_purpose", "node_type": "RobotPurpose"}]
         Goal:
             -
-                name: exercise_finished_goal # G1 #Needs also D3.1 and D4.1, or is that a different Goal?
+                name: exercise_finished_goal # G1 #TODO: Needs also D3.1 and D4.1, or is that a different Goal?
                 class_name: cognitive_nodes.goal.GoalMotiven
                 parameters:
                     neighbors: [{"name": "student_exercise_teacher_old_present_drive", "node_type": "Drive"}, #D1.1
