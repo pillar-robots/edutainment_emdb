@@ -9,7 +9,7 @@ from rclpy.time import Time
 
 # Global variables for the thresholds
 STUDENT_TYPE_UNDEFINED_THRESHOLD = 0.0
-STUDENT_TYPE_AMATEUR_THRESHOLD = 0.2
+STUDENT_TYPE_AMATEUR_THRESHOLD = 0.21 # To avoid rounding errors.
 STUDENT_TYPE_EXPERT_THRESHOLD = 0.8
 
 class EdutainmentStudentExpert(WorldModel):
