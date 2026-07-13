@@ -127,7 +127,7 @@ LTM:
             -
                 name: student_exercise_teacher_old_absent_drive # D3.1
                 class_name: cognitive_nodes.drive.DriveExponential # DriveExponential: 0 active, 1 inactive
-                #class_name: cognitive_nodes.drive.DriveExponentialOpo # DriveExponentialOpo: 1 active, 0 inactive
+                #class_name: edutainment_emdb.drives.DriveExponentialOpo # DriveExponentialOpo: 1 active, 0 inactive
                 parameters:
                     input_topic: /teacher/is_present # TODO: TEST, CAMBIAR POR /student/challenge_completion.
                     input_msg: std_msgs.msg.Float32
