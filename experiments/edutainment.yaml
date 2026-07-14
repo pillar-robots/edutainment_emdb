@@ -450,129 +450,129 @@ LTM:
                 name: python_errors_expert_cnode # C1.1 EXPERT_WM
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
-                    neighbors: [{"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
-                                {"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
+                    neighbors: [{"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
+                                {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
                                 {"name": "python_errors_pnode", "node_type": "PNode"}] # Pn1.1
             -
                 name: python_errors_amateur_cnode # C1.1 AMATEUR_WM
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
-                    neighbors: [{"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
-                                {"name": "AMATEUR_WM", "node_type": "WorldModel"}, # WM2
+                    neighbors: [{"name": "AMATEUR_WM", "node_type": "WorldModel"}, # WM2
+                                {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
                                 {"name": "python_errors_pnode", "node_type": "PNode"}] # Pn1.1
             -
                 name: evaluation_errors_expert_cnode # C1.2 EXPERT_WM
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
-                    neighbors: [{"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
-                                {"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
+                    neighbors: [{"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
+                                {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
                                 {"name": "evaluation_errors_pnode", "node_type": "PNode"}] # Pn1.2
             -
                 name: evaluation_errors_amateur_cnode # C1.2 AMATEUR_WM
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
-                    neighbors: [{"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
-                                {"name": "AMATEUR_WM", "node_type": "WorldModel"}, # WM2
+                    neighbors: [{"name": "AMATEUR_WM", "node_type": "WorldModel"}, # WM2
+                                {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
                                 {"name": "evaluation_errors_pnode", "node_type": "PNode"}] # Pn1.2
             -
                 name: python_evaluation_errors_present_expert_cnode # C1.3 EXPERT_WM
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
-                    neighbors: [{"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
-                                {"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
+                    neighbors: [{"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
+                                {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
                                 {"name": "python_evaluation_errors_present_pnode", "node_type": "PNode"}] # Pn1.3
             -
                 name: python_evaluation_errors_present_amateur_cnode # C1.3 AMATEUR_WM
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
-                    neighbors: [{"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
-                                {"name": "AMATEUR_WM", "node_type": "WorldModel"}, # WM2
+                    neighbors: [{"name": "AMATEUR_WM", "node_type": "WorldModel"}, # WM2
+                                {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
                                 {"name": "python_evaluation_errors_present_pnode", "node_type": "PNode"}] # Pn1.3
             ### C2.X
             -
                 name: bored_low_expert_cnode # C2.1 EXPERT_WM
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
-                    neighbors: [{"name": "awake_goal", "node_type": "Goal"}, # G2
-                                {"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
+                    neighbors: [{"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
+                                {"name": "awake_goal", "node_type": "Goal"}, # G2
                                 {"name": "bored_low_pnode", "node_type": "PNode"}] # Pn2.1 and Pn2.2
             -
                 name: bored_low_amateur_cnode # C2.2 AMATEUR_WM
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
-                    neighbors: [{"name": "awake_goal", "node_type": "Goal"}, # G2
-                                {"name": "AMATEUR_WM", "node_type": "WorldModel"}, # WM2
+                    neighbors: [{"name": "AMATEUR_WM", "node_type": "WorldModel"}, # WM2
+                                {"name": "awake_goal", "node_type": "Goal"}, # G2
                                 {"name": "bored_low_pnode", "node_type": "PNode"}] # Pn2.1 and Pn2.2
             -
                 name: bored_high_expert_cnode # C2.3 EXPERT_WM
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
-                    neighbors: [{"name": "awake_goal", "node_type": "Goal"}, # G2
-                                {"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
+                    neighbors: [{"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
+                                {"name": "awake_goal", "node_type": "Goal"}, # G2
                                 {"name": "bored_high_pnode", "node_type": "PNode"}] # Pn2.3
             -
                 name: bored_high_amateur_cnode # C2.3 AMATEUR_WM
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
-                    neighbors: [{"name": "awake_goal", "node_type": "Goal"}, # G2
-                                {"name": "AMATEUR_WM", "node_type": "WorldModel"}, # WM2
+                    neighbors: [{"name": "AMATEUR_WM", "node_type": "WorldModel"}, # WM2
+                                {"name": "awake_goal", "node_type": "Goal"}, # G2
                                 {"name": "bored_high_pnode", "node_type": "PNode"}] # Pn2.3
             ### C3.X
             -
                 name: standing_low_expert_cnode # C3.1 EXPERT_WM
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
-                    neighbors: [{"name": "seated_goal", "node_type": "Goal"}, # G3
-                                {"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
+                    neighbors: [{"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
+                                {"name": "seated_goal", "node_type": "Goal"}, # G3
                                 {"name": "standing_low_pnode", "node_type": "PNode"}] # Pn3.1
             -
                 name: standing_low_amateur_cnode # C3.1 AMATEUR_WM
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
-                    neighbors: [{"name": "seated_goal", "node_type": "Goal"}, # G3
-                                {"name": "AMATEUR_WM", "node_type": "WorldModel"}, # WM2
+                    neighbors: [{"name": "AMATEUR_WM", "node_type": "WorldModel"}, # WM2
+                                {"name": "seated_goal", "node_type": "Goal"}, # G3
                                 {"name": "standing_low_pnode", "node_type": "PNode"}] # Pn3.1
             -
                 name: standing_high_present_expert_cnode # C3.2 EXPERT_WM
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
-                    neighbors: [{"name": "seated_goal", "node_type": "Goal"}, # G3
-                                {"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
+                    neighbors: [{"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
+                                {"name": "seated_goal", "node_type": "Goal"}, # G3
                                 {"name": "standing_high_present_pnode", "node_type": "PNode"}] # Pn3.2
             -
                 name: standing_high_present_amateur_cnode # C3.2 AMATEUR_WM
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
-                    neighbors: [{"name": "seated_goal", "node_type": "Goal"}, # G3
-                                {"name": "AMATEUR_WM", "node_type": "WorldModel"}, # WM2
+                    neighbors: [{"name": "AMATEUR_WM", "node_type": "WorldModel"}, # WM2
+                                {"name": "seated_goal", "node_type": "Goal"}, # G3
                                 {"name": "standing_high_present_pnode", "node_type": "PNode"}] # Pn3.2
             -
                 name: standing_high_absent_old_expert_cnode # C3.3 EXPERT_WM
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
-                    neighbors: [{"name": "seated_goal", "node_type": "Goal"}, # G3
-                                {"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
+                    neighbors: [{"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
+                                {"name": "seated_goal", "node_type": "Goal"}, # G3
                                 {"name": "standing_high_absent_old_pnode", "node_type": "PNode"}] # Pn3.3
             -
                 name: standing_high_absent_old_amateur_cnode # C3.3 AMATEUR_WM
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
-                    neighbors: [{"name": "seated_goal", "node_type": "Goal"}, # G3
-                                {"name": "AMATEUR_WM", "node_type": "WorldModel"}, # WM2
+                    neighbors: [{"name": "AMATEUR_WM", "node_type": "WorldModel"}, # WM2
+                                {"name": "seated_goal", "node_type": "Goal"}, # G3
                                 {"name": "standing_high_absent_old_pnode", "node_type": "PNode"}] # Pn3.3
             -
                 name: standing_high_absent_modern_expert_cnode # C3.4 EXPERT_WM
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
-                    neighbors: [{"name": "seated_goal", "node_type": "Goal"}, # G3
-                                {"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
+                    neighbors: [{"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
+                                {"name": "seated_goal", "node_type": "Goal"}, # G3
                                 {"name": "standing_high_absent_modern_pnode", "node_type": "PNode"}] # Pn3.4
             -
                 name: standing_high_absent_modern_amateur_cnode # C3.4 AMATEUR_WM
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
-                    neighbors: [{"name": "seated_goal", "node_type": "Goal"}, # G3
-                                {"name": "AMATEUR_WM", "node_type": "WorldModel"}, # WM2
+                    neighbors: [{"name": "AMATEUR_WM", "node_type": "WorldModel"}, # WM2
+                                {"name": "seated_goal", "node_type": "Goal"}, # G3
                                 {"name": "standing_high_absent_modern_pnode", "node_type": "PNode"}] # Pn3.4
         Policy:
             -

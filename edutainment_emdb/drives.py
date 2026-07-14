@@ -1,10 +1,8 @@
 import rclpy
 from copy import copy
-from cognitive_nodes.drive import DriveTopicInput, Drive
-from builtin_interfaces.msg import Time as TimeMsg
 import random
-from core.utils import class_from_classname
 from math import exp, isclose
+from cognitive_nodes.drive import DriveTopicInput, Drive
 
 class DriveExponentialOpo(DriveTopicInput):
     def evaluate(self, perception=None):

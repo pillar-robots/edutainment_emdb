@@ -1,15 +1,7 @@
 import time
 import rclpy
-from rclpy.action import ActionClient
 import random
-from rclpy.node import Node
-from core.utils import perception_msg_to_dict
-from core.service_client import ServiceClientAsync
 from cognitive_nodes.policy import Policy
-from cognitive_node_interfaces.srv import SetActivation
-from trajectory_msgs.msg import JointTrajectoryPoint, JointTrajectory
-from builtin_interfaces.msg import Duration
-from std_msgs.msg import Float32
 import requests
 
 class PolicySkill1(Policy):
