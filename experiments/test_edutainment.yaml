@@ -162,3 +162,11 @@ LTM:
                 class_name: edutainment_emdb.policies.PolicySkill1
                 parameters:
                     neighbors: [{"name": "python_errors_expert_cnode", "node_type": "CNode"}] # C1.1 EXPERT_WM
+            -
+                name: skill_2_evaluation_policy #S2
+                class_name: edutainment_emdb.policies.PolicySkill2
+                parameters:
+                    neighbors: [
+                                # {"name": "evaluation_errors_expert_cnode", "node_type": "CNode"}, # C1.2 EXPERT_WM
+                                #{"name": "evaluation_errors_amateur_cnode", "node_type": "CNode"}
+                                ] # C1.2 AMATEUR_WM
