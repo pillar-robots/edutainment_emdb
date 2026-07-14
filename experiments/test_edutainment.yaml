@@ -7,7 +7,7 @@ Experiment:
         iterations: 10 #10000 # 100
         trials: 20
         subgoals: False
-        softmax_selection: False #True # False # TODO: review this parameter.
+        softmax_selection: True #True # False # TODO: review this parameter.
         softmax_temperature: 0.3
         kill_on_finish: True
 Control:
@@ -21,7 +21,7 @@ Control:
     #world_reset_service: /emdb/simulator/world_reset # Commented # TODO: review this service, used only by simulator.
     world_reset_msg: cognitive_processes_interfaces.srv.WorldReset
 LTM:
-    Files: # TODO: review them, they are not writing anything.
+    Files:
         -
             id: goodness
             class: core.file.FileGoodness
@@ -121,7 +121,7 @@ LTM:
                     weight: 1.0 #0.9
                     drive_id: 'student_exercise_teacher_old_absent_drive' # D3.1
                     purpose_type: 'Mission'
-                    terminal: False
+                    terminal: True # Test
         Drive:
             ### DX.1
             -
@@ -166,7 +166,4 @@ LTM:
                 name: skill_2_evaluation_policy #S2
                 class_name: edutainment_emdb.policies.PolicySkill2
                 parameters:
-                    neighbors: [
-                                # {"name": "evaluation_errors_expert_cnode", "node_type": "CNode"}, # C1.2 EXPERT_WM
-                                #{"name": "evaluation_errors_amateur_cnode", "node_type": "CNode"}
-                                ] # C1.2 AMATEUR_WM
+                    neighbors: [ ]

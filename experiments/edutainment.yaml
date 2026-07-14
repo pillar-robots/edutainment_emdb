@@ -21,7 +21,7 @@ Control:
     #world_reset_service: /emdb/simulator/world_reset # Commented # TODO: review this service, used only by simulator.
     world_reset_msg: cognitive_processes_interfaces.srv.WorldReset
 LTM:
-    Files: # TODO: review them, they are not writing anything.
+    Files:
         -
             id: goodness
             class: core.file.FileGoodness
