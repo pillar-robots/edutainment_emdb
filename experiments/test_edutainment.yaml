@@ -7,7 +7,7 @@ Experiment:
         iterations: 10 #10000 # 100
         trials: 20
         subgoals: False
-        softmax_selection: True #True # False # TODO: review this parameter.
+        softmax_selection: False #True # False # TODO: review this parameter.
         softmax_temperature: 0.3
         kill_on_finish: True
 Control:
@@ -140,6 +140,13 @@ LTM:
                 parameters:
                     neighbors: [{"name": "student_exercise_teacher_old_absent_drive", "node_type": "Drive"}] #D3.1
         PNode:
+            ### Pn0
+            -
+                name: idle_pnode # Pn0
+                class_name: edutainment_emdb.pnodes.PNodeIdle
+                parameters:
+                    space_class: cognitive_nodes.space.ActivatedDummySpace
+                    neighbors: [{"name": "python_errors_perception", "node_type": "Perception"}] # TEST WITH challenge_completion_perception
             ### Pn1.X
             -
                 name: python_errors_pnode # Pn1.1
@@ -148,6 +155,14 @@ LTM:
                     space_class: cognitive_nodes.space.ActivatedDummySpace
                     neighbors: [{"name": "python_errors_perception", "node_type": "Perception"}]
         CNode:
+            ### C0
+            -
+                name: idle_expert_cnode # C0 IDLE EXPERT_WM
+                class_name: cognitive_nodes.cnode.CNode
+                parameters:
+                    neighbors: [{"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
+                                {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
+                                {"name": "idle_pnode", "node_type": "PNode"}] # Pn1.1
             ### C1.X
             -
                 name: python_errors_expert_cnode # C1.1 EXPERT_WM
@@ -157,6 +172,11 @@ LTM:
                                 {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
                                 {"name": "python_errors_pnode", "node_type": "PNode"}] # Pn1.1
         Policy:
+            -
+                name: skill_0_idle_policy #S0
+                class_name: edutainment_emdb.policies.PolicySkill0
+                parameters:
+                    neighbors: [{"name": "idle_expert_cnode", "node_type": "CNode"}]
             -
                 name: skill_1_python_policy #S1
                 class_name: edutainment_emdb.policies.PolicySkill1
