@@ -12,9 +12,8 @@ TOPICS = [
     ("teacher_type_perception", "/teacher/type", 0.0),
     ("student_type_perception", "/student/type", 0.0),
     ("challenge_completion_perception", "/student/challenge_completion", 0.0),
-    ("python_errors_perception", "/student/metrics/python_errors", 0.0),
-    ("evaluation_errors_perception", "/student/metrics/evaluation_error_streak", 0.0),
-    ("error_streak_perception", "/student/metrics/error_streak", 0.0),
+    ("python_error_streak_perception", "/student/metrics/python_error_streak", 0.0),
+    ("evaluation_error_streak_perception", "/student/metrics/evaluation_error_streak", 0.0),
     ("bored_perception", "/student/bored", 0.0),
     ("standing_perception", "/student/standing", 0.0)
 ]

@@ -18,7 +18,7 @@ STANDING_HIGH_THRESHOLD = 0.75
 
 class PNodeIdle(PNode): #Pn0
     """
-    PNode that represents if the system should be idle or not. It is activated when the python_errors_perception is below the low threshold.
+    PNode that represents if the system should be idle or not. It is activated when the python_error_streak_perception is below the low threshold.
     """
     def __init__(self, name='idle_pnode', class_name='cognitive_nodes.pnode.PNode', space_class=None, space=None, history_size=100, **params):
         super().__init__(name, class_name, space_class, space, history_size, **params)
@@ -40,7 +40,7 @@ class PNodeIdle(PNode): #Pn0
                 activation_list[sensor]['updated']=False
                 perception[sensor]=activation_list[sensor]['data']
         if perception:
-            value_raw = perception.get('python_errors_perception')
+            value_raw = perception.get('python_error_streak_perception')
             value = round(value_raw[0]['data'], 1)
 
             # Pn0: Python errors < low threshold
@@ -66,7 +66,7 @@ class PNodePythonErrors(PNode): #Pn1.1
                 activation_list[sensor]['updated']=False
                 perception[sensor]=activation_list[sensor]['data']
         if perception:
-            value_raw = perception.get('python_errors_perception')
+            value_raw = perception.get('python_error_streak_perception')
             value = round(value_raw[0]['data'], 1)
 
             # Pn1.1: Python errors > low threshold
@@ -92,7 +92,7 @@ class PNodeEvaluationErrors(PNode): #Pn1.2
                 activation_list[sensor]['updated']=False
                 perception[sensor]=activation_list[sensor]['data']
         if perception:
-            value_raw = perception.get('evaluation_errors_perception')
+            value_raw = perception.get('evaluation_error_streak_perception')
             value = round(value_raw[0]['data'], 1)
 
             # Pn1.2: evaluation errors > low threshold
@@ -120,9 +120,9 @@ class PNodePythonEvaluationErrorsPresent(PNode): #Pn1.3
         if perception:
             value_raw = perception.get('teacher_present_perception')
             value = round(value_raw[0]['data'], 1)
-            value_raw_2 = perception.get('python_errors_perception')
+            value_raw_2 = perception.get('python_error_streak_perception')
             value_2 = round(value_raw_2[0]['data'], 1)
-            value_raw_3 = perception.get('evaluation_errors_perception')
+            value_raw_3 = perception.get('evaluation_error_streak_perception')
             value_3 = round(value_raw_3[0]['data'], 1)
 
             # P1.3: any USER present & Python errors or evaluation errors > high threshold

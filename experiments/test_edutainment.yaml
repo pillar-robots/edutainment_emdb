@@ -101,11 +101,11 @@ LTM:
                   default_msg: std_msgs.msg.Float32
                   default_topic: /student/type
             -
-                name: python_errors_perception
+                name: python_error_streak_perception
                 class_name: edutainment_emdb.perceptions.EdutainmentPerception
                 parameters:
                   default_msg: std_msgs.msg.Float32
-                  default_topic: /student/metrics/python_errors
+                  default_topic: /student/metrics/python_error_streak
         WorldModel:
             -
                 name: EXPERT_WM # WM1
@@ -146,14 +146,14 @@ LTM:
                 class_name: edutainment_emdb.pnodes.PNodeIdle
                 parameters:
                     space_class: cognitive_nodes.space.ActivatedDummySpace
-                    neighbors: [{"name": "python_errors_perception", "node_type": "Perception"}] # TEST WITH challenge_completion_perception
+                    neighbors: [{"name": "python_error_streak_perception", "node_type": "Perception"}] # TEST WITH challenge_completion_perception
             ### Pn1.X
             -
                 name: python_errors_pnode # Pn1.1
                 class_name: edutainment_emdb.pnodes.PNodePythonErrors
                 parameters:
                     space_class: cognitive_nodes.space.ActivatedDummySpace
-                    neighbors: [{"name": "python_errors_perception", "node_type": "Perception"}]
+                    neighbors: [{"name": "python_error_streak_perception", "node_type": "Perception"}]
         CNode:
             ### C0
             -

@@ -107,23 +107,17 @@ LTM:
                   default_msg: std_msgs.msg.Float32
                   default_topic: /student/challenge_completion
             -
-                name: python_errors_perception
+                name: python_error_streak_perception
                 class_name: edutainment_emdb.perceptions.EdutainmentPerception
                 parameters:
                   default_msg: std_msgs.msg.Float32
-                  default_topic: /student/metrics/python_errors
+                  default_topic: /student/metrics/python_error_streak
             -
-                name: evaluation_errors_perception
+                name: evaluation_error_streak_perception
                 class_name: edutainment_emdb.perceptions.EdutainmentPerception
                 parameters:
                   default_msg: std_msgs.msg.Float32
                   default_topic: /student/metrics/evaluation_error_streak
-            -
-                name: error_streak_perception
-                class_name: edutainment_emdb.perceptions.EdutainmentPerception
-                parameters:
-                  default_msg: std_msgs.msg.Float32
-                  default_topic: /student/metrics/error_streak
             -
                 name: bored_perception
                 class_name: edutainment_emdb.perceptions.EdutainmentPerception
@@ -384,21 +378,21 @@ LTM:
                 class_name: edutainment_emdb.pnodes.PNodePythonErrors
                 parameters:
                     space_class: cognitive_nodes.space.ActivatedDummySpace
-                    neighbors: [{"name": "python_errors_perception", "node_type": "Perception"}]
+                    neighbors: [{"name": "python_error_streak_perception", "node_type": "Perception"}]
             -
                 name: evaluation_errors_pnode # Pn1.2
                 class_name: edutainment_emdb.pnodes.PNodeEvaluationErrors
                 parameters:
                     space_class: cognitive_nodes.space.ActivatedDummySpace
-                    neighbors: [{"name": "evaluation_errors_perception", "node_type": "Perception"}]
+                    neighbors: [{"name": "evaluation_error_streak_perception", "node_type": "Perception"}]
             -
                 name: python_evaluation_errors_present_pnode # Pn1.3
                 class_name: edutainment_emdb.pnodes.PNodePythonEvaluationErrorsPresent
                 parameters:
                     space_class: cognitive_nodes.space.ActivatedDummySpace
                     neighbors: [{"name": "teacher_present_perception", "node_type": "Perception"},
-                                {"name": "python_errors_perception", "node_type": "Perception"}, 
-                                {"name": "evaluation_errors_perception", "node_type": "Perception"}]
+                                {"name": "python_error_streak_perception", "node_type": "Perception"}, 
+                                {"name": "evaluation_error_streak_perception", "node_type": "Perception"}]
             ### Pn2.X
             -
                 name: bored_low_pnode # Pn2.1 and Pn2.2

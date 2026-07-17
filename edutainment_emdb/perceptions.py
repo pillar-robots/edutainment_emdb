@@ -27,9 +27,8 @@ class EdutainmentPerception(Perception):
                             teacher_type_perception=perception.teacher_type_perception,
                             student_type_perception=perception.student_type_perception,
                             challenge_completion_perception=perception.challenge_completion_perception,
-                            python_errors_perception=perception.python_errors_perception,
+                            python_error_streak_perception=perception.python_error_streak_perception,
                             evaluation_error_streak_perception=perception.evaluation_error_streak_perception,
-                            error_streak_perception=perception.error_streak_perception,
                             bored_perception=perception.bored_perception,
                             standing_perception=perception.standing_perception
                     )
