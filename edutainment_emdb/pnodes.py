@@ -8,9 +8,11 @@ TEACHER_TYPE_UNDEFINED_THRESHOLD = 0.0
 TEACHER_TYPE_MODERN_THRESHOLD = 0.21 # To avoid rounding errors.
 TEACHER_TYPE_OLD_THRESHOLD = 0.8
 PYTHON_ERRORS_LOW_THRESHOLD = 0.5
-PYTHON_ERRORS_HIGH_THRESHOLD = 0.75
+PYTHON_ERRORS_MID_THRESHOLD = 0.6
+PYTHON_ERRORS_HIGH_THRESHOLD = 0.8
 EVALUATION_ERRORS_LOW_THRESHOLD = 0.5
-EVALUATION_ERRORS_HIGH_THRESHOLD = 0.75
+EVALUATION_ERRORS_MID_THRESHOLD = 0.6
+EVALUATION_ERRORS_HIGH_THRESHOLD = 0.8
 BORED_LOW_THRESHOLD = 0.5
 BORED_HIGH_THRESHOLD = 0.75
 STANDING_LOW_THRESHOLD = 0.5
@@ -70,7 +72,7 @@ class PNodePythonErrors(PNode): #Pn1.1
             value = round(value_raw[0]['data'], 1)
 
             # Pn1.1: Python errors > low threshold
-            if value >= PYTHON_ERRORS_LOW_THRESHOLD and value < PYTHON_ERRORS_HIGH_THRESHOLD:
+            if value >= PYTHON_ERRORS_LOW_THRESHOLD and value < PYTHON_ERRORS_MID_THRESHOLD:
                 self.activation.activation = 0.95
                 self.get_logger().debug(f"PNODE DEBUG: python_errors_pnode: {value}")
             else:
@@ -96,7 +98,7 @@ class PNodeEvaluationErrors(PNode): #Pn1.2
             value = round(value_raw[0]['data'], 1)
 
             # Pn1.2: evaluation errors > low threshold
-            if value >= EVALUATION_ERRORS_LOW_THRESHOLD and value < EVALUATION_ERRORS_HIGH_THRESHOLD:
+            if value >= EVALUATION_ERRORS_LOW_THRESHOLD and value < EVALUATION_ERRORS_MID_THRESHOLD:
                 self.activation.activation = 0.95
                 self.get_logger().debug(f"PNODE DEBUG: evaluation_errors_pnode: {value}")
             else:
