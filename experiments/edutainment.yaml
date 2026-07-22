@@ -4,10 +4,10 @@ Experiment:
     new_executor: True
     threads: 2
     parameters: 
-        iterations: 10 #10000 # 100
+        iterations: 100 #10000
         trials: 20
         subgoals: False
-        softmax_selection: False #True # False # TODO: review this parameter.
+        softmax_selection: False #True
         softmax_temperature: 0.3
         kill_on_finish: True
 Control:
@@ -16,9 +16,9 @@ Control:
     control_msg: cognitive_processes_interfaces.msg.ControlMsg
     episodes_topic: /main_loop/episodes
     episodes_msg: cognitive_processes_interfaces.msg.Episode
-    #executed_policy_service: /emdb/simulator/executed_policy # Commented # TODO: review this service, used only by simulator.
+    #executed_policy_service: /emdb/simulator/executed_policy # This service is only used by the simulator.
     executed_policy_msg: cognitive_node_interfaces.srv.Policy
-    #world_reset_service: /emdb/simulator/world_reset # Commented # TODO: review this service, used only by simulator.
+    #world_reset_service: /emdb/simulator/world_reset # This service is only used by the simulator.
     world_reset_msg: cognitive_processes_interfaces.srv.WorldReset
 LTM:
     Files:
@@ -61,7 +61,7 @@ LTM:
     Connectors:
         -
             data: Space
-            default_class: cognitive_nodes.space.ANNSpace #cognitive_nodes.space.SVMSpace # cognitive_nodes.space.ANNSpace
+            default_class: cognitive_nodes.space.ANNSpace #cognitive_nodes.space.SVMSpace
         -
             data: Perception
             default_class: cognitive_nodes.perception.Perception
@@ -73,13 +73,13 @@ LTM:
             default_class: cognitive_nodes.cnode.CNode
         -
             data: Goal
-            default_class: cognitive_nodes.goal.GoalLearnedSpace # cognitive_nodes.goal.Goal #cognitive_nodes.goal.GoalLearnedSpace
+            default_class: cognitive_nodes.goal.GoalLearnedSpace # cognitive_nodes.goal.Goal
         -
             data: WorldModel
             default_class: cognitive_nodes.world_model.WorldModel
         -
             data: Policy
-            default_class: cognitive_nodes.policy.PolicyBlocking #cognitive_nodes.policy.Policy # cognitive_nodes.policy.PolicyBlocking
+            default_class: cognitive_nodes.policy.PolicyBlocking #cognitive_nodes.policy.Policy
     Nodes:
         Perception:
             -
@@ -372,6 +372,13 @@ LTM:
                                 {"name": "student_seated_teacher_old_absent_drive", "node_type": "Drive"}, #D3.3
                                 {"name": "student_seated_teacher_modern_absent_drive", "node_type": "Drive"}] #D4.3
         PNode:
+            ### Pn0
+            -
+                name: idle_pnode # Pn0
+                class_name: edutainment_emdb.pnodes.PNodeIdle
+                parameters:
+                    space_class: cognitive_nodes.space.ActivatedDummySpace
+                    neighbors: [{"name": "python_error_streak_perception", "node_type": "Perception"}]
             ### Pn1.X
             -
                 name: python_errors_pnode # Pn1.1
@@ -439,6 +446,21 @@ LTM:
                                 {"name": "teacher_present_perception", "node_type": "Perception"},
                                 {"name": "standing_perception", "node_type": "Perception"}]
         CNode:
+            ### C0
+            -
+                name: idle_expert_cnode # C0 IDLE EXPERT_WM
+                class_name: cognitive_nodes.cnode.CNode
+                parameters:
+                    neighbors: [{"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
+                                {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
+                                {"name": "idle_pnode", "node_type": "PNode"}] # Pn1.1
+            -
+                name: idle_amateur_cnode # C0 IDLE AMATEUR_WM
+                class_name: cognitive_nodes.cnode.CNode
+                parameters:
+                    neighbors: [{"name": "AMATEUR_WM", "node_type": "WorldModel"}, # WM2
+                                {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
+                                {"name": "idle_pnode", "node_type": "PNode"}] # Pn1.1
             ### C1.X
             -
                 name: python_errors_expert_cnode # C1.1 EXPERT_WM
@@ -569,6 +591,12 @@ LTM:
                                 {"name": "seated_goal", "node_type": "Goal"}, # G3
                                 {"name": "standing_high_absent_modern_pnode", "node_type": "PNode"}] # Pn3.4
         Policy:
+            -
+                name: skill_0_idle_policy #S0
+                class_name: edutainment_emdb.policies.PolicySkill0
+                parameters:
+                    neighbors: [{"name": "idle_expert_cnode", "node_type": "CNode"}, # C0 IDLE EXPERT_WM
+                                {"name": "idle_amateur_cnode", "node_type": "CNode"}] # C0 IDLE AMATEUR_WM
             -
                 name: skill_1_python_policy #S1
                 class_name: edutainment_emdb.policies.PolicySkill1
