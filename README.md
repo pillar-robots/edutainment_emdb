@@ -15,9 +15,9 @@ git clone https://github.com/pillar-robots/edutainment_emdb.git
 - Build and source the experiment:
 
 ```bash
+source /opt/ros/humble/setup.bash
 cd ~/eMDB_ws/
 colcon build --packages-select edutainment_emdb --symlink-install
-source /opt/ros/humble/setup.bash
 source install/setup.bash
 ```
 
@@ -25,7 +25,6 @@ source install/setup.bash
 
 ```bash
 cd ~/eMDB_ws/
-source /opt/ros/humble/setup.bash
 source install/setup.bash
 ros2 launch edutainment_emdb edutainment_launch.py |& tee ~/edutainment_output.log
 ```
