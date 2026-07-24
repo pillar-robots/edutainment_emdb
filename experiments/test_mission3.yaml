@@ -4,7 +4,7 @@ Experiment:
     new_executor: True
     threads: 2
     parameters: 
-        iterations: 100 #10000
+        iterations: 10 #10000
         trials: 20
         subgoals: False
         softmax_selection: False #True
@@ -147,72 +147,6 @@ LTM:
                 parameters:
                     neighbors: [{"name": "student_type_perception", "node_type": "Perception"}]
         RobotPurpose: 
-            ### MX.1
-            -
-                name: student_exercise_teacher_old_present_purpose # M1.1
-                class_name: cognitive_nodes.robot_purpose.RobotPurpose
-                parameters:
-                    weight: 1.0 #0.9 # The weight of the RobotPurpose. # TODO: review weights, check diagram.
-                    drive_id: 'student_exercise_teacher_old_present_drive' # D1.1
-                    purpose_type: 'Mission'
-                    terminal: False # The terminal flag indicates if a world reset is required after satisfying the purpose.
-            -
-                name: student_exercise_teacher_modern_present_purpose # M2.1
-                class_name: cognitive_nodes.robot_purpose.RobotPurpose
-                parameters:
-                    weight: 1.0 #0.9
-                    drive_id: 'student_exercise_teacher_modern_present_drive' # D2.1
-                    purpose_type: 'Mission'
-                    terminal: False
-            -
-                name: student_exercise_teacher_old_absent_purpose # M3.1
-                class_name: cognitive_nodes.robot_purpose.RobotPurpose
-                parameters:
-                    weight: 1.0 #0.9
-                    drive_id: 'student_exercise_teacher_old_absent_drive' # D3.1
-                    purpose_type: 'Mission'
-                    terminal: False
-            -
-                name: student_exercise_teacher_modern_absent_purpose # M4.1
-                class_name: cognitive_nodes.robot_purpose.RobotPurpose
-                parameters:
-                    weight: 1.0 #0.9
-                    drive_id: 'student_exercise_teacher_modern_absent_drive' # D4.1
-                    purpose_type: 'Mission'
-                    terminal: False
-            ### MX.2
-            -
-                name: student_awake_teacher_old_present_purpose # M1.2
-                class_name: cognitive_nodes.robot_purpose.RobotPurpose
-                parameters:
-                    weight: 1.0 #0.9
-                    drive_id: 'student_awake_teacher_old_present_drive' # D1.2
-                    purpose_type: 'Mission'
-                    terminal: False
-            -
-                name: student_awake_teacher_modern_present_purpose # M2.2
-                class_name: cognitive_nodes.robot_purpose.RobotPurpose
-                parameters:
-                    weight: 1.0 #0.9
-                    drive_id: 'student_awake_teacher_modern_present_drive' # D2.2
-                    purpose_type: 'Mission'
-                    terminal: False
-            -
-                name: student_awake_teacher_old_absent_purpose # M3.2
-                class_name: cognitive_nodes.robot_purpose.RobotPurpose
-                parameters:
-                    weight: 1.0 #0.9
-                    drive_id: 'student_awake_teacher_old_absent_drive' # D3.2
-                    purpose_type: 'Mission'
-                    terminal: False
-            -
-                name: student_awake_teacher_modern_absent_purpose # M4.2
-                class_name: cognitive_nodes.robot_purpose.RobotPurpose
-                parameters:
-                    weight: 1.0 #0.9
-                    drive_id: 'student_awake_teacher_modern_absent_drive' # D4.2
-                    purpose_type: 'Mission'
-                    terminal: False
             ### MX.3
             -
                 name: student_seated_teacher_old_present_purpose # M1.3
@@ -247,72 +181,6 @@ LTM:
                     purpose_type: 'Mission'
                     terminal: False
         Drive:
-            ### DX.1
-            -
-                name: student_exercise_teacher_old_present_drive # D1.1
-                class_name: cognitive_nodes.drive.DriveExponential # DriveExponential: 0 active, 1 inactive (satisfied) # TODO: review type of Drive, check DriveDummy, DriveExponentialOpo and MyControll.DriveExponential.
-                parameters:
-                    input_topic: /student/challenge_completion # Topic where the input will be published.
-                    input_msg: std_msgs.msg.Float32 # Message type of the input topic.
-                    min_eval: 0.8 # Minimum evaluation value as input reaches 1.0, defaults to 0.0. # TODO: review this parameter.
-                    neighbors: [{"name": "student_exercise_teacher_old_present_purpose", "node_type": "RobotPurpose"}] # M1.1
-            -
-                name: student_exercise_teacher_modern_present_drive # D2.1
-                class_name: cognitive_nodes.drive.DriveExponential # DriveExponential: 0 active, 1 inactive (satisfied)
-                parameters:
-                    input_topic: /student/challenge_completion
-                    input_msg: std_msgs.msg.Float32
-                    min_eval: 0.8
-                    neighbors: [{"name": "student_exercise_teacher_modern_present_purpose", "node_type": "RobotPurpose"}] # M2.1
-            -
-                name: student_exercise_teacher_old_absent_drive # D3.1
-                class_name: cognitive_nodes.drive.DriveExponential # DriveExponential: 0 active, 1 inactive (satisfied)
-                parameters:
-                    input_topic: /student/challenge_completion
-                    input_msg: std_msgs.msg.Float32
-                    min_eval: 0.8
-                    neighbors: [{"name": "student_exercise_teacher_old_absent_purpose", "node_type": "RobotPurpose"}] # M3.1
-            -
-                name: student_exercise_teacher_modern_absent_drive # D4.1
-                class_name: cognitive_nodes.drive.DriveExponential # DriveExponential: 0 active, 1 inactive (satisfied)
-                parameters:
-                    input_topic: /student/challenge_completion
-                    input_msg: std_msgs.msg.Float32
-                    min_eval: 0.8
-                    neighbors: [{"name": "student_exercise_teacher_modern_absent_purpose", "node_type": "RobotPurpose"}] # M4.1
-            ### DX.2
-            -
-                name: student_awake_teacher_old_present_drive # D1.2
-                class_name: edutainment_emdb.drives.DriveExponentialOpo # DriveExponentialOpo: 1 active, 0 inactive (satisfied)
-                parameters:
-                    input_topic: /student/bored
-                    input_msg: std_msgs.msg.Float32
-                    min_eval: 0.8
-                    neighbors: [{"name": "student_awake_teacher_old_present_purpose", "node_type": "RobotPurpose"}] # M1.2
-            -
-                name: student_awake_teacher_modern_present_drive # D2.2
-                class_name: edutainment_emdb.drives.DriveExponentialOpo # DriveExponentialOpo: 1 active, 0 inactive (satisfied)
-                parameters:
-                    input_topic: /student/bored
-                    input_msg: std_msgs.msg.Float32
-                    min_eval: 0.8
-                    neighbors: [{"name": "student_awake_teacher_modern_present_purpose", "node_type": "RobotPurpose"}] # M2.2
-            -
-                name: student_awake_teacher_old_absent_drive # D3.2
-                class_name: edutainment_emdb.drives.DriveExponentialOpo # DriveExponentialOpo: 1 active, 0 inactive (satisfied)
-                parameters:
-                    input_topic: /student/bored
-                    input_msg: std_msgs.msg.Float32
-                    min_eval: 0.8
-                    neighbors: [{"name": "student_awake_teacher_old_absent_purpose", "node_type": "RobotPurpose"}] # M3.2
-            -
-                name: student_awake_teacher_modern_absent_drive # D4.2
-                class_name: edutainment_emdb.drives.DriveExponentialOpo # DriveExponentialOpo: 1 active, 0 inactive (satisfied)
-                parameters:
-                    input_topic: /student/bored
-                    input_msg: std_msgs.msg.Float32
-                    min_eval: 0.8
-                    neighbors: [{"name": "student_awake_teacher_modern_absent_purpose", "node_type": "RobotPurpose"}] # M4.2
             ### DX.3
             -
                 name: student_seated_teacher_old_present_drive # D1.3
@@ -348,22 +216,6 @@ LTM:
                     neighbors: [{"name": "student_seated_teacher_modern_absent_purpose", "node_type": "RobotPurpose"}]
         Goal:
             -
-                name: exercise_finished_goal # G1 #TODO: Needs also D3.1 and D4.1, or is that a different Goal?
-                class_name: cognitive_nodes.goal.GoalMotiven
-                parameters:
-                    neighbors: [{"name": "student_exercise_teacher_old_present_drive", "node_type": "Drive"}, #D1.1
-                                {"name": "student_exercise_teacher_modern_present_drive", "node_type": "Drive"}, #D2.1
-                                {"name": "student_exercise_teacher_old_absent_drive", "node_type": "Drive"}, #D3.1
-                                {"name": "student_exercise_teacher_modern_absent_drive", "node_type": "Drive"}] #D4.1
-            -
-                name: awake_goal # G2
-                class_name: cognitive_nodes.goal.GoalMotiven
-                parameters:
-                    neighbors: [{"name": "student_awake_teacher_old_present_drive", "node_type": "Drive"}, #D1.2
-                                {"name": "student_awake_teacher_modern_present_drive", "node_type": "Drive"}, #D2.2
-                                {"name": "student_awake_teacher_old_absent_drive", "node_type": "Drive"}, #D3.2
-                                {"name": "student_awake_teacher_modern_absent_drive", "node_type": "Drive"}] #D4.2
-            -
                 name: seated_goal # G3
                 class_name: cognitive_nodes.goal.GoalMotiven
                 parameters:
@@ -379,42 +231,6 @@ LTM:
                 parameters:
                     space_class: cognitive_nodes.space.ActivatedDummySpace
                     neighbors: [{"name": "python_error_streak_perception", "node_type": "Perception"}]
-            ### Pn1.X
-            -
-                name: python_errors_pnode # Pn1.1
-                class_name: edutainment_emdb.pnodes.PNodePythonErrors
-                parameters:
-                    space_class: cognitive_nodes.space.ActivatedDummySpace
-                    neighbors: [{"name": "python_error_streak_perception", "node_type": "Perception"}]
-            -
-                name: evaluation_errors_pnode # Pn1.2
-                class_name: edutainment_emdb.pnodes.PNodeEvaluationErrors
-                parameters:
-                    space_class: cognitive_nodes.space.ActivatedDummySpace
-                    neighbors: [{"name": "evaluation_error_streak_perception", "node_type": "Perception"}]
-            -
-                name: python_evaluation_errors_present_pnode # Pn1.3
-                class_name: edutainment_emdb.pnodes.PNodePythonEvaluationErrorsPresent
-                parameters:
-                    space_class: cognitive_nodes.space.ActivatedDummySpace
-                    neighbors: [{"name": "teacher_present_perception", "node_type": "Perception"},
-                                {"name": "python_error_streak_perception", "node_type": "Perception"}, 
-                                {"name": "evaluation_error_streak_perception", "node_type": "Perception"}]
-            ### Pn2.X
-            -
-                name: bored_low_pnode # Pn2.1 and Pn2.2
-                class_name: edutainment_emdb.pnodes.PNodeBoredLow
-                parameters:
-                    space_class: cognitive_nodes.space.ActivatedDummySpace
-                    neighbors: [{"name": "bored_perception", "node_type": "Perception"}]
-            -
-                name: bored_high_pnode # Pn2.3
-                class_name: edutainment_emdb.pnodes.PNodeBoredHigh
-                parameters:
-                    space_class: cognitive_nodes.space.ActivatedDummySpace
-                    neighbors: [{"name": "teacher_type_perception", "node_type": "Perception"},
-                                {"name": "teacher_present_perception", "node_type": "Perception"},
-                                {"name": "bored_perception", "node_type": "Perception"}]
             ### Pn3.X
             -
                 name: standing_low_pnode # Pn3.1
@@ -461,78 +277,6 @@ LTM:
                     neighbors: [{"name": "AMATEUR_WM", "node_type": "WorldModel"}, # WM2
                                 {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
                                 {"name": "idle_pnode", "node_type": "PNode"}] # Pn1.1
-            ### C1.X
-            -
-                name: python_errors_expert_cnode # C1.1 WM1
-                class_name: cognitive_nodes.cnode.CNode
-                parameters:
-                    neighbors: [{"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
-                                {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
-                                {"name": "python_errors_pnode", "node_type": "PNode"}] # Pn1.1
-            -
-                name: python_errors_amateur_cnode # C1.1 WM2
-                class_name: cognitive_nodes.cnode.CNode
-                parameters:
-                    neighbors: [{"name": "AMATEUR_WM", "node_type": "WorldModel"}, # WM2
-                                {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
-                                {"name": "python_errors_pnode", "node_type": "PNode"}] # Pn1.1
-            -
-                name: evaluation_errors_expert_cnode # C1.2 WM1
-                class_name: cognitive_nodes.cnode.CNode
-                parameters:
-                    neighbors: [{"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
-                                {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
-                                {"name": "evaluation_errors_pnode", "node_type": "PNode"}] # Pn1.2
-            -
-                name: evaluation_errors_amateur_cnode # C1.2 WM2
-                class_name: cognitive_nodes.cnode.CNode
-                parameters:
-                    neighbors: [{"name": "AMATEUR_WM", "node_type": "WorldModel"}, # WM2
-                                {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
-                                {"name": "evaluation_errors_pnode", "node_type": "PNode"}] # Pn1.2
-            -
-                name: python_evaluation_errors_present_expert_cnode # C1.3 WM1
-                class_name: cognitive_nodes.cnode.CNode
-                parameters:
-                    neighbors: [{"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
-                                {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
-                                {"name": "python_evaluation_errors_present_pnode", "node_type": "PNode"}] # Pn1.3
-            -
-                name: python_evaluation_errors_present_amateur_cnode # C1.3 WM2
-                class_name: cognitive_nodes.cnode.CNode
-                parameters:
-                    neighbors: [{"name": "AMATEUR_WM", "node_type": "WorldModel"}, # WM2
-                                {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
-                                {"name": "python_evaluation_errors_present_pnode", "node_type": "PNode"}] # Pn1.3
-            ### C2.X
-            -
-                name: bored_low_expert_cnode # C2.1 WM1
-                class_name: cognitive_nodes.cnode.CNode
-                parameters:
-                    neighbors: [{"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
-                                {"name": "awake_goal", "node_type": "Goal"}, # G2
-                                {"name": "bored_low_pnode", "node_type": "PNode"}] # Pn2.1 and Pn2.2
-            -
-                name: bored_low_amateur_cnode # C2.2 WM2
-                class_name: cognitive_nodes.cnode.CNode
-                parameters:
-                    neighbors: [{"name": "AMATEUR_WM", "node_type": "WorldModel"}, # WM2
-                                {"name": "awake_goal", "node_type": "Goal"}, # G2
-                                {"name": "bored_low_pnode", "node_type": "PNode"}] # Pn2.1 and Pn2.2
-            -
-                name: bored_high_expert_cnode # C2.3 WM1
-                class_name: cognitive_nodes.cnode.CNode
-                parameters:
-                    neighbors: [{"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
-                                {"name": "awake_goal", "node_type": "Goal"}, # G2
-                                {"name": "bored_high_pnode", "node_type": "PNode"}] # Pn2.3
-            -
-                name: bored_high_amateur_cnode # C2.3 WM2
-                class_name: cognitive_nodes.cnode.CNode
-                parameters:
-                    neighbors: [{"name": "AMATEUR_WM", "node_type": "WorldModel"}, # WM2
-                                {"name": "awake_goal", "node_type": "Goal"}, # G2
-                                {"name": "bored_high_pnode", "node_type": "PNode"}] # Pn2.3
             ### C3.X
             -
                 name: standing_low_expert_cnode # C3.1 WM1
@@ -596,27 +340,27 @@ LTM:
                 class_name: edutainment_emdb.policies.PolicySkill0
                 parameters:
                     neighbors: [{"name": "idle_expert_cnode", "node_type": "CNode"}, # C0 WM1
-                                {"name": "idle_amateur_cnode", "node_type": "CNode"}] # C0 WM2
-            -
-                name: skill_1_python_policy #S1
-                class_name: edutainment_emdb.policies.PolicySkill1
-                parameters:
-                    neighbors: [{"name": "python_errors_expert_cnode", "node_type": "CNode"}, # C1.1 WM1
-                                {"name": "python_errors_amateur_cnode", "node_type": "CNode"}] # C1.1 WM2
-            -
-                name: skill_2_evaluation_policy #S2
-                class_name: edutainment_emdb.policies.PolicySkill2
-                parameters:
-                    neighbors: [{"name": "evaluation_errors_expert_cnode", "node_type": "CNode"}, # C1.2 WM1
-                                {"name": "evaluation_errors_amateur_cnode", "node_type": "CNode"}] # C1.2 WM2
+                                {"name": "idle_amateur_cnode", "node_type": "CNode"}] # C0 IDLE WM2
+            # -
+            #     name: skill_1_python_policy #S1
+            #     class_name: edutainment_emdb.policies.PolicySkill1
+            #     parameters:
+            #         neighbors: [{"name": "python_errors_expert_cnode", "node_type": "CNode"}, # C1.1 WM1
+            #                     {"name": "python_errors_amateur_cnode", "node_type": "CNode"}] # C1.1 WM2
+            # -
+            #     name: skill_2_evaluation_policy #S2
+            #     class_name: edutainment_emdb.policies.PolicySkill2
+            #     parameters:
+            #         neighbors: [{"name": "evaluation_errors_expert_cnode", "node_type": "CNode"}, # C1.2 WM1
+            #                     {"name": "evaluation_errors_amateur_cnode", "node_type": "CNode"}] # C1.2 WM2
             -
                 name: skill_3_teacher_policy #S3
                 class_name: edutainment_emdb.policies.PolicySkill3
                 parameters:
-                    neighbors: [{"name": "python_evaluation_errors_present_expert_cnode", "node_type": "CNode"}, # C1.3 WM1
-                                {"name": "python_evaluation_errors_present_amateur_cnode", "node_type": "CNode"}, # C1.3 WM2
-                                {"name": "bored_high_expert_cnode", "node_type": "CNode"}, # C2.3 WM1
-                                {"name": "bored_high_amateur_cnode", "node_type": "CNode"}, # C2.3 WM2
+                    neighbors: [ #{"name": "python_evaluation_errors_present_expert_cnode", "node_type": "CNode"}, # C1.3 WM1
+                                #{"name": "python_evaluation_errors_present_amateur_cnode", "node_type": "CNode"}, # C1.3 WM2
+                                #{"name": "bored_high_expert_cnode", "node_type": "CNode"}, # C2.3 WM1
+                                #{"name": "bored_high_amateur_cnode", "node_type": "CNode"}, # C2.3 WM2
                                 {"name": "standing_high_present_expert_cnode", "node_type": "CNode"}, # C3.2 WM1
                                 {"name": "standing_high_present_amateur_cnode", "node_type": "CNode"}] # C3.2 WM2
             -
@@ -625,11 +369,11 @@ LTM:
                 parameters:
                     neighbors: [{"name": "standing_low_expert_cnode", "node_type": "CNode"}, # C3.1 WM1
                                 {"name": "standing_low_amateur_cnode", "node_type": "CNode"}] # 3.1 WM2
-            -
-                name: skill_5_break_policy #S5
-                class_name: edutainment_emdb.policies.PolicySkill5
-                parameters:
-                    neighbors: [{"name": "bored_low_amateur_cnode", "node_type": "CNode"}] # C2.2 WM2
+            # -
+            #     name: skill_5_break_policy #S5
+            #     class_name: edutainment_emdb.policies.PolicySkill5
+            #     parameters:
+            #         neighbors: [{"name": "bored_low_amateur_cnode", "node_type": "CNode"}] # C2.2 WM2
             -
                 name: skill_6_video_policy #S6
                 class_name: edutainment_emdb.policies.PolicySkill6
@@ -640,6 +384,6 @@ LTM:
                 name: skill_7_gamification_policy #S7
                 class_name: edutainment_emdb.policies.PolicySkill7
                 parameters:
-                    neighbors: [{"name": "bored_low_expert_cnode", "node_type": "CNode"}, # C2.1 WM1
+                    neighbors: [ #{"name": "bored_low_expert_cnode", "node_type": "CNode"}, # C2.1 WM1
                                 {"name": "standing_high_absent_old_expert_cnode", "node_type": "CNode"}, # C3.3 WM1
                                 {"name": "standing_high_absent_old_amateur_cnode", "node_type": "CNode"}] # C3.3 WM2

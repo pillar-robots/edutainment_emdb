@@ -47,7 +47,7 @@ class PNodeIdle(PNode): #Pn0
 
             # Pn0: Python errors < low threshold
             if value < PYTHON_ERRORS_LOW_THRESHOLD:
-                self.activation.activation = 0.99 
+                self.activation.activation = 0.85 # Lower than the rest, so everything has higher activation than idle. 
                 self.get_logger().debug(f"PNODE DEBUG: idle_pnode: {value}")
             else:
                 self.activation.activation = 0.0

@@ -122,7 +122,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "experiment_file",
-            default_value="test_edutainment.yaml",
+            default_value="test_mission1.yaml",
             description="The file that loads the experiment config",
         )
     )
