@@ -105,7 +105,7 @@ LTM:
                 class_name: edutainment_emdb.perceptions.EdutainmentPerception
                 parameters:
                   default_msg: std_msgs.msg.Float32
-                  default_topic: /student/metrics/python_error_streak
+                  default_topic: /student/python_error_streak
         WorldModel:
             -
                 name: EXPERT_WM # WM1

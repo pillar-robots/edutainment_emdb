@@ -29,8 +29,7 @@ setup(
     entry_points={
         'console_scripts': [
             'edutainment_simulator = edutainment_emdb.edutainment_simulator:main',
-            'manual_publisher = edutainment_emdb.manual_publisher:main',
-            'manual_publisher_og = edutainment_emdb.manual_publisher_og:main'
+            'manual_publisher = edutainment_emdb.manual_publisher:main'
         ],
     },
 )

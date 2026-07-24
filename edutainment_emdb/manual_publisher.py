@@ -12,8 +12,8 @@ TOPICS = [
     (Float32,   "teacher_type_perception", "/teacher/type", 0.0, 0.0, 1.0),
     (Float32,   "student_type_perception", "/student/type", 0.0, 0.0, 1.0),
     (Float32,   "challenge_completion_perception", "/student/challenge_completion", 0.0, 0.0, 1.0),
-    (Float32,   "python_error_streak_perception", "/student/metrics/python_error_streak", 0.0, 0.0, 1.0),
-    (Float32,   "evaluation_error_streak_perception", "/student/metrics/evaluation_error_streak", 0.0, 0.0, 1.0),
+    (Float32,   "python_error_streak_perception", "/student/python_error_streak", 0.0, 0.0, 1.0),
+    (Float32,   "evaluation_error_streak_perception", "/student/evaluation_error_streak", 0.0, 0.0, 1.0),
     (Float32,   "bored_perception", "/student/bored", 0.0, 0.0, 1.0),
     (Float32,   "standing_perception", "/student/standing", 0.0, 0.0, 1.0)
     ]

@@ -111,13 +111,13 @@ LTM:
                 class_name: edutainment_emdb.perceptions.EdutainmentPerception
                 parameters:
                   default_msg: std_msgs.msg.Float32
-                  default_topic: /student/metrics/python_error_streak
+                  default_topic: /student/python_error_streak
             -
                 name: evaluation_error_streak_perception
                 class_name: edutainment_emdb.perceptions.EdutainmentPerception
                 parameters:
                   default_msg: std_msgs.msg.Float32
-                  default_topic: /student/metrics/evaluation_error_streak
+                  default_topic: /student/evaluation_error_streak
             -
                 name: bored_perception
                 class_name: edutainment_emdb.perceptions.EdutainmentPerception
