@@ -74,7 +74,7 @@ class SliderApp:
         header.pack(fill="x", padx=24, pady=(20, 4))
         tk.Label(
             header,
-            text="Topic  Publisher",
+            text="Topic Publisher",
             font=self.FONT_TITLE,
             fg=self.ACCENT,
             bg=self.BG,
