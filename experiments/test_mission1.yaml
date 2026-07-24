@@ -329,8 +329,8 @@ LTM:
                 parameters:
                     neighbors: [{"name": "python_evaluation_errors_present_expert_cnode", "node_type": "CNode"}, # C1.3 WM1
                                 #{"name": "python_evaluation_errors_present_amateur_cnode", "node_type": "CNode"}, # C1.3 WM2
-                                {"name": "bored_high_expert_cnode", "node_type": "CNode"}, # C2.3 WM1
+                                #{"name": "bored_high_expert_cnode", "node_type": "CNode"}, # C2.3 WM1
                                 #{"name": "bored_high_amateur_cnode", "node_type": "CNode"}, # C2.3 WM2
-                                {"name": "standing_high_present_expert_cnode", "node_type": "CNode"}, # C3.2 WM1
+                                #{"name": "standing_high_present_expert_cnode", "node_type": "CNode"}, # C3.2 WM1
                                 #{"name": "standing_high_present_amateur_cnode", "node_type": "CNode"}
                                 ] # C3.2 WM2
