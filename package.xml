@@ -3,8 +3,8 @@
 <package format="3">
   <name>edutainment_emdb</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="ubuntu@todo.todo">ubuntu</maintainer>
+  <description>e-MDB implementation of the WP8 Edutainmet use case for the PILLAR project.</description>
+  <maintainer email="antonio.leis@@udc.es">Antonio J. Leis</maintainer>
   <license>Apache-2.0</license>
 
   <test_depend>ament_copyright</test_depend>

@@ -21,7 +21,7 @@ TOPICS = [
 # ── ROS2 Node ────────────────────────────────────────────────────────────────
 class ManualPublisher(Node):
     def __init__(self):
-        super().__init__("manual_pillar_publisher")
+        super().__init__("manual_edutainment_publisher")
         self.publishers_ = {}
         self.values = {}
         self.topic_types = {}

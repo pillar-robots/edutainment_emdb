@@ -17,9 +17,9 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='AntonioLeis',
+    maintainer='Antonio J. Leis',
     maintainer_email='antonio.leis@udc.es',
-    description='Edutainment experiment for the PILLAR project',
+    description='e-MDB implementation of the WP8 Edutainmet use case for the PILLAR project.',
     license='Apache-2.0',
     extras_require={
         'test': [
@@ -29,7 +29,6 @@ setup(
     entry_points={
         'console_scripts': [
             'edutainment_simulator = edutainment_emdb.edutainment_simulator:main',
-            'test_sim = edutainment_emdb.test_sim:main',
             'manual_publisher = edutainment_emdb.manual_publisher:main',
             'manual_publisher_og = edutainment_emdb.manual_publisher_og:main'
         ],

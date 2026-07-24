@@ -14,6 +14,8 @@ from core_interfaces.srv import LoadConfig
 from core.utils import class_from_classname, actuation_msg_to_dict
 from simulators.scenarios_2D import SimpleScenario, EntityType
 
+# NOT USED: default Simulator, not adapted to our experiment.
+
 class EdutainmentSimulator(Node):
     """
     A simple 2D simulator for the e-MDB experiments.

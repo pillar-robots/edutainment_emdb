@@ -1,6 +1,6 @@
 # edutainment_emdb
 
-e-MDB implementation of the WP8 Edutainmet use case.
+e-MDB implementation of the WP8 Edutainmet use case for the PILLAR project.
 
 ## Installation
 
