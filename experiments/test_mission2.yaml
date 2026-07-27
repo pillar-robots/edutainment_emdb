@@ -292,12 +292,12 @@ LTM:
                                 {"name": "awake_goal", "node_type": "Goal"}, # G2
                                 {"name": "bored_high_pnode", "node_type": "PNode"}] # Pn2.3
         Policy:
-            # -
-            #     name: skill_0_idle_policy #S0
-            #     class_name: edutainment_emdb.policies.PolicySkill0
-            #     parameters:
-            #         neighbors: [{"name": "idle_expert_cnode", "node_type": "CNode"}, # C0 WM1
-            #                     {"name": "idle_amateur_cnode", "node_type": "CNode"}] # C0 IDLE WM2
+            -
+                name: skill_0_idle_policy #S0
+                class_name: edutainment_emdb.policies.PolicySkill0
+                parameters:
+                    neighbors: [{"name": "idle_expert_cnode", "node_type": "CNode"}, # C0 WM1
+                                {"name": "idle_amateur_cnode", "node_type": "CNode"}] # C0 IDLE WM2
             # -
             #     name: skill_1_python_policy #S1
             #     class_name: edutainment_emdb.policies.PolicySkill1
