@@ -156,7 +156,7 @@ LTM:
         CNode:
             ### C0
             -
-                name: idle_expert_cnode # C0 IDLE EXPERT_WM
+                name: idle_expert_cnode # C0 WM1
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
                     neighbors: [{"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
@@ -164,7 +164,7 @@ LTM:
                                 {"name": "idle_pnode", "node_type": "PNode"}] # Pn1.1
             ### C1.X
             -
-                name: python_errors_expert_cnode # C1.1 EXPERT_WM
+                name: python_errors_expert_cnode # C1.1 WM1
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
                     neighbors: [{"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
@@ -175,12 +175,12 @@ LTM:
                 name: skill_0_idle_policy #S0
                 class_name: edutainment_emdb.policies.PolicySkill0
                 parameters:
-                    neighbors: [{"name": "idle_expert_cnode", "node_type": "CNode"}]
+                    neighbors: [{"name": "idle_expert_cnode", "node_type": "CNode"}] # C0 WM1
             -
                 name: skill_1_python_policy #S1
                 class_name: edutainment_emdb.policies.PolicySkill1
                 parameters:
-                    neighbors: [{"name": "python_errors_expert_cnode", "node_type": "CNode"}] # C1.1 EXPERT_WM
+                    neighbors: [{"name": "python_errors_expert_cnode", "node_type": "CNode"}] # C1.1 WM1
             -
                 name: skill_2_evaluation_policy #S2
                 class_name: edutainment_emdb.policies.PolicySkill2
