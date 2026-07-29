@@ -1,5 +1,6 @@
 import math
 from cognitive_nodes.pnode import PNode
+from core.container import Container, consolidate_containers
 
 # Global variables for the thresholds
 TEACHER_ABSENT_THRESHOLD = 0.0
@@ -23,7 +24,7 @@ class PNodeIdle(PNode): #Pn0
     PNode that represents if the system should be idle or not. It is activated when the python_error_streak_perception is below the low threshold.
     """
     def __init__(self, name='idle_pnode', class_name='cognitive_nodes.pnode.PNode', space_class=None, space=None, history_size=100, **params):
-        super().__init__(name, class_name, space_class, space, history_size, **params)
+        super().__init__(name=name, class_name=class_name, space_class=space_class, space=space, history_size=history_size, **params)
     def calculate_activation(self, perception=None, activation_list=None):
         """
         Calculate the new activation value for a given perception.
@@ -37,13 +38,21 @@ class PNodeIdle(PNode): #Pn0
         :rtype: cognitive_node_interfaces.msg.Activation
         """
         if activation_list!=None:
-            perception={}
-            for sensor in activation_list:
-                activation_list[sensor]['updated']=False
-                perception[sensor]=activation_list[sensor]['data']
+            data = [activation_list[sensor]['data'] for sensor in activation_list]
+            if self.perception is None and len(data)>0:
+                self.perception = consolidate_containers(data, name="perception", container_type="perception")
+            elif len(data)==0: # Activation list may be empty when initializing the P-Node.
+                self.activation.activation = 0.0
+                self.activation.timestamp = self.get_clock().now().to_msg()
+                return self.activation
+            else:
+                consolidate_containers(data, write_container=self.perception)
+            perception = self.perception
+        activation_value = 0.0
+
         if perception:
-            value_raw = perception.get('python_error_streak_perception')
-            value = round(value_raw[0]['data'], 1)
+            value_raw = perception.read().sel(features=["python_error_streak_perception:data"]).values[-1] if "python_error_streak_perception:data" in perception.feature_labels else 0.0
+            value = round(float(value_raw), 1)
 
             # Pn0: Python errors < low threshold
             if value < PYTHON_ERRORS_LOW_THRESHOLD:
@@ -54,22 +63,30 @@ class PNodeIdle(PNode): #Pn0
             
             self.activation.timestamp = self.get_clock().now().to_msg()
         return self.activation
-
+    
 class PNodePythonErrors(PNode): #Pn1.1
     """
     PNode that represents Python errors
     """
     def __init__(self, name='python_errors_pnode', class_name='cognitive_nodes.pnode.PNode', space_class=None, space=None, history_size=100, **params):
-        super().__init__(name, class_name, space_class, space, history_size, **params)
+        super().__init__(name=name, class_name=class_name, space_class=space_class, space=space, history_size=history_size, **params)
     def calculate_activation(self, perception=None, activation_list=None):
         if activation_list!=None:
-            perception={}
-            for sensor in activation_list:
-                activation_list[sensor]['updated']=False
-                perception[sensor]=activation_list[sensor]['data']
+            data = [activation_list[sensor]['data'] for sensor in activation_list]
+            if self.perception is None and len(data)>0:
+                self.perception = consolidate_containers(data, name="perception", container_type="perception")
+            elif len(data)==0: # Activation list may be empty when initializing the P-Node.
+                self.activation.activation = 0.0
+                self.activation.timestamp = self.get_clock().now().to_msg()
+                return self.activation
+            else:
+                consolidate_containers(data, write_container=self.perception)
+            perception = self.perception
+        activation_value = 0.0
+
         if perception:
-            value_raw = perception.get('python_error_streak_perception')
-            value = round(value_raw[0]['data'], 1)
+            value_raw = perception.read().sel(features=["python_error_streak_perception:data"]).values[-1] if "python_error_streak_perception:data" in perception.feature_labels else 0.0
+            value = round(float(value_raw), 1)
 
             # Pn1.1: Python errors > low threshold
             if value >= PYTHON_ERRORS_LOW_THRESHOLD and value < PYTHON_ERRORS_MID_THRESHOLD:
@@ -86,16 +103,24 @@ class PNodeEvaluationErrors(PNode): #Pn1.2
     PNode that represents evaluation errors
     """
     def __init__(self, name='evaluation_errors_pnode', class_name='cognitive_nodes.pnode.PNode', space_class=None, space=None, history_size=100, **params):
-        super().__init__(name, class_name, space_class, space, history_size, **params)
+        super().__init__(name=name, class_name=class_name, space_class=space_class, space=space, history_size=history_size, **params)
     def calculate_activation(self, perception=None, activation_list=None):
         if activation_list!=None:
-            perception={}
-            for sensor in activation_list:
-                activation_list[sensor]['updated']=False
-                perception[sensor]=activation_list[sensor]['data']
+            data = [activation_list[sensor]['data'] for sensor in activation_list]
+            if self.perception is None and len(data)>0:
+                self.perception = consolidate_containers(data, name="perception", container_type="perception")
+            elif len(data)==0: # Activation list may be empty when initializing the P-Node.
+                self.activation.activation = 0.0
+                self.activation.timestamp = self.get_clock().now().to_msg()
+                return self.activation
+            else:
+                consolidate_containers(data, write_container=self.perception)
+            perception = self.perception
+        activation_value = 0.0
+
         if perception:
-            value_raw = perception.get('evaluation_error_streak_perception')
-            value = round(value_raw[0]['data'], 1)
+            value_raw = perception.read().sel(features=["evaluation_error_streak_perception:data"]).values[-1] if "evaluation_error_streak_perception:data" in perception.feature_labels else 0.0
+            value = round(float(value_raw), 1)
 
             # Pn1.2: evaluation errors > low threshold
             if value >= EVALUATION_ERRORS_LOW_THRESHOLD and value < EVALUATION_ERRORS_MID_THRESHOLD:
@@ -112,20 +137,28 @@ class PNodePythonEvaluationErrorsPresent(PNode): #Pn1.3
     PNode that represents Python and evaluation errors with teacher present
     """
     def __init__(self, name='python_evaluation_errors_present_pnode', class_name='cognitive_nodes.pnode.PNode', space_class=None, space=None, history_size=100, **params):
-        super().__init__(name, class_name, space_class, space, history_size, **params)
+        super().__init__(name=name, class_name=class_name, space_class=space_class, space=space, history_size=history_size, **params)
     def calculate_activation(self, perception=None, activation_list=None):
         if activation_list!=None:
-            perception={}
-            for sensor in activation_list:
-                activation_list[sensor]['updated']=False
-                perception[sensor]=activation_list[sensor]['data']
+            data = [activation_list[sensor]['data'] for sensor in activation_list]
+            if self.perception is None and len(data)>0:
+                self.perception = consolidate_containers(data, name="perception", container_type="perception")
+            elif len(data)==0: # Activation list may be empty when initializing the P-Node.
+                self.activation.activation = 0.0
+                self.activation.timestamp = self.get_clock().now().to_msg()
+                return self.activation
+            else:
+                consolidate_containers(data, write_container=self.perception)
+            perception = self.perception
+        activation_value = 0.0
+
         if perception:
-            value_raw = perception.get('teacher_present_perception')
-            value = round(value_raw[0]['data'], 1)
-            value_raw_2 = perception.get('python_error_streak_perception')
-            value_2 = round(value_raw_2[0]['data'], 1)
-            value_raw_3 = perception.get('evaluation_error_streak_perception')
-            value_3 = round(value_raw_3[0]['data'], 1)
+            value_raw = perception.read().sel(features=["teacher_present_perception:data"]).values[-1] if "teacher_present_perception:data" in perception.feature_labels else 0.0
+            value = round(float(value_raw), 1)
+            value_raw_2 = perception.read().sel(features=["python_error_streak_perception:data"]).values[-1] if "python_error_streak_perception:data" in perception.feature_labels else 0.0
+            value_2 = round(float(value_raw_2), 1)
+            value_raw_3 = perception.read().sel(features=["evaluation_error_streak_perception:data"]).values[-1] if "evaluation_error_streak_perception:data" in perception.feature_labels else 0.0
+            value_3 = round(float(value_raw_3), 1)
 
             # P1.3: any USER present & Python errors or evaluation errors > high threshold
             if  value == TEACHER_PRESENT_THRESHOLD and (value_2 >= PYTHON_ERRORS_HIGH_THRESHOLD or value_3 >= EVALUATION_ERRORS_HIGH_THRESHOLD):
@@ -142,16 +175,24 @@ class PNodeBoredLow(PNode): #Pn2.1 and Pn2.2
     PNode that represents the student being bored
     """
     def __init__(self, name='bored_low_pnode', class_name='cognitive_nodes.pnode.PNode', space_class=None, space=None, history_size=100, **params):
-        super().__init__(name, class_name, space_class, space, history_size, **params)
+        super().__init__(name=name, class_name=class_name, space_class=space_class, space=space, history_size=history_size, **params)
     def calculate_activation(self, perception=None, activation_list=None):
         if activation_list!=None:
-            perception={}
-            for sensor in activation_list:
-                activation_list[sensor]['updated']=False
-                perception[sensor]=activation_list[sensor]['data']
+            data = [activation_list[sensor]['data'] for sensor in activation_list]
+            if self.perception is None and len(data)>0:
+                self.perception = consolidate_containers(data, name="perception", container_type="perception")
+            elif len(data)==0: # Activation list may be empty when initializing the P-Node.
+                self.activation.activation = 0.0
+                self.activation.timestamp = self.get_clock().now().to_msg()
+                return self.activation
+            else:
+                consolidate_containers(data, write_container=self.perception)
+            perception = self.perception
+        activation_value = 0.0
+
         if perception:
-            value_raw = perception.get('bored_perception')
-            value = round(value_raw[0]['data'], 1)
+            value_raw = perception.read().sel(features=["bored_perception:data"]).values[-1] if "bored_perception:data" in perception.feature_labels else 0.0
+            value = round(float(value_raw), 1)
 
             # Pn2.1 and Pn2.2: student not engaged > low threshold
             if value >= BORED_LOW_THRESHOLD and value < BORED_HIGH_THRESHOLD:
@@ -168,20 +209,28 @@ class PNodeBoredHigh(PNode): # Pn2.3
     PNode that represents the student being highly bored
     """
     def __init__(self, name='bored_high_pnode', class_name='cognitive_nodes.pnode.PNode', space_class=None, space=None, history_size=100, **params):
-        super().__init__(name, class_name, space_class, space, history_size, **params)
+        super().__init__(name=name, class_name=class_name, space_class=space_class, space=space, history_size=history_size, **params)
     def calculate_activation(self, perception=None, activation_list=None):
         if activation_list!=None:
-            perception={}
-            for sensor in activation_list:
-                activation_list[sensor]['updated']=False
-                perception[sensor]=activation_list[sensor]['data']
+            data = [activation_list[sensor]['data'] for sensor in activation_list]
+            if self.perception is None and len(data)>0:
+                self.perception = consolidate_containers(data, name="perception", container_type="perception")
+            elif len(data)==0: # Activation list may be empty when initializing the P-Node.
+                self.activation.activation = 0.0
+                self.activation.timestamp = self.get_clock().now().to_msg()
+                return self.activation
+            else:
+                consolidate_containers(data, write_container=self.perception)
+            perception = self.perception
+        activation_value = 0.0
+
         if perception:
-            value_raw = perception.get('teacher_type_perception')
-            value = round(value_raw[0]['data'], 1)
-            value_raw_2 = perception.get('teacher_present_perception')
-            value_2 = round(value_raw_2[0]['data'], 1)
-            value_raw_3 = perception.get('bored_perception')
-            value_3 = round(value_raw_3[0]['data'], 1)
+            value_raw = perception.read().sel(features=["teacher_type_perception:data"]).values[-1] if "teacher_type_perception:data" in perception.feature_labels else 0.0
+            value = round(float(value_raw), 1)
+            value_raw_2 = perception.read().sel(features=["teacher_present_perception:data"]).values[-1] if "teacher_present_perception:data" in perception.feature_labels else 0.0
+            value_2 = round(float(value_raw_2), 1)
+            value_raw_3 = perception.read().sel(features=["bored_perception:data"]).values[-1] if "bored_perception:data" in perception.feature_labels else 0.0
+            value_3 = round(float(value_raw_3), 1)
 
             # Pn2.3: USER2 & any USER present & student not engaged > high threshold
             if TEACHER_TYPE_UNDEFINED_THRESHOLD < value <= TEACHER_TYPE_MODERN_THRESHOLD and value_2 == TEACHER_PRESENT_THRESHOLD and value_3 >= BORED_HIGH_THRESHOLD:
@@ -198,16 +247,24 @@ class PNodeStandingLow(PNode): # Pn3.1
     PNode that represents the student standing
     """
     def __init__(self, name='standing_low_pnode', class_name='cognitive_nodes.pnode.PNode', space_class=None, space=None, history_size=100, **params):
-        super().__init__(name, class_name, space_class, space, history_size, **params)
+        super().__init__(name=name, class_name=class_name, space_class=space_class, space=space, history_size=history_size, **params)
     def calculate_activation(self, perception=None, activation_list=None):
         if activation_list!=None:
-            perception={}
-            for sensor in activation_list:
-                activation_list[sensor]['updated']=False
-                perception[sensor]=activation_list[sensor]['data']
+            data = [activation_list[sensor]['data'] for sensor in activation_list]
+            if self.perception is None and len(data)>0:
+                self.perception = consolidate_containers(data, name="perception", container_type="perception")
+            elif len(data)==0: # Activation list may be empty when initializing the P-Node.
+                self.activation.activation = 0.0
+                self.activation.timestamp = self.get_clock().now().to_msg()
+                return self.activation
+            else:
+                consolidate_containers(data, write_container=self.perception)
+            perception = self.perception
+        activation_value = 0.0
+
         if perception:
-            value_raw = perception.get('standing_perception')
-            value = round(value_raw[0]['data'], 1)
+            value_raw = perception.read().sel(features=["standing_perception:data"]).values[-1] if "standing_perception:data" in perception.feature_labels else 0.0
+            value = round(float(value_raw), 1)
 
             # Pn3.1: student standing up > low threshold
             if value >= STANDING_LOW_THRESHOLD and value < STANDING_HIGH_THRESHOLD:
@@ -224,18 +281,26 @@ class PNodeStandingHighPresent(PNode): # Pn3.2
     PNode that represents the student standing for a long time with teacher present
     """
     def __init__(self, name='standing_high_present_pnode', class_name='cognitive_nodes.pnode.PNode', space_class=None, space=None, history_size=100, **params):
-        super().__init__(name, class_name, space_class, space, history_size, **params)
+        super().__init__(name=name, class_name=class_name, space_class=space_class, space=space, history_size=history_size, **params)
     def calculate_activation(self, perception=None, activation_list=None):
         if activation_list!=None:
-            perception={}
-            for sensor in activation_list:
-                activation_list[sensor]['updated']=False
-                perception[sensor]=activation_list[sensor]['data']
+            data = [activation_list[sensor]['data'] for sensor in activation_list]
+            if self.perception is None and len(data)>0:
+                self.perception = consolidate_containers(data, name="perception", container_type="perception")
+            elif len(data)==0: # Activation list may be empty when initializing the P-Node.
+                self.activation.activation = 0.0
+                self.activation.timestamp = self.get_clock().now().to_msg()
+                return self.activation
+            else:
+                consolidate_containers(data, write_container=self.perception)
+            perception = self.perception
+        activation_value = 0.0
+
         if perception:
-            value_raw = perception.get('teacher_present_perception')
-            value = round(value_raw[0]['data'], 1)
-            value_raw_2 = perception.get('standing_perception')
-            value_2 = round(value_raw_2[0]['data'], 1)
+            value_raw = perception.read().sel(features=["teacher_present_perception:data"]).values[-1] if "teacher_present_perception:data" in perception.feature_labels else 0.0
+            value = round(float(value_raw), 1)
+            value_raw_2 = perception.read().sel(features=["standing_perception:data"]).values[-1] if "standing_perception:data" in perception.feature_labels else 0.0
+            value_2 = round(float(value_raw_2), 1)
 
             # Pn3.2: any USER present & student standing up > high threshold
             if value == TEACHER_PRESENT_THRESHOLD and value_2 >= STANDING_HIGH_THRESHOLD:
@@ -252,20 +317,28 @@ class PNodeStandingHighAbsentOld(PNode): # Pn3.3
     PNode that represents the student standing for a long time with an old-school teacher absent
     """
     def __init__(self, name='standing_high_absent_old_pnode', class_name='cognitive_nodes.pnode.PNode', space_class=None, space=None, history_size=100, **params):
-        super().__init__(name, class_name, space_class, space, history_size, **params)
+        super().__init__(name=name, class_name=class_name, space_class=space_class, space=space, history_size=history_size, **params)
     def calculate_activation(self, perception=None, activation_list=None):
         if activation_list!=None:
-            perception={}
-            for sensor in activation_list:
-                activation_list[sensor]['updated']=False
-                perception[sensor]=activation_list[sensor]['data']
+            data = [activation_list[sensor]['data'] for sensor in activation_list]
+            if self.perception is None and len(data)>0:
+                self.perception = consolidate_containers(data, name="perception", container_type="perception")
+            elif len(data)==0: # Activation list may be empty when initializing the P-Node.
+                self.activation.activation = 0.0
+                self.activation.timestamp = self.get_clock().now().to_msg()
+                return self.activation
+            else:
+                consolidate_containers(data, write_container=self.perception)
+            perception = self.perception
+        activation_value = 0.0
+
         if perception:
-            value_raw = perception.get('teacher_type_perception')
-            value = round(value_raw[0]['data'], 1)
-            value_raw_2 = perception.get('teacher_present_perception')
-            value_2 = round(value_raw_2[0]['data'], 1)
-            value_raw_3 = perception.get('standing_perception')
-            value_3 = round(value_raw_3[0]['data'], 1)
+            value_raw = perception.read().sel(features=["teacher_type_perception:data"]).values[-1] if "teacher_type_perception:data" in perception.feature_labels else 0.0
+            value = round(float(value_raw), 1)
+            value_raw_2 = perception.read().sel(features=["teacher_present_perception:data"]).values[-1] if "teacher_present_perception:data" in perception.feature_labels else 0.0
+            value_2 = round(float(value_raw_2), 1)
+            value_raw_3 = perception.read().sel(features=["standing_perception:data"]).values[-1] if "standing_perception:data" in perception.feature_labels else 0.0
+            value_3 = round(float(value_raw_3), 1)
 
             # Pn3.3: USER1 & no USER present & student standing up > high threshold
             if value >= TEACHER_TYPE_OLD_THRESHOLD and value_2 == TEACHER_ABSENT_THRESHOLD and value_3 >= STANDING_HIGH_THRESHOLD:
@@ -282,20 +355,28 @@ class PNodeStandingHighAbsentModern(PNode): # Pn3.4
     PNode that represents the student standing for a long time with a modern teacher absent
     """
     def __init__(self, name='standing_high_absent_modern_pnode', class_name='cognitive_nodes.pnode.PNode', space_class=None, space=None, history_size=100, **params):
-        super().__init__(name, class_name, space_class, space, history_size, **params)
+        super().__init__(name=name, class_name=class_name, space_class=space_class, space=space, history_size=history_size, **params)
     def calculate_activation(self, perception=None, activation_list=None):
         if activation_list!=None:
-            perception={}
-            for sensor in activation_list:
-                activation_list[sensor]['updated']=False
-                perception[sensor]=activation_list[sensor]['data']
+            data = [activation_list[sensor]['data'] for sensor in activation_list]
+            if self.perception is None and len(data)>0:
+                self.perception = consolidate_containers(data, name="perception", container_type="perception")
+            elif len(data)==0: # Activation list may be empty when initializing the P-Node.
+                self.activation.activation = 0.0
+                self.activation.timestamp = self.get_clock().now().to_msg()
+                return self.activation
+            else:
+                consolidate_containers(data, write_container=self.perception)
+            perception = self.perception
+        activation_value = 0.0
+
         if perception:
-            value_raw = perception.get('teacher_type_perception')
-            value = round(value_raw[0]['data'], 1)
-            value_raw_2 = perception.get('teacher_present_perception')
-            value_2 = round(value_raw_2[0]['data'], 1)
-            value_raw_3 = perception.get('standing_perception')
-            value_3 = round(value_raw_3[0]['data'], 1)
+            value_raw = perception.read().sel(features=["teacher_type_perception:data"]).values[-1] if "teacher_type_perception:data" in perception.feature_labels else 0.0
+            value = round(float(value_raw), 1)
+            value_raw_2 = perception.read().sel(features=["teacher_present_perception:data"]).values[-1] if "teacher_present_perception:data" in perception.feature_labels else 0.0
+            value_2 = round(float(value_raw_2), 1)
+            value_raw_3 = perception.read().sel(features=["standing_perception:data"]).values[-1] if "standing_perception:data" in perception.feature_labels else 0.0
+            value_3 = round(float(value_raw_3), 1)
 
             # Pn3.4: USER2 & not USER present & student standing up > high threshold
             if TEACHER_TYPE_UNDEFINED_THRESHOLD < value <= TEACHER_TYPE_MODERN_THRESHOLD and value_2 == TEACHER_ABSENT_THRESHOLD and value_3 >= STANDING_HIGH_THRESHOLD:

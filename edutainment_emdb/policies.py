@@ -25,8 +25,8 @@ class ServiceClient(Node):
 
 
 class PolicySkill0(Policy): # Dummy idle policy.
-    def __init__(self, name='skill_0_idle_policy', class_name='cognitive_nodes.policy.Policy', publisher_msg=None, publisher_topic=None, **params):
-        super().__init__(name, class_name, publisher_msg, publisher_topic, **params)
+    def __init__(self, name='skill_0_idle_policy', class_name='cognitive_nodes.policy.Policy', service_msg=None, service_name=None, **params):
+        super().__init__(name=name, class_name=class_name, **params)
     async def execute_callback(self, request, response):
         #requests.post("http://localhost:2727/api/skills/0")
         #node = ServiceClient(name=self.name, service_name='pillar_control/skill_0')
@@ -36,8 +36,8 @@ class PolicySkill0(Policy): # Dummy idle policy.
         return response
 
 class PolicySkill1(Policy):
-    def __init__(self, name='skill_1_python_policy', class_name='cognitive_nodes.policy.Policy', publisher_msg=None, publisher_topic=None, **params):
-        super().__init__(name, class_name, publisher_msg, publisher_topic, **params)
+    def __init__(self, name='skill_1_python_policy', class_name='cognitive_nodes.policy.Policy', service_msg=None, service_name=None, **params):
+        super().__init__(name=name, class_name=class_name, **params)
     async def execute_callback(self, request, response):
         #requests.post("http://localhost:2727/api/skills/1")
         node = ServiceClient(name=self.name, service_name='pillar_control/skill_1')
@@ -47,8 +47,8 @@ class PolicySkill1(Policy):
         return response
 
 class PolicySkill2(Policy):
-    def __init__(self, name='skill_2_evaluation_policy', class_name='cognitive_nodes.policy.Policy', publisher_msg=None, publisher_topic=None, **params):
-        super().__init__(name, class_name, publisher_msg, publisher_topic, **params)
+    def __init__(self, name='skill_2_evaluation_policy', class_name='cognitive_nodes.policy.Policy', service_msg=None, service_name=None, **params):
+        super().__init__(name=name, class_name=class_name, **params)
     async def execute_callback(self, request, response):
         #requests.post("http://localhost:2727/api/skills/2")
         node = ServiceClient(name=self.name, service_name='pillar_control/skill_2')
@@ -58,8 +58,8 @@ class PolicySkill2(Policy):
         return response
 
 class PolicySkill3(Policy):
-    def __init__(self, name='skill_3_teacher_policy', class_name='cognitive_nodes.policy.Policy', publisher_msg=None, publisher_topic=None, **params):
-        super().__init__(name, class_name, publisher_msg, publisher_topic, **params)
+    def __init__(self, name='skill_3_teacher_policy', class_name='cognitive_nodes.policy.Policy', service_msg=None, service_name=None, **params):
+        super().__init__(name=name, class_name=class_name, **params)
     async def execute_callback(self, request, response):
         #requests.post("http://localhost:2727/api/skills/3")
         node = ServiceClient(name=self.name, service_name='pillar_control/skill_3')
@@ -69,8 +69,8 @@ class PolicySkill3(Policy):
         return response
 
 class PolicySkill4(Policy):
-    def __init__(self, name='skill_4_sit_policy', class_name='cognitive_nodes.policy.Policy', publisher_msg=None, publisher_topic=None, **params):
-        super().__init__(name, class_name, publisher_msg, publisher_topic, **params)
+    def __init__(self, name='skill_4_sit_policy', class_name='cognitive_nodes.policy.Policy', service_msg=None, service_name=None, **params):
+        super().__init__(name=name, class_name=class_name, **params)
     async def execute_callback(self, request, response):
         #requests.post("http://localhost:2727/api/skills/4")
         node = ServiceClient(name=self.name, service_name='pillar_control/skill_4')
@@ -80,8 +80,8 @@ class PolicySkill4(Policy):
         return response
 
 class PolicySkill5(Policy):
-    def __init__(self, name='skill_5_break_policy', class_name='cognitive_nodes.policy.Policy', publisher_msg=None, publisher_topic=None, **params):
-        super().__init__(name, class_name, publisher_msg, publisher_topic, **params)
+    def __init__(self, name='skill_5_break_policy', class_name='cognitive_nodes.policy.Policy', service_msg=None, service_name=None, **params):
+        super().__init__(name=name, class_name=class_name, **params)
     async def execute_callback(self, request, response):
         #requests.post("http://localhost:2727/api/skills/5")
         node = ServiceClient(name=self.name, service_name='pillar_control/skill_5')
@@ -91,8 +91,8 @@ class PolicySkill5(Policy):
         return response
 
 class PolicySkill6(Policy):
-    def __init__(self, name='skill_6_video_policy', class_name='cognitive_nodes.policy.Policy', publisher_msg=None, publisher_topic=None, **params):
-        super().__init__(name, class_name, publisher_msg, publisher_topic, **params)
+    def __init__(self, name='skill_6_video_policy', class_name='cognitive_nodes.policy.Policy', service_msg=None, service_name=None, **params):
+        super().__init__(name=name, class_name=class_name, **params)
     async def execute_callback(self, request, response):
         #requests.post("http://localhost:2727/api/skills/6")
         node = ServiceClient(name=self.name, service_name='pillar_control/skill_6')
@@ -102,8 +102,8 @@ class PolicySkill6(Policy):
         return response
 
 class PolicySkill7(Policy):
-    def __init__(self, name='skill_7_gamification_policy', class_name='cognitive_nodes.policy.Policy', publisher_msg=None, publisher_topic=None, **params):
-        super().__init__(name, class_name, publisher_msg, publisher_topic, **params)
+    def __init__(self, name='skill_7_gamification_policy', class_name='cognitive_nodes.policy.Policy', service_msg=None, service_name=None, **params):
+        super().__init__(name=name, class_name=class_name, **params)
     async def execute_callback(self, request, response):
         #requests.post("http://localhost:2727/api/skills/7")
         node = ServiceClient(name=self.name, service_name='pillar_control/skill_7')
