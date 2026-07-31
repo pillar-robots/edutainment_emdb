@@ -306,31 +306,27 @@ LTM:
                 name: skill_0_idle_policy #S0
                 class_name: edutainment_emdb.policies.PolicySkill0
                 parameters:
-                    neighbors: [{"name": "idle_expert_cnode", "node_type": "CNode"} #, # C0 WM1
-                                #{"name": "idle_amateur_cnode", "node_type": "CNode"}
-                                ] # C0 WM2
+                    neighbors: [{"name": "idle_expert_cnode", "node_type": "CNode"}] #, # C0 WM1
+                                #{"name": "idle_amateur_cnode", "node_type": "CNode"} ] # C0 WM2
             -
                 name: skill_1_python_policy #S1
                 class_name: edutainment_emdb.policies.PolicySkill1
                 parameters:
-                    neighbors: [{"name": "python_errors_expert_cnode", "node_type": "CNode"} #, # C1.1 WM1
-                                #{"name": "python_errors_amateur_cnode", "node_type": "CNode"}
-                                ] # C1.1 WM2
+                    neighbors: [{"name": "python_errors_expert_cnode", "node_type": "CNode"}] #, # C1.1 WM1
+                                #{"name": "python_errors_amateur_cnode", "node_type": "CNode"}] # C1.1 WM2
             -
                 name: skill_2_evaluation_policy #S2
                 class_name: edutainment_emdb.policies.PolicySkill2
                 parameters:
-                    neighbors: [{"name": "evaluation_errors_expert_cnode", "node_type": "CNode"} #, # C1.2 WM1
-                                #{"name": "evaluation_errors_amateur_cnode", "node_type": "CNode"}
-                                ] # C1.2 WM2
+                    neighbors: [{"name": "evaluation_errors_expert_cnode", "node_type": "CNode"}] #, # C1.2 WM1
+                                #{"name": "evaluation_errors_amateur_cnode", "node_type": "CNode"}] # C1.2 WM2
             -
                 name: skill_3_teacher_policy #S3
                 class_name: edutainment_emdb.policies.PolicySkill3
                 parameters:
-                    neighbors: [{"name": "python_evaluation_errors_present_expert_cnode", "node_type": "CNode"}, # C1.3 WM1
+                    neighbors: [{"name": "python_evaluation_errors_present_expert_cnode", "node_type": "CNode"}] #, # C1.3 WM1
                                 #{"name": "python_evaluation_errors_present_amateur_cnode", "node_type": "CNode"}, # C1.3 WM2
                                 #{"name": "bored_high_expert_cnode", "node_type": "CNode"}, # C2.3 WM1
                                 #{"name": "bored_high_amateur_cnode", "node_type": "CNode"}, # C2.3 WM2
                                 #{"name": "standing_high_present_expert_cnode", "node_type": "CNode"}, # C3.2 WM1
-                                #{"name": "standing_high_present_amateur_cnode", "node_type": "CNode"}
-                                ] # C3.2 WM2
+                                #{"name": "standing_high_present_amateur_cnode", "node_type": "CNode"}] # C3.2 WM2

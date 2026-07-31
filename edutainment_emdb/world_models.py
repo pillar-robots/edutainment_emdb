@@ -35,7 +35,7 @@ class EdutainmentStudentExpert(WorldModel):
             if value >= STUDENT_TYPE_EXPERT_THRESHOLD:
                 self.activation.activation = 1.0
                 self.selected_behavior = "expert_student"
-                self.get_logger().debug(f"[{self.name}] Selected behavior: {self.selected_behavior}")
+                self.get_logger().info(f"[{self.name}] Selected behavior: {self.selected_behavior}")
             else:
                 self.activation.activation = 0.0
 
@@ -58,7 +58,7 @@ class EdutainmentStudentExpert(WorldModel):
             timestamp=Time()
             new_input=dict(subscriber=subscriber, data=data, updated=updated, timestamp=timestamp)
             self.activation_inputs[name]=new_input
-            self.get_logger().debug(f'{self.name} -- Created new activation input: {name} of type {node_type}')
+            self.get_logger().info(f'{self.name} -- Created new activation input: {name} of type {node_type}')
 
     def read_activation_callback(self, msg: PerceptionStamped):
         """
@@ -102,7 +102,7 @@ class EdutainmentStudentAmateur(WorldModel):
             if STUDENT_TYPE_UNDEFINED_THRESHOLD < value <= STUDENT_TYPE_AMATEUR_THRESHOLD:
                 self.activation.activation = 1.0
                 self.selected_behavior = "amateur_student"
-                self.get_logger().debug(f"[{self.name}] Selected behavior: {self.selected_behavior}")
+                self.get_logger().info(f"[{self.name}] Selected behavior: {self.selected_behavior}")
             else:
                 self.activation.activation = 0.0
             
@@ -125,7 +125,7 @@ class EdutainmentStudentAmateur(WorldModel):
             timestamp=Time()
             new_input=dict(subscriber=subscriber, data=data, updated=updated, timestamp=timestamp)
             self.activation_inputs[name]=new_input
-            self.get_logger().debug(f'{self.name} -- Created new activation input: {name} of type {node_type}')
+            self.get_logger().info(f'{self.name} -- Created new activation input: {name} of type {node_type}')
 
     def read_activation_callback(self, msg: PerceptionStamped):
         """
@@ -169,7 +169,7 @@ class EdutainmentStudentGeneral(WorldModel):
             if STUDENT_TYPE_AMATEUR_THRESHOLD < value < STUDENT_TYPE_EXPERT_THRESHOLD:
                 self.activation.activation = 1.0
                 self.selected_behavior = "general_student"
-                self.get_logger().debug(f"[{self.name}] Selected behavior: {self.selected_behavior}")
+                self.get_logger().info(f"[{self.name}] Selected behavior: {self.selected_behavior}")
             else:
                 self.activation.activation = 0.0
 
@@ -192,7 +192,7 @@ class EdutainmentStudentGeneral(WorldModel):
             timestamp=Time()
             new_input=dict(subscriber=subscriber, data=data, updated=updated, timestamp=timestamp)
             self.activation_inputs[name]=new_input
-            self.get_logger().debug(f'{self.name} -- Created new activation input: {name} of type {node_type}')
+            self.get_logger().info(f'{self.name} -- Created new activation input: {name} of type {node_type}')
 
     def read_activation_callback(self, msg: PerceptionStamped):
         """

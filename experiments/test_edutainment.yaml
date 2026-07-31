@@ -101,11 +101,35 @@ LTM:
                   default_msg: std_msgs.msg.Float32
                   default_topic: /student/type
             -
+                name: challenge_completion_perception
+                class_name: edutainment_emdb.perceptions.EdutainmentPerception
+                parameters:
+                  default_msg: std_msgs.msg.Float32
+                  default_topic: /student/challenge_completion
+            -
                 name: python_error_streak_perception
                 class_name: edutainment_emdb.perceptions.EdutainmentPerception
                 parameters:
                   default_msg: std_msgs.msg.Float32
                   default_topic: /student/python_error_streak
+            -
+                name: evaluation_error_streak_perception
+                class_name: edutainment_emdb.perceptions.EdutainmentPerception
+                parameters:
+                  default_msg: std_msgs.msg.Float32
+                  default_topic: /student/evaluation_error_streak
+            -
+                name: bored_perception
+                class_name: edutainment_emdb.perceptions.EdutainmentPerception
+                parameters:
+                  default_msg: std_msgs.msg.Float32
+                  default_topic: /student/bored
+            -
+                name: standing_perception
+                class_name: edutainment_emdb.perceptions.EdutainmentPerception
+                parameters:
+                  default_msg: std_msgs.msg.Float32
+                  default_topic: /student/standing
         WorldModel:
             -
                 name: EXPERT_WM # WM1
@@ -115,13 +139,13 @@ LTM:
         RobotPurpose: 
             ### MX.1
             -
-                name: student_exercise_teacher_old_absent_purpose # M3.1
+                name: student_exercise_teacher_old_present_purpose # M1.1
                 class_name: cognitive_nodes.robot_purpose.RobotPurpose
                 parameters:
-                    weight: 1.0 #0.9
-                    drive_id: 'student_exercise_teacher_old_absent_drive' # D3.1
+                    weight: 1.0 #0.9 # The weight of the RobotPurpose. # TODO: review weights, check diagram.
+                    drive_id: 'student_exercise_teacher_old_present_drive' # D1.1
                     purpose_type: 'Mission'
-                    terminal: False
+                    terminal: False # The terminal flag indicates if a world reset is required after satisfying the purpose.
         Drive:
             ### DX.1
             -
