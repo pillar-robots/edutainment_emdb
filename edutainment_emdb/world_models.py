@@ -6,6 +6,7 @@ from rclpy.callback_groups import ReentrantCallbackGroup, MutuallyExclusiveCallb
 from core.utils import class_from_classname, perception_msg_to_dict, separate_perceptions
 from cognitive_node_interfaces.msg import Perception, PerceptionStamped
 from rclpy.time import Time
+from core.container import Container, consolidate_containers
 
 # Global variables for the thresholds
 STUDENT_TYPE_UNDEFINED_THRESHOLD = 0.0
@@ -13,23 +14,28 @@ STUDENT_TYPE_AMATEUR_THRESHOLD = 0.21 # To avoid rounding errors.
 STUDENT_TYPE_EXPERT_THRESHOLD = 0.8
 
 class EdutainmentStudentExpert(WorldModel):
-    def __init__(self,
-                 name='EXPERT_WM',
-                 class_name='cognitive_nodes.world_model.WorldModel',
-                 **params):
-        super().__init__(name, class_name, **params)
+    def __init__(self, name='EXPERT_WM', class_name='cognitive_nodes.world_model.WorldModel', **params):
+        super().__init__(name=name, class_name=class_name, **params)
         self.selected_behavior = None
         self.configure_activation_inputs(self.neighbors)
 
     def calculate_activation(self, perception=None, activation_list=None):
         if activation_list!=None:
-            perception={}
-            for sensor in activation_list:
-                activation_list[sensor]['updated']=False
-                perception[sensor]=activation_list[sensor]['data']
+            data = [activation_list[sensor]['data'] for sensor in activation_list]
+            if self.perception is None and len(data)>0:
+                self.perception = consolidate_containers(data, name="perception", container_type="perception")
+            elif len(data)==0: # Activation list may be empty when initializing the P-Node.
+                self.activation.activation = 0.0
+                self.activation.timestamp = self.get_clock().now().to_msg()
+                return self.activation
+            else:
+                consolidate_containers(data, write_container=self.perception)
+            perception = self.perception
+        activation_value = 0.0
+
         if perception:
-            value_raw = perception.get('student_type_perception')
-            value = round(value_raw[0]['data'], 1)
+            value_raw = perception.read().sel(features=["student_type_perception:data"]).values[-1] if "student_type_perception:data" in perception.feature_labels else 0.0
+            value = round(float(value_raw), 1)
 
             # WM 1
             if value >= STUDENT_TYPE_EXPERT_THRESHOLD:
@@ -80,23 +86,28 @@ class EdutainmentStudentExpert(WorldModel):
             self.get_logger().warn("Empty perception recieved in P-Node. No activation calculated")
 
 class EdutainmentStudentAmateur(WorldModel):
-    def __init__(self,
-                 name='AMATEUR_WM',
-                 class_name='cognitive_nodes.world_model.WorldModel',
-                 **params):
-        super().__init__(name, class_name, **params)
+    def __init__(self, name='AMATEUR_WM', class_name='cognitive_nodes.world_model.WorldModel', **params):
+        super().__init__(name=name, class_name=class_name, **params)
         self.selected_behavior = None
         self.configure_activation_inputs(self.neighbors)
 
     def calculate_activation(self, perception=None, activation_list=None):
         if activation_list!=None:
-            perception={}
-            for sensor in activation_list:
-                activation_list[sensor]['updated']=False
-                perception[sensor]=activation_list[sensor]['data']
+            data = [activation_list[sensor]['data'] for sensor in activation_list]
+            if self.perception is None and len(data)>0:
+                self.perception = consolidate_containers(data, name="perception", container_type="perception")
+            elif len(data)==0: # Activation list may be empty when initializing the P-Node.
+                self.activation.activation = 0.0
+                self.activation.timestamp = self.get_clock().now().to_msg()
+                return self.activation
+            else:
+                consolidate_containers(data, write_container=self.perception)
+            perception = self.perception
+        activation_value = 0.0
+
         if perception:
-            value_raw = perception.get('student_type_perception')
-            value = round(value_raw[0]['data'], 1)
+            value_raw = perception.read().sel(features=["student_type_perception:data"]).values[-1] if "student_type_perception:data" in perception.feature_labels else 0.0
+            value = round(float(value_raw), 1)
 
             # WM 2
             if STUDENT_TYPE_UNDEFINED_THRESHOLD < value <= STUDENT_TYPE_AMATEUR_THRESHOLD:
@@ -147,23 +158,28 @@ class EdutainmentStudentAmateur(WorldModel):
             self.get_logger().warn("Empty perception recieved in P-Node. No activation calculated")
 
 class EdutainmentStudentGeneral(WorldModel):
-    def __init__(self,
-                 name='GENERAL_WM',
-                 class_name='cognitive_nodes.world_model.WorldModel',
-                 **params):
-        super().__init__(name, class_name, **params)
+    def __init__(self, name='GENERAL_WM', class_name='cognitive_nodes.world_model.WorldModel', **params):
+        super().__init__(name=name, class_name=class_name, **params)
         self.selected_behavior = None
         self.configure_activation_inputs(self.neighbors)
 
     def calculate_activation(self, perception=None, activation_list=None):
         if activation_list!=None:
-            perception={}
-            for sensor in activation_list:
-                activation_list[sensor]['updated']=False
-                perception[sensor]=activation_list[sensor]['data']
+            data = [activation_list[sensor]['data'] for sensor in activation_list]
+            if self.perception is None and len(data)>0:
+                self.perception = consolidate_containers(data, name="perception", container_type="perception")
+            elif len(data)==0: # Activation list may be empty when initializing the P-Node.
+                self.activation.activation = 0.0
+                self.activation.timestamp = self.get_clock().now().to_msg()
+                return self.activation
+            else:
+                consolidate_containers(data, write_container=self.perception)
+            perception = self.perception
+        activation_value = 0.0
+
         if perception:
-            value_raw = perception.get('student_type_perception')
-            value = round(value_raw[0]['data'], 1)
+            value_raw = perception.read().sel(features=["student_type_perception:data"]).values[-1] if "student_type_perception:data" in perception.feature_labels else 0.0
+            value = round(float(value_raw), 1)
 
             # WM 3
             if STUDENT_TYPE_AMATEUR_THRESHOLD < value < STUDENT_TYPE_EXPERT_THRESHOLD:
