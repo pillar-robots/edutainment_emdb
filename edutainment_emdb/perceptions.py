@@ -5,12 +5,8 @@ from core.container import Container
 
 class EdutainmentPerception(Perception):
     """Edutainment Perception class"""
-    def __init__(self, name='perception',
-                 class_name='cognitive_nodes.perception.Perception',
-                 default_msg=None,
-                 default_topic=None,
-                 normalize_data=None,
-                 **params):
+    def __init__(self, name='perception', class_name='cognitive_nodes.perception.Perception',
+                 default_msg=None, default_topic=None, normalize_data=None, **params):
         super().__init__(name=name, class_name=class_name, default_msg=default_msg, default_topic=default_topic, normalize_data=normalize_data, **params)
         self.value = 0.0
     def process_and_send_reading(self):
@@ -18,10 +14,10 @@ class EdutainmentPerception(Perception):
         Publishes the current perception value (Float32) to its topic.
         The value should already be set externally in self.value.
         """
-        if isinstance(self.reading.data, list):
-            if len(self.reading.data) == 0:
+        if isinstance(self.reading, list):
+            if len(self.reading) == 0:
                 return # No reading to process, return immediately
-            for perception in self.reading.data:
+            for perception in self.reading:
                 teacher_present_perception=perception.teacher_present_perception,
                 teacher_type_perception=perception.teacher_type_perception,
                 student_type_perception=perception.student_type_perception,

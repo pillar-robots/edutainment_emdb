@@ -1,12 +1,11 @@
 import rclpy
-from copy import deepcopy
+from rclpy.time import Time
+from rclpy.qos import QoSProfile, qos_profile_sensor_data, ReliabilityPolicy, HistoryPolicy
+from rclpy.callback_groups import ReentrantCallbackGroup, MutuallyExclusiveCallbackGroup
+from core.container import Container, consolidate_containers
+from core_interfaces.msg import Container as ContainerMsg
 from cognitive_nodes.world_model import WorldModel
 from std_msgs.msg import Float32
-from rclpy.callback_groups import ReentrantCallbackGroup, MutuallyExclusiveCallbackGroup
-from core.utils import class_from_classname, perception_msg_to_dict, separate_perceptions
-from cognitive_node_interfaces.msg import Perception, PerceptionStamped
-from rclpy.time import Time
-from core.container import Container, consolidate_containers
 
 # Global variables for the thresholds
 STUDENT_TYPE_UNDEFINED_THRESHOLD = 0.0
@@ -16,11 +15,11 @@ STUDENT_TYPE_EXPERT_THRESHOLD = 0.8
 class EdutainmentStudentExpert(WorldModel):
     def __init__(self, name='EXPERT_WM', class_name='cognitive_nodes.world_model.WorldModel', **params):
         super().__init__(name=name, class_name=class_name, **params)
-        self.selected_behavior = None
-        self.configure_activation_inputs(self.neighbors)
+        self.perception = None
+        self.cbgroup_activation = getattr(self, "cbgroup_activation", MutuallyExclusiveCallbackGroup())
 
     def calculate_activation(self, perception=None, activation_list=None):
-        if activation_list!=None:
+        if activation_list is not None:
             data = [activation_list[sensor]['data'] for sensor in activation_list]
             if self.perception is None and len(data)>0:
                 self.perception = consolidate_containers(data, name="perception", container_type="perception")
@@ -39,51 +38,57 @@ class EdutainmentStudentExpert(WorldModel):
 
             # WM 1
             if value >= STUDENT_TYPE_EXPERT_THRESHOLD:
-                self.activation.activation = 1.0
-                self.selected_behavior = "expert_student"
-                self.get_logger().info(f"[{self.name}] Selected behavior: {self.selected_behavior}")
+                activation_value = 1.0
             else:
-                self.activation.activation = 0.0
-
-            self.activation.timestamp = self.get_clock().now().to_msg()
+                activation_value = 0.0
+        
+        perception_timestamp = self.perception.data.coords["timestamp"].values[-1]
+        self.activation.activation = activation_value
+        self.activation.timestamp = Time(nanoseconds=perception_timestamp).to_msg()
         return self.activation
     
-    def create_activation_input(self, node: dict): #Adds or deletes a node from the activation inputs list. By default reads activations.
-        """
-        Adds perceptions to the activation inputs list.
-
-        :param node: Dictionary with the information of the node {'name': <name>, 'node_type': <node_type>}.
-        :type node: dict
-        """    
-        name=node['name']
-        node_type=node['node_type']
+    def create_activation_input(self, node: dict):
+        """Añade suscripciones con QoS de sensor para baja latencia."""
+        name = node['name']
+        node_type = node['node_type']
         if node_type == "Perception":
-            subscriber=self.create_subscription(PerceptionStamped, "perception/" + str(name) + "/value", self.read_activation_callback, 1, callback_group=self.cbgroup_activation)
-            data=Perception()
-            updated=False
-            timestamp=Time()
-            new_input=dict(subscriber=subscriber, data=data, updated=updated, timestamp=timestamp)
-            self.activation_inputs[name]=new_input
-            self.get_logger().info(f'{self.name} -- Created new activation input: {name} of type {node_type}')
+            sub = self.create_subscription(
+                ContainerMsg,
+                f"perception/{name}/value",
+                self.read_activation_callback,
+                qos_profile_sensor_data,  # OPT: QoS de sensores
+                callback_group=self.cbgroup_activation
+            )
+            # OPT: no crear nuevos objetos por callback; usa referencias in-place
+            self.activation_inputs[name] = dict(
+                subscriber=sub,
+                data=None,             # placeholder reutilizable
+                updated=False
+            )
 
-    def read_activation_callback(self, msg: PerceptionStamped):
+    def read_activation_callback(self, msg: ContainerMsg):
         """
         Callback method that reads a perception and stores it in the activation inputs list.
 
         :param msg: PerceptionStamped message that contains the perception and its timestamp.
         :type msg: cognitive_node_interfaces.msg.PerceptionStamped
         """        
-        perception_dict=perception_msg_to_dict(msg=msg.perception)
-        if len(perception_dict)>1:
-            self.get_logger().error(f'{self.name} -- Received perception with multiple sensors: ({perception_dict.keys()}). Perception nodes should (currently) include only one sensor!')
-        if len(perception_dict)==1:
-            node_name=list(perception_dict.keys())[0]
+        if msg.max_size>1:
+            self.get_logger().error(f'Received perception with multiple readings: ({msg.name}). Perception messages should (currently) include only one reading!')
+        elif msg.max_size==1:
+            node_name=msg.name
             if node_name in self.activation_inputs:
-                self.activation_inputs[node_name]['data']=perception_dict[node_name]
+                if self.activation_inputs[node_name]['data'] is None:
+                    self.activation_inputs[node_name]['data']=Container.from_msg(msg)
+                else:
+                    self.activation_inputs[node_name]['data'].push_from_msg(msg)
                 self.activation_inputs[node_name]['updated']=True
-                self.activation_inputs[node_name]['timestamp']=Time.from_msg(msg.timestamp)
+            else:
+                self.get_logger().error(
+                    "Received perception not registered in local perception cache!!!"
+                )
         else:
-            self.get_logger().warn("Empty perception recieved in P-Node. No activation calculated")
+            self.get_logger().warn("Empty perception recieved in P-Node")
 
 class EdutainmentStudentAmateur(WorldModel):
     def __init__(self, name='AMATEUR_WM', class_name='cognitive_nodes.world_model.WorldModel', **params):
@@ -92,7 +97,7 @@ class EdutainmentStudentAmateur(WorldModel):
         self.configure_activation_inputs(self.neighbors)
 
     def calculate_activation(self, perception=None, activation_list=None):
-        if activation_list!=None:
+        if activation_list is not None:
             data = [activation_list[sensor]['data'] for sensor in activation_list]
             if self.perception is None and len(data)>0:
                 self.perception = consolidate_containers(data, name="perception", container_type="perception")
@@ -111,51 +116,57 @@ class EdutainmentStudentAmateur(WorldModel):
 
             # WM 2
             if STUDENT_TYPE_UNDEFINED_THRESHOLD < value <= STUDENT_TYPE_AMATEUR_THRESHOLD:
-                self.activation.activation = 1.0
-                self.selected_behavior = "amateur_student"
-                self.get_logger().info(f"[{self.name}] Selected behavior: {self.selected_behavior}")
+                activation_value = 1.0
             else:
-                self.activation.activation = 0.0
+                activation_value = 0.0
             
-            self.activation.timestamp = self.get_clock().now().to_msg()
+        perception_timestamp = self.perception.data.coords["timestamp"].values[-1]
+        self.activation.activation = activation_value
+        self.activation.timestamp = Time(nanoseconds=perception_timestamp).to_msg()
         return self.activation
     
-    def create_activation_input(self, node: dict): #Adds or deletes a node from the activation inputs list. By default reads activations.
-        """
-        Adds perceptions to the activation inputs list.
-
-        :param node: Dictionary with the information of the node {'name': <name>, 'node_type': <node_type>}.
-        :type node: dict
-        """    
-        name=node['name']
-        node_type=node['node_type']
+    def create_activation_input(self, node: dict):
+        """Añade suscripciones con QoS de sensor para baja latencia."""
+        name = node['name']
+        node_type = node['node_type']
         if node_type == "Perception":
-            subscriber=self.create_subscription(PerceptionStamped, "perception/" + str(name) + "/value", self.read_activation_callback, 1, callback_group=self.cbgroup_activation)
-            data=Perception()
-            updated=False
-            timestamp=Time()
-            new_input=dict(subscriber=subscriber, data=data, updated=updated, timestamp=timestamp)
-            self.activation_inputs[name]=new_input
-            self.get_logger().info(f'{self.name} -- Created new activation input: {name} of type {node_type}')
+            sub = self.create_subscription(
+                ContainerMsg,
+                f"perception/{name}/value",
+                self.read_activation_callback,
+                qos_profile_sensor_data,  # OPT: QoS de sensores
+                callback_group=self.cbgroup_activation
+            )
+            # OPT: no crear nuevos objetos por callback; usa referencias in-place
+            self.activation_inputs[name] = dict(
+                subscriber=sub,
+                data=None,             # placeholder reutilizable
+                updated=False
+            )
 
-    def read_activation_callback(self, msg: PerceptionStamped):
+    def read_activation_callback(self, msg: ContainerMsg):
         """
         Callback method that reads a perception and stores it in the activation inputs list.
 
         :param msg: PerceptionStamped message that contains the perception and its timestamp.
         :type msg: cognitive_node_interfaces.msg.PerceptionStamped
         """        
-        perception_dict=perception_msg_to_dict(msg=msg.perception)
-        if len(perception_dict)>1:
-            self.get_logger().error(f'{self.name} -- Received perception with multiple sensors: ({perception_dict.keys()}). Perception nodes should (currently) include only one sensor!')
-        if len(perception_dict)==1:
-            node_name=list(perception_dict.keys())[0]
+        if msg.max_size>1:
+            self.get_logger().error(f'Received perception with multiple readings: ({msg.name}). Perception messages should (currently) include only one reading!')
+        elif msg.max_size==1:
+            node_name=msg.name
             if node_name in self.activation_inputs:
-                self.activation_inputs[node_name]['data']=perception_dict[node_name]
+                if self.activation_inputs[node_name]['data'] is None:
+                    self.activation_inputs[node_name]['data']=Container.from_msg(msg)
+                else:
+                    self.activation_inputs[node_name]['data'].push_from_msg(msg)
                 self.activation_inputs[node_name]['updated']=True
-                self.activation_inputs[node_name]['timestamp']=Time.from_msg(msg.timestamp)
+            else:
+                self.get_logger().error(
+                    "Received perception not registered in local perception cache!!!"
+                )
         else:
-            self.get_logger().warn("Empty perception recieved in P-Node. No activation calculated")
+            self.get_logger().warn("Empty perception recieved in P-Node")
 
 class EdutainmentStudentGeneral(WorldModel):
     def __init__(self, name='GENERAL_WM', class_name='cognitive_nodes.world_model.WorldModel', **params):
@@ -164,7 +175,7 @@ class EdutainmentStudentGeneral(WorldModel):
         self.configure_activation_inputs(self.neighbors)
 
     def calculate_activation(self, perception=None, activation_list=None):
-        if activation_list!=None:
+        if activation_list is not None:
             data = [activation_list[sensor]['data'] for sensor in activation_list]
             if self.perception is None and len(data)>0:
                 self.perception = consolidate_containers(data, name="perception", container_type="perception")
@@ -183,48 +194,54 @@ class EdutainmentStudentGeneral(WorldModel):
 
             # WM 3
             if STUDENT_TYPE_AMATEUR_THRESHOLD < value < STUDENT_TYPE_EXPERT_THRESHOLD:
-                self.activation.activation = 1.0
-                self.selected_behavior = "general_student"
-                self.get_logger().info(f"[{self.name}] Selected behavior: {self.selected_behavior}")
+                activation_value = 1.0
             else:
-                self.activation.activation = 0.0
+                activation_value = 0.0
 
-            self.activation.timestamp = self.get_clock().now().to_msg()
+        perception_timestamp = self.perception.data.coords["timestamp"].values[-1]
+        self.activation.activation = activation_value
+        self.activation.timestamp = Time(nanoseconds=perception_timestamp).to_msg()
         return self.activation
     
-    def create_activation_input(self, node: dict): #Adds or deletes a node from the activation inputs list. By default reads activations.
-        """
-        Adds perceptions to the activation inputs list.
-
-        :param node: Dictionary with the information of the node {'name': <name>, 'node_type': <node_type>}.
-        :type node: dict
-        """    
-        name=node['name']
-        node_type=node['node_type']
+    def create_activation_input(self, node: dict):
+        """Añade suscripciones con QoS de sensor para baja latencia."""
+        name = node['name']
+        node_type = node['node_type']
         if node_type == "Perception":
-            subscriber=self.create_subscription(PerceptionStamped, "perception/" + str(name) + "/value", self.read_activation_callback, 1, callback_group=self.cbgroup_activation)
-            data=Perception()
-            updated=False
-            timestamp=Time()
-            new_input=dict(subscriber=subscriber, data=data, updated=updated, timestamp=timestamp)
-            self.activation_inputs[name]=new_input
-            self.get_logger().info(f'{self.name} -- Created new activation input: {name} of type {node_type}')
+            sub = self.create_subscription(
+                ContainerMsg,
+                f"perception/{name}/value",
+                self.read_activation_callback,
+                qos_profile_sensor_data,  # OPT: QoS de sensores
+                callback_group=self.cbgroup_activation
+            )
+            # OPT: no crear nuevos objetos por callback; usa referencias in-place
+            self.activation_inputs[name] = dict(
+                subscriber=sub,
+                data=None,             # placeholder reutilizable
+                updated=False
+            )
 
-    def read_activation_callback(self, msg: PerceptionStamped):
+    def read_activation_callback(self, msg: ContainerMsg):
         """
         Callback method that reads a perception and stores it in the activation inputs list.
 
         :param msg: PerceptionStamped message that contains the perception and its timestamp.
         :type msg: cognitive_node_interfaces.msg.PerceptionStamped
         """        
-        perception_dict=perception_msg_to_dict(msg=msg.perception)
-        if len(perception_dict)>1:
-            self.get_logger().error(f'{self.name} -- Received perception with multiple sensors: ({perception_dict.keys()}). Perception nodes should (currently) include only one sensor!')
-        if len(perception_dict)==1:
-            node_name=list(perception_dict.keys())[0]
+        if msg.max_size>1:
+            self.get_logger().error(f'Received perception with multiple readings: ({msg.name}). Perception messages should (currently) include only one reading!')
+        elif msg.max_size==1:
+            node_name=msg.name
             if node_name in self.activation_inputs:
-                self.activation_inputs[node_name]['data']=perception_dict[node_name]
+                if self.activation_inputs[node_name]['data'] is None:
+                    self.activation_inputs[node_name]['data']=Container.from_msg(msg)
+                else:
+                    self.activation_inputs[node_name]['data'].push_from_msg(msg)
                 self.activation_inputs[node_name]['updated']=True
-                self.activation_inputs[node_name]['timestamp']=Time.from_msg(msg.timestamp)
+            else:
+                self.get_logger().error(
+                    "Received perception not registered in local perception cache!!!"
+                )
         else:
-            self.get_logger().warn("Empty perception recieved in P-Node. No activation calculated")
+            self.get_logger().warn("Empty perception recieved in P-Node")
