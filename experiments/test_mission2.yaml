@@ -314,13 +314,12 @@ LTM:
                 name: skill_3_teacher_policy #S3
                 class_name: edutainment_emdb.policies.PolicySkill3
                 parameters:
-                    neighbors: [ #{"name": "python_evaluation_errors_present_expert_cnode", "node_type": "CNode"}, # C1.3 WM1
+                    neighbors: [{"name": "bored_high_expert_cnode", "node_type": "CNode"}, # C2.3 WM1
+                                {"name": "bored_high_amateur_cnode", "node_type": "CNode"}] # C2.3 WM2
+                                #{"name": "python_evaluation_errors_present_expert_cnode", "node_type": "CNode"}, # C1.3 WM1
                                 #{"name": "python_evaluation_errors_present_amateur_cnode", "node_type": "CNode"}, # C1.3 WM2
-                                {"name": "bored_high_expert_cnode", "node_type": "CNode"}, # C2.3 WM1
-                                {"name": "bored_high_amateur_cnode", "node_type": "CNode"}, # C2.3 WM2
                                 #{"name": "standing_high_present_expert_cnode", "node_type": "CNode"}, # C3.2 WM1
-                                #{"name": "standing_high_present_amateur_cnode", "node_type": "CNode"}
-                                ] # C3.2 WM2
+                                #{"name": "standing_high_present_amateur_cnode", "node_type": "CNode"}] # C3.2 WM2
             # -
             #     name: skill_4_sit_policy #S4
             #     class_name: edutainment_emdb.policies.PolicySkill4
@@ -342,7 +341,6 @@ LTM:
                 name: skill_7_gamification_policy #S7
                 class_name: edutainment_emdb.policies.PolicySkill7
                 parameters:
-                    neighbors: [{"name": "bored_low_expert_cnode", "node_type": "CNode"} #, # C2.1 WM1
+                    neighbors: [{"name": "bored_low_expert_cnode", "node_type": "CNode"}] #, # C2.1 WM1
                                 #{"name": "standing_high_absent_old_expert_cnode", "node_type": "CNode"}, # C3.3 WM1
-                                #{"name": "standing_high_absent_old_amateur_cnode", "node_type": "CNode"}
-                                ] # C3.3 WM2
+                                #{"name": "standing_high_absent_old_amateur_cnode", "node_type": "CNode"}] # C3.3 WM2
