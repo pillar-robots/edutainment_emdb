@@ -139,13 +139,13 @@ LTM:
         RobotPurpose: 
             ### MX.1
             -
-                name: student_exercise_teacher_old_present_purpose # M1.1
+                name: student_exercise_teacher_old_absent_purpose # M3.1
                 class_name: cognitive_nodes.robot_purpose.RobotPurpose
                 parameters:
-                    weight: 1.0 #0.9 # The weight of the RobotPurpose. # TODO: review weights, check diagram.
-                    drive_id: 'student_exercise_teacher_old_present_drive' # D1.1
+                    weight: 1.0 #0.9
+                    drive_id: 'student_exercise_teacher_old_absent_drive' # D3.1
                     purpose_type: 'Mission'
-                    terminal: False # The terminal flag indicates if a world reset is required after satisfying the purpose.
+                    terminal: False
         Drive:
             ### DX.1
             -
