@@ -11,17 +11,26 @@ class ServiceClient(Node):
         super().__init__(name)
         self.service_name = service_name
         self.client = self.create_client(Empty, self.service_name)
-        while not self.client.wait_for_service(timeout_sec=1.0):
-            self.get_logger().info(f'Waiting for service {self.service_name}')
         self.request = Empty.Request()
 
     def call_service(self):
+        if not self.client.wait_for_service(timeout_sec=0.5):
+            self.get_logger().warning(f'Service {self.service_name} not available; skipping call')
+            return False
+
         future = self.client.call_async(self.request)
-        rclpy.spin_until_future_complete(self, future)
-        if future.result() is not None:
+        rclpy.spin_until_future_complete(self, future, timeout_sec=0.2)
+
+        if future.done() and future.result() is not None:
             self.get_logger().info(f'Called {self.service_name}')
-        else:
+            return True
+
+        if future.done() and future.result() is None:
             self.get_logger().error(f'Error while calling service: {future.exception()}')
+        else:
+            self.get_logger().warning(f'Timeout while calling service {self.service_name}')
+
+        return False
 
 
 class PolicySkill0(Policy): # Dummy idle policy.
