@@ -35,31 +35,34 @@ class PNodeIdle(PNode): #Pn0
             It also returs the timestamp.
         :rtype: cognitive_node_interfaces.msg.Activation
         """
-        if activation_list!=None:
-            data = [activation_list[sensor]['data'] for sensor in activation_list]
-            if self.perception is None and len(data)>0:
-                self.perception = consolidate_containers(data, name="perception", container_type="perception")
-            elif len(data)==0: # Activation list may be empty when initializing the P-Node.
-                self.activation.activation = 0.0
-                self.activation.timestamp = self.get_clock().now().to_msg()
-                return self.activation
-            else:
-                consolidate_containers(data, write_container=self.perception)
-            perception = self.perception
-        activation_value = 0.0
+        # if activation_list!=None:
+        #     data = [activation_list[sensor]['data'] for sensor in activation_list]
+        #     if self.perception is None and len(data)>0:
+        #         self.perception = consolidate_containers(data, name="perception", container_type="perception")
+        #     elif len(data)==0: # Activation list may be empty when initializing the P-Node.
+        #         self.activation.activation = 0.0
+        #         self.activation.timestamp = self.get_clock().now().to_msg()
+        #         return self.activation
+        #     else:
+        #         consolidate_containers(data, write_container=self.perception)
+        #     perception = self.perception
+        # activation_value = 0.0
 
-        if perception:
-            value_raw = perception.read().sel(features=["python_error_streak_perception:data"]).values[-1] if "python_error_streak_perception:data" in perception.feature_labels else 0.0
-            value = round(float(value_raw), 1)
+        self.activation.activation = 0.85
+        self.activation.timestamp = self.get_clock().now().to_msg()
 
-            # Pn0: Python errors < low threshold
-            if value < PYTHON_ERRORS_LOW_THRESHOLD:
-                self.activation.activation = 0.85 # Lower than the rest, so everything has higher activation than idle. 
-                self.get_logger().debug(f"PNODE DEBUG: idle_pnode: {value}")
-            else:
-                self.activation.activation = 0.0
+        # if perception:
+        #     value_raw = perception.read().sel(features=["python_error_streak_perception:data"]).values[-1] if "python_error_streak_perception:data" in perception.feature_labels else 0.0
+        #     value = round(float(value_raw), 1)
+
+        #     # Pn0: Python errors < low threshold
+        #     if value < PYTHON_ERRORS_LOW_THRESHOLD:
+        #         self.activation.activation = 0.85 # Lower than the rest, so everything has higher activation than idle. 
+        #         self.get_logger().debug(f"PNODE DEBUG: idle_pnode: {value}")
+        #     else:
+        #         self.activation.activation = 0.0
             
-            self.activation.timestamp = self.get_clock().now().to_msg()
+        #     self.activation.timestamp = self.get_clock().now().to_msg()
         return self.activation
     
 class PNodePythonErrors(PNode): #Pn1.1
@@ -160,7 +163,7 @@ class PNodePythonEvaluationErrorsPresent(PNode): #Pn1.3
 
             # P1.3: any USER present & Python errors or evaluation errors > high threshold
             if  value == TEACHER_PRESENT_THRESHOLD and (value_2 >= PYTHON_ERRORS_HIGH_THRESHOLD or value_3 >= EVALUATION_ERRORS_HIGH_THRESHOLD):
-                self.activation.activation = 0.95
+                self.activation.activation = 0.97
                 self.get_logger().debug(f"PNODE DEBUG: python_evaluation_errors_present_pnode: {value}")
             else:
                 self.activation.activation = 0.0
@@ -232,7 +235,7 @@ class PNodeBoredHigh(PNode): # Pn2.3
 
             # Pn2.3: USER2 & any USER present & student not engaged > high threshold
             if TEACHER_TYPE_UNDEFINED_THRESHOLD < value <= TEACHER_TYPE_MODERN_THRESHOLD and value_2 == TEACHER_PRESENT_THRESHOLD and value_3 >= BORED_HIGH_THRESHOLD:
-                self.activation.activation = 0.95
+                self.activation.activation = 0.97
                 self.get_logger().debug(f"PNODE DEBUG: bored_high_pnode: {value}")
             else:
                 self.activation.activation = 0.0
@@ -302,7 +305,7 @@ class PNodeStandingHighPresent(PNode): # Pn3.2
 
             # Pn3.2: any USER present & student standing up > high threshold
             if value == TEACHER_PRESENT_THRESHOLD and value_2 >= STANDING_HIGH_THRESHOLD:
-                self.activation.activation = 0.95
+                self.activation.activation = 0.97
                 self.get_logger().debug(f"PNODE DEBUG: standing_high_present_pnode: {value}")
             else:
                 self.activation.activation = 0.0
@@ -340,7 +343,7 @@ class PNodeStandingHighAbsentOld(PNode): # Pn3.3
 
             # Pn3.3: USER1 & no USER present & student standing up > high threshold
             if value >= TEACHER_TYPE_OLD_THRESHOLD and value_2 == TEACHER_ABSENT_THRESHOLD and value_3 >= STANDING_HIGH_THRESHOLD:
-                self.activation.activation = 0.95
+                self.activation.activation = 0.98
                 self.get_logger().debug(f"PNODE DEBUG: standing_high_absent_old_pnode: {value}")
             else:
                 self.activation.activation = 0.0
@@ -378,7 +381,7 @@ class PNodeStandingHighAbsentModern(PNode): # Pn3.4
 
             # Pn3.4: USER2 & not USER present & student standing up > high threshold
             if TEACHER_TYPE_UNDEFINED_THRESHOLD < value <= TEACHER_TYPE_MODERN_THRESHOLD and value_2 == TEACHER_ABSENT_THRESHOLD and value_3 >= STANDING_HIGH_THRESHOLD:
-                self.activation.activation = 0.95
+                self.activation.activation = 0.98
                 self.get_logger().debug(f"PNODE DEBUG: standing_high_absent_modern_pnode: {value}")
             else:
                 self.activation.activation = 0.0

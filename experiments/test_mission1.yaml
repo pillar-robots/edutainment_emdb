@@ -230,7 +230,7 @@ LTM:
                 class_name: edutainment_emdb.pnodes.PNodeIdle
                 parameters:
                     space_class: cognitive_nodes.space.ActivatedDummySpace
-                    neighbors: [{"name": "python_error_streak_perception", "node_type": "Perception"}]
+                    neighbors: []
             ### Pn1.X
             -
                 name: python_errors_pnode # Pn1.1
