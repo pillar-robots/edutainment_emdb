@@ -152,13 +152,13 @@ LTM:
                 name: student_exercise_teacher_old_absent_drive # D3.1
                 class_name: cognitive_nodes.drive.DriveExponential # DriveExponential: 0 active, 1 inactive (satisfied)
                 parameters:
-                    input_topic: /teacher/is_present # TODO: change to /student/challenge_completion
+                    input_topic: /student/challenge_completion
                     input_msg: std_msgs.msg.Float32
                     min_eval: 0.8
                     neighbors: [{"name": "student_exercise_teacher_old_absent_purpose", "node_type": "RobotPurpose"}] # M3.1
         Goal:
             -
-                name: exercise_finished_goal # G1 #TODO: Needs also D3.1 and D4.1, or is that a different Goal?
+                name: exercise_finished_goal # G1
                 class_name: cognitive_nodes.goal.GoalMotiven
                 parameters:
                     neighbors: [{"name": "student_exercise_teacher_old_absent_drive", "node_type": "Drive"}] #D3.1
@@ -166,10 +166,9 @@ LTM:
             ### Pn0
             -
                 name: idle_pnode # Pn0
-                class_name: edutainment_emdb.pnodes.PNodeIdle
+                class_name: dummy_nodes.dummy_pnodes.ActivatedDummyPNode # Always with 0.5 activation
                 parameters:
                     space_class: cognitive_nodes.space.ActivatedDummySpace
-                    neighbors: [{"name": "python_error_streak_perception", "node_type": "Perception"}]
             ### Pn1.X
             -
                 name: python_errors_pnode # Pn1.1

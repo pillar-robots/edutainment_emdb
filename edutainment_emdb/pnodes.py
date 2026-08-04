@@ -17,54 +17,8 @@ BORED_HIGH_THRESHOLD = 0.75
 STANDING_LOW_THRESHOLD = 0.5
 STANDING_HIGH_THRESHOLD = 0.9
 
-class PNodeIdle(PNode): #Pn0
-    """
-    PNode that represents if the system should be idle or not. It is activated when the python_error_streak_perception is below the low threshold.
-    """
-    def __init__(self, name='idle_pnode', class_name='cognitive_nodes.pnode.PNode', space_class=None, space=None, history_size=100, **params):
-        super().__init__(name=name, class_name=class_name, space_class=space_class, space=space, history_size=history_size, **params)
-    def calculate_activation(self, perception=None, activation_list=None):
-        """
-        Calculate the new activation value for a given perception.
+# Pn0: class_name: dummy_nodes.dummy_pnodes.ActivatedDummyPNode # Always with 0.5 activation
 
-        :param perception: The perception for which P-Node activation is calculated.
-        :type perception: dict
-        :param activation_list: The list of activations to be used for the calculation.
-        :type activation_list: list
-        :return: If there is space, returns the activation of the P-Node. If not, returns 0. 
-            It also returs the timestamp.
-        :rtype: cognitive_node_interfaces.msg.Activation
-        """
-        # if activation_list!=None:
-        #     data = [activation_list[sensor]['data'] for sensor in activation_list]
-        #     if self.perception is None and len(data)>0:
-        #         self.perception = consolidate_containers(data, name="perception", container_type="perception")
-        #     elif len(data)==0: # Activation list may be empty when initializing the P-Node.
-        #         self.activation.activation = 0.0
-        #         self.activation.timestamp = self.get_clock().now().to_msg()
-        #         return self.activation
-        #     else:
-        #         consolidate_containers(data, write_container=self.perception)
-        #     perception = self.perception
-        # activation_value = 0.0
-
-        self.activation.activation = 0.85
-        self.activation.timestamp = self.get_clock().now().to_msg()
-
-        # if perception:
-        #     value_raw = perception.read().sel(features=["python_error_streak_perception:data"]).values[-1] if "python_error_streak_perception:data" in perception.feature_labels else 0.0
-        #     value = round(float(value_raw), 1)
-
-        #     # Pn0: Python errors < low threshold
-        #     if value < PYTHON_ERRORS_LOW_THRESHOLD:
-        #         self.activation.activation = 0.85 # Lower than the rest, so everything has higher activation than idle. 
-        #         self.get_logger().debug(f"PNODE DEBUG: idle_pnode: {value}")
-        #     else:
-        #         self.activation.activation = 0.0
-            
-        #     self.activation.timestamp = self.get_clock().now().to_msg()
-        return self.activation
-    
 class PNodePythonErrors(PNode): #Pn1.1
     """
     PNode that represents Python errors
