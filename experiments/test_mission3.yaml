@@ -261,22 +261,21 @@ LTM:
                                 {"name": "teacher_present_perception", "node_type": "Perception"},
                                 {"name": "standing_perception", "node_type": "Perception"}]
         CNode:
-            ### C0
+            ### C3.X
             -
-                name: idle_expert_cnode # C0 WM1
+                name: idle_expert_seated_cnode # C0 WM1 G3 Pn0
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
                     neighbors: [{"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
-                                {"name": "seated_goal", "node_type": "Goal"}, # G1
-                                {"name": "idle_pnode", "node_type": "PNode"}] # Pn1.1
+                                {"name": "seated_goal", "node_type": "Goal"}, # G3
+                                {"name": "idle_pnode", "node_type": "PNode"}] # Pn0
             -
-                name: idle_amateur_cnode # C0 WM2
+                name: idle_amateur_seated_cnode # C0 WM1 G3 Pn0
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
                     neighbors: [{"name": "AMATEUR_WM", "node_type": "WorldModel"}, # WM2
-                                {"name": "seated_goal", "node_type": "Goal"}, # G1
-                                {"name": "idle_pnode", "node_type": "PNode"}] # Pn1.1
-            ### C3.X
+                                {"name": "seated_goal", "node_type": "Goal"}, # G3
+                                {"name": "idle_pnode", "node_type": "PNode"}] # Pn0
             -
                 name: standing_low_expert_cnode # C3.1 WM1
                 class_name: cognitive_nodes.cnode.CNode
@@ -338,8 +337,13 @@ LTM:
                 name: skill_0_idle_policy #S0
                 class_name: edutainment_emdb.policies.PolicySkill0
                 parameters:
-                    neighbors: [{"name": "idle_expert_cnode", "node_type": "CNode"}, # C0 WM1
-                                {"name": "idle_amateur_cnode", "node_type": "CNode"}] # C0 WM2
+                    neighbors: [{"name": "idle_expert_seated_cnode", "node_type": "CNode"}, # C0 WM1 G3 Pn0
+                                {"name": "idle_amateur_seated_cnode", "node_type": "CNode"}] #, # C0 WM1 G3 Pn0
+                                # {"name": "idle_expert_exercise_cnode", "node_type": "CNode"}, # C0 WM1 G1 Pn0
+                                # {"name": "idle_amateur_exercise_cnode", "node_type": "CNode"}, # C0 WM2 G1 Pn0
+                                # {"name": "idle_expert_awake_cnode", "node_type": "CNode"}, # C0 WM1 G2 Pn0
+                                # {"name": "idle_amateur_awake_cnode", "node_type": "CNode"}] # C0 WM2 G2 Pn0
+                                
             # -
             #     name: skill_1_python_policy #S1
             #     class_name: edutainment_emdb.policies.PolicySkill1

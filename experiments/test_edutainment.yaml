@@ -184,7 +184,7 @@ LTM:
                 parameters:
                     neighbors: [{"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
                                 {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
-                                {"name": "idle_pnode", "node_type": "PNode"}] # Pn1.1
+                                {"name": "idle_pnode", "node_type": "PNode"}] # Pn0
             ### C1.X
             -
                 name: python_errors_expert_cnode # C1.1 WM1
