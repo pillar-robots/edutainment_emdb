@@ -375,7 +375,7 @@ LTM:
             ### Pn0
             -
                 name: idle_pnode # Pn0
-                class_name: dummy_nodes.dummy_pnodes.ActivatedDummyPNode # Always with 0.5 activation
+                class_name: edutainment_emdb.pnodes.PNodeIdle # Always with 0.5 activation
                 parameters:
                     space_class: cognitive_nodes.space.ActivatedDummySpace
             ### Pn1.X

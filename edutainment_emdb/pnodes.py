@@ -1,6 +1,7 @@
 import math
 from cognitive_nodes.pnode import PNode
 from core.container import Container, consolidate_containers
+from core_interfaces.msg import Container as ContainerMsg
 
 # Global variables for the thresholds
 TEACHER_ABSENT_THRESHOLD = 0.0
@@ -17,7 +18,19 @@ BORED_HIGH_THRESHOLD = 0.75
 STANDING_LOW_THRESHOLD = 0.5
 STANDING_HIGH_THRESHOLD = 0.9
 
-# Pn0: class_name: dummy_nodes.dummy_pnodes.ActivatedDummyPNode # Always with 0.5 activation
+class PNodeIdle(PNode): #Pn0
+    """
+    PNode that represents a DummyPnode always at 0.5 activation
+    """
+    def __init__(self, name='python_errors_pnode', class_name='cognitive_nodes.pnode.PNode', space_class=None, space=None, history_size=100, **params):
+        super().__init__(name=name, class_name=class_name, space_class=space_class, space=space, history_size=history_size, **params)
+    def send_pnode_space_callback(self, request, response): 
+        response.space = ContainerMsg()  # Return an empty space
+        return response
+    def calculate_activation(self, perception=None, activation_list=None):
+        self.activation.activation = 0.5
+        self.activation.timestamp = self.get_clock().now().to_msg()
+        return self.activation
 
 class PNodePythonErrors(PNode): #Pn1.1
     """
