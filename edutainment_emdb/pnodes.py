@@ -11,8 +11,10 @@ TEACHER_TYPE_MODERN_THRESHOLD = 0.21 # To avoid rounding errors.
 TEACHER_TYPE_OLD_THRESHOLD = 0.8
 PYTHON_ERRORS_LOW_THRESHOLD = 0.5
 PYTHON_ERRORS_HIGH_THRESHOLD = 0.8
+PYTHON_ERRORS_NEW_THRESHOLD = 1.0
 EVALUATION_ERRORS_LOW_THRESHOLD = 0.5
 EVALUATION_ERRORS_HIGH_THRESHOLD = 0.8
+EVALUATION_ERRORS_NEW_THRESHOLD = 1.0
 BORED_LOW_THRESHOLD = 0.5
 BORED_HIGH_THRESHOLD = 0.75
 STANDING_LOW_THRESHOLD = 0.5
@@ -53,11 +55,13 @@ class PNodePythonErrors(PNode): #Pn1.1
         activation_value = 0.0
 
         if perception:
-            value_raw = perception.read().sel(features=["python_error_streak_perception:data"]).values[-1] if "python_error_streak_perception:data" in perception.feature_labels else 0.0
+            value_raw = perception.read().sel(features=["python_error_new_perception:data"]).values[-1] if "python_error_new_perception:data" in perception.feature_labels else 0.0
+            value_raw_2 = perception.read().sel(features=["python_error_streak_perception:data"]).values[-1] if "python_error_streak_perception:data" in perception.feature_labels else 0.0
             value = round(float(value_raw), 1)
+            value_2 = round(float(value_raw_2), 1)
 
-            # Pn1.1: Python errors > low threshold
-            if value >= PYTHON_ERRORS_LOW_THRESHOLD and value < PYTHON_ERRORS_HIGH_THRESHOLD:
+            # Pn1.1: New Python error and Python errors >= low threshold and Python errors < high threshold
+            if value == PYTHON_ERRORS_NEW_THRESHOLD and value_2 >= PYTHON_ERRORS_LOW_THRESHOLD and value_2 < PYTHON_ERRORS_HIGH_THRESHOLD:
                 self.activation.activation = 0.95
                 self.get_logger().debug(f"PNODE DEBUG: python_errors_pnode: {value}")
             else:
@@ -87,11 +91,13 @@ class PNodeEvaluationErrors(PNode): #Pn1.2
         activation_value = 0.0
 
         if perception:
-            value_raw = perception.read().sel(features=["evaluation_error_streak_perception:data"]).values[-1] if "evaluation_error_streak_perception:data" in perception.feature_labels else 0.0
+            value_raw = perception.read().sel(features=["evaluation_error_new_perception:data"]).values[-1] if "evaluation_error_new_perception:data" in perception.feature_labels else 0.0
+            value_raw_2 = perception.read().sel(features=["evaluation_error_streak_perception:data"]).values[-1] if "evaluation_error_streak_perception:data" in perception.feature_labels else 0.0
             value = round(float(value_raw), 1)
+            value_2 = round(float(value_raw_2), 1)
 
-            # Pn1.2: evaluation errors > low threshold
-            if value >= EVALUATION_ERRORS_LOW_THRESHOLD and value < EVALUATION_ERRORS_HIGH_THRESHOLD:
+            # Pn1.2: New evaluation error and evaluation errors >= low threshold and evaluation errors < high threshold
+            if value == EVALUATION_ERRORS_NEW_THRESHOLD and value_2 >= EVALUATION_ERRORS_LOW_THRESHOLD and value_2 < EVALUATION_ERRORS_HIGH_THRESHOLD:
                 self.activation.activation = 0.95
                 self.get_logger().debug(f"PNODE DEBUG: evaluation_errors_pnode: {value}")
             else:
@@ -122,14 +128,18 @@ class PNodePythonEvaluationErrorsPresent(PNode): #Pn1.3
 
         if perception:
             value_raw = perception.read().sel(features=["teacher_present_perception:data"]).values[-1] if "teacher_present_perception:data" in perception.feature_labels else 0.0
+            value_raw_2 = perception.read().sel(features=["python_error_new_perception:data"]).values[-1] if "python_error_new_perception:data" in perception.feature_labels else 0.0
+            value_raw_3 = perception.read().sel(features=["python_error_streak_perception:data"]).values[-1] if "python_error_streak_perception:data" in perception.feature_labels else 0.0
+            value_raw_4 = perception.read().sel(features=["evaluation_error_new_perception:data"]).values[-1] if "evaluation_error_new_perception:data" in perception.feature_labels else 0.0
+            value_raw_5 = perception.read().sel(features=["evaluation_error_streak_perception:data"]).values[-1] if "evaluation_error_streak_perception:data" in perception.feature_labels else 0.0
             value = round(float(value_raw), 1)
-            value_raw_2 = perception.read().sel(features=["python_error_streak_perception:data"]).values[-1] if "python_error_streak_perception:data" in perception.feature_labels else 0.0
             value_2 = round(float(value_raw_2), 1)
-            value_raw_3 = perception.read().sel(features=["evaluation_error_streak_perception:data"]).values[-1] if "evaluation_error_streak_perception:data" in perception.feature_labels else 0.0
             value_3 = round(float(value_raw_3), 1)
+            value_4 = round(float(value_raw_4), 1)
+            value_5 = round(float(value_raw_5), 1)
 
-            # P1.3: any USER present & Python errors or evaluation errors > high threshold
-            if  value == TEACHER_PRESENT_THRESHOLD and (value_2 >= PYTHON_ERRORS_HIGH_THRESHOLD or value_3 >= EVALUATION_ERRORS_HIGH_THRESHOLD):
+            # P1.3: any USER present & ((New Python error and Python errors >= high threshold) or (New evaluation error and evaluation errors >= high threshold))
+            if  value == TEACHER_PRESENT_THRESHOLD and ((value_2 == PYTHON_ERRORS_NEW_THRESHOLD and value_3 >= PYTHON_ERRORS_HIGH_THRESHOLD) or (value_4 == EVALUATION_ERRORS_NEW_THRESHOLD and value_5 >= EVALUATION_ERRORS_HIGH_THRESHOLD)):
                 self.activation.activation = 0.97
                 self.get_logger().debug(f"PNODE DEBUG: python_evaluation_errors_present_pnode: {value}")
             else:
@@ -162,7 +172,7 @@ class PNodeBoredLow(PNode): #Pn2.1 and Pn2.2
             value_raw = perception.read().sel(features=["bored_perception:data"]).values[-1] if "bored_perception:data" in perception.feature_labels else 0.0
             value = round(float(value_raw), 1)
 
-            # Pn2.1 and Pn2.2: student not engaged > low threshold
+            # Pn2.1 and Pn2.2: student not engaged >= low threshold and student not engaged < high threshold
             if value >= BORED_LOW_THRESHOLD and value < BORED_HIGH_THRESHOLD:
                 self.activation.activation = 0.95
                 self.get_logger().debug(f"PNODE DEBUG: bored_low_pnode: {value}")
@@ -200,7 +210,7 @@ class PNodeBoredHigh(PNode): # Pn2.3
             value_raw_3 = perception.read().sel(features=["bored_perception:data"]).values[-1] if "bored_perception:data" in perception.feature_labels else 0.0
             value_3 = round(float(value_raw_3), 1)
 
-            # Pn2.3: USER2 & any USER present & student not engaged > high threshold
+            # Pn2.3: USER2 & any USER present & student not engaged >= high threshold
             if TEACHER_TYPE_UNDEFINED_THRESHOLD < value <= TEACHER_TYPE_MODERN_THRESHOLD and value_2 == TEACHER_PRESENT_THRESHOLD and value_3 >= BORED_HIGH_THRESHOLD:
                 self.activation.activation = 0.97
                 self.get_logger().debug(f"PNODE DEBUG: bored_high_pnode: {value}")
@@ -234,7 +244,7 @@ class PNodeStandingLow(PNode): # Pn3.1
             value_raw = perception.read().sel(features=["standing_perception:data"]).values[-1] if "standing_perception:data" in perception.feature_labels else 0.0
             value = round(float(value_raw), 1)
 
-            # Pn3.1: student standing up > low threshold
+            # Pn3.1: student standing up >= low threshold and student standing up < high threshold
             if value >= STANDING_LOW_THRESHOLD and value < STANDING_HIGH_THRESHOLD:
                 self.activation.activation = 0.95
                 self.get_logger().debug(f"PNODE DEBUG: standing_low_pnode: {value}")
@@ -270,7 +280,7 @@ class PNodeStandingHighPresent(PNode): # Pn3.2
             value_raw_2 = perception.read().sel(features=["standing_perception:data"]).values[-1] if "standing_perception:data" in perception.feature_labels else 0.0
             value_2 = round(float(value_raw_2), 1)
 
-            # Pn3.2: any USER present & student standing up > high threshold
+            # Pn3.2: any USER present & student standing up >= high threshold
             if value == TEACHER_PRESENT_THRESHOLD and value_2 >= STANDING_HIGH_THRESHOLD:
                 self.activation.activation = 0.97
                 self.get_logger().debug(f"PNODE DEBUG: standing_high_present_pnode: {value}")
@@ -308,7 +318,7 @@ class PNodeStandingHighAbsentOld(PNode): # Pn3.3
             value_raw_3 = perception.read().sel(features=["standing_perception:data"]).values[-1] if "standing_perception:data" in perception.feature_labels else 0.0
             value_3 = round(float(value_raw_3), 1)
 
-            # Pn3.3: USER1 & no USER present & student standing up > high threshold
+            # Pn3.3: USER1 & no USER present & student standing up >= high threshold
             if value >= TEACHER_TYPE_OLD_THRESHOLD and value_2 == TEACHER_ABSENT_THRESHOLD and value_3 >= STANDING_HIGH_THRESHOLD:
                 self.activation.activation = 0.98
                 self.get_logger().debug(f"PNODE DEBUG: standing_high_absent_old_pnode: {value}")
@@ -346,7 +356,7 @@ class PNodeStandingHighAbsentModern(PNode): # Pn3.4
             value_raw_3 = perception.read().sel(features=["standing_perception:data"]).values[-1] if "standing_perception:data" in perception.feature_labels else 0.0
             value_3 = round(float(value_raw_3), 1)
 
-            # Pn3.4: USER2 & not USER present & student standing up > high threshold
+            # Pn3.4: USER2 & not USER present & student standing up >= high threshold
             if TEACHER_TYPE_UNDEFINED_THRESHOLD < value <= TEACHER_TYPE_MODERN_THRESHOLD and value_2 == TEACHER_ABSENT_THRESHOLD and value_3 >= STANDING_HIGH_THRESHOLD:
                 self.activation.activation = 0.98
                 self.get_logger().debug(f"PNODE DEBUG: standing_high_absent_modern_pnode: {value}")
