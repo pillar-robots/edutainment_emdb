@@ -204,10 +204,10 @@ class PNodeBoredHigh(PNode): # Pn2.3
 
         if perception:
             value_raw = perception.read().sel(features=["teacher_type_perception:data"]).values[-1] if "teacher_type_perception:data" in perception.feature_labels else 0.0
-            value = round(float(value_raw), 1)
             value_raw_2 = perception.read().sel(features=["teacher_present_perception:data"]).values[-1] if "teacher_present_perception:data" in perception.feature_labels else 0.0
-            value_2 = round(float(value_raw_2), 1)
             value_raw_3 = perception.read().sel(features=["bored_perception:data"]).values[-1] if "bored_perception:data" in perception.feature_labels else 0.0
+            value = round(float(value_raw), 1)
+            value_2 = round(float(value_raw_2), 1)
             value_3 = round(float(value_raw_3), 1)
 
             # Pn2.3: USER2 & any USER present & student not engaged >= high threshold
@@ -276,8 +276,8 @@ class PNodeStandingHighPresent(PNode): # Pn3.2
 
         if perception:
             value_raw = perception.read().sel(features=["teacher_present_perception:data"]).values[-1] if "teacher_present_perception:data" in perception.feature_labels else 0.0
-            value = round(float(value_raw), 1)
             value_raw_2 = perception.read().sel(features=["standing_perception:data"]).values[-1] if "standing_perception:data" in perception.feature_labels else 0.0
+            value = round(float(value_raw), 1)
             value_2 = round(float(value_raw_2), 1)
 
             # Pn3.2: any USER present & student standing up >= high threshold
@@ -312,10 +312,10 @@ class PNodeStandingHighAbsentOld(PNode): # Pn3.3
 
         if perception:
             value_raw = perception.read().sel(features=["teacher_type_perception:data"]).values[-1] if "teacher_type_perception:data" in perception.feature_labels else 0.0
-            value = round(float(value_raw), 1)
             value_raw_2 = perception.read().sel(features=["teacher_present_perception:data"]).values[-1] if "teacher_present_perception:data" in perception.feature_labels else 0.0
-            value_2 = round(float(value_raw_2), 1)
             value_raw_3 = perception.read().sel(features=["standing_perception:data"]).values[-1] if "standing_perception:data" in perception.feature_labels else 0.0
+            value = round(float(value_raw), 1)
+            value_2 = round(float(value_raw_2), 1)
             value_3 = round(float(value_raw_3), 1)
 
             # Pn3.3: USER1 & no USER present & student standing up >= high threshold
@@ -350,10 +350,10 @@ class PNodeStandingHighAbsentModern(PNode): # Pn3.4
 
         if perception:
             value_raw = perception.read().sel(features=["teacher_type_perception:data"]).values[-1] if "teacher_type_perception:data" in perception.feature_labels else 0.0
-            value = round(float(value_raw), 1)
             value_raw_2 = perception.read().sel(features=["teacher_present_perception:data"]).values[-1] if "teacher_present_perception:data" in perception.feature_labels else 0.0
-            value_2 = round(float(value_raw_2), 1)
             value_raw_3 = perception.read().sel(features=["standing_perception:data"]).values[-1] if "standing_perception:data" in perception.feature_labels else 0.0
+            value = round(float(value_raw), 1)
+            value_2 = round(float(value_raw_2), 1)
             value_3 = round(float(value_raw_3), 1)
 
             # Pn3.4: USER2 & not USER present & student standing up >= high threshold
