@@ -4,7 +4,7 @@ Experiment:
     new_executor: True
     threads: 2
     parameters: 
-        iterations: 10 #10000
+        iterations: 30 #10000
         trials: 20
         subgoals: False
         softmax_selection: False #True
@@ -15,7 +15,7 @@ Control:
     control_topic: /main_loop/control
     control_msg: cognitive_processes_interfaces.msg.ControlMsg
     episodes_topic: /main_loop/episodes
-    episodes_msg: cognitive_processes_interfaces.msg.Episode
+    episodes_msg: core_interfaces.msg.Container
     #executed_policy_service: /emdb/simulator/executed_policy # This service is only used by the simulator.
     executed_policy_msg: cognitive_node_interfaces.srv.Policy
     #world_reset_service: /emdb/simulator/world_reset # This service is only used by the simulator.
@@ -113,11 +113,23 @@ LTM:
                   default_msg: std_msgs.msg.Float32
                   default_topic: /student/python_error_streak
             -
+                name: python_error_new_perception
+                class_name: edutainment_emdb.perceptions.EdutainmentPerception
+                parameters:
+                  default_msg: std_msgs.msg.Float32
+                  default_topic: /student/is_new_python_error
+            -
                 name: evaluation_error_streak_perception
                 class_name: edutainment_emdb.perceptions.EdutainmentPerception
                 parameters:
                   default_msg: std_msgs.msg.Float32
                   default_topic: /student/evaluation_error_streak
+            -
+                name: evaluation_error_new_perception
+                class_name: edutainment_emdb.perceptions.EdutainmentPerception
+                parameters:
+                  default_msg: std_msgs.msg.Float32
+                  default_topic: /student/is_new_evaluation_error
             -
                 name: bored_perception
                 class_name: edutainment_emdb.perceptions.EdutainmentPerception
@@ -152,13 +164,13 @@ LTM:
                 name: student_exercise_teacher_old_absent_drive # D3.1
                 class_name: cognitive_nodes.drive.DriveExponential # DriveExponential: 0 active, 1 inactive (satisfied)
                 parameters:
-                    input_topic: /teacher/is_present # TODO: change to /student/challenge_completion
+                    input_topic: /student/challenge_completion
                     input_msg: std_msgs.msg.Float32
                     min_eval: 0.8
                     neighbors: [{"name": "student_exercise_teacher_old_absent_purpose", "node_type": "RobotPurpose"}] # M3.1
         Goal:
             -
-                name: exercise_finished_goal # G1 #TODO: Needs also D3.1 and D4.1, or is that a different Goal?
+                name: exercise_finished_goal # G1
                 class_name: cognitive_nodes.goal.GoalMotiven
                 parameters:
                     neighbors: [{"name": "student_exercise_teacher_old_absent_drive", "node_type": "Drive"}] #D3.1
@@ -166,17 +178,17 @@ LTM:
             ### Pn0
             -
                 name: idle_pnode # Pn0
-                class_name: edutainment_emdb.pnodes.PNodeIdle
+                class_name: edutainment_emdb.pnodes.PNodeIdle # Always with 0.5 activation
                 parameters:
                     space_class: cognitive_nodes.space.ActivatedDummySpace
-                    neighbors: [{"name": "python_error_streak_perception", "node_type": "Perception"}]
             ### Pn1.X
             -
                 name: python_errors_pnode # Pn1.1
                 class_name: edutainment_emdb.pnodes.PNodePythonErrors
                 parameters:
                     space_class: cognitive_nodes.space.ActivatedDummySpace
-                    neighbors: [{"name": "python_error_streak_perception", "node_type": "Perception"}]
+                    neighbors: [{"name": "python_error_new_perception", "node_type": "Perception"},
+                                {"name": "python_error_streak_perception", "node_type": "Perception"}]
         CNode:
             ### C0
             -
@@ -185,7 +197,7 @@ LTM:
                 parameters:
                     neighbors: [{"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
                                 {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
-                                {"name": "idle_pnode", "node_type": "PNode"}] # Pn1.1
+                                {"name": "idle_pnode", "node_type": "PNode"}] # Pn0
             ### C1.X
             -
                 name: python_errors_expert_cnode # C1.1 WM1
