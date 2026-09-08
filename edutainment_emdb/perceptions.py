@@ -23,13 +23,15 @@ class EdutainmentPerception(Perception):
                 student_type_perception=perception.student_type_perception,
                 challenge_completion_perception=perception.challenge_completion_perception,
                 python_error_streak_perception=perception.python_error_streak_perception,
-                python_error_new_perception=perception.python_error_new_perception,
+                is_python_low_used_perception=perception.is_python_low_used_perception,
+                is_python_high_used_perception=perception.is_python_high_used_perception,
                 evaluation_error_streak_perception=perception.evaluation_error_streak_perception,
-                evaluation_error_new_perception=perception.evaluation_error_new_perception,
+                is_evaluation_low_used_perception=perception.is_evaluation_low_used_perception,
+                is_evaluation_high_used_perception=perception.is_evaluation_high_used_perception,
                 bored_perception=perception.bored_perception,
                 standing_perception=perception.standing_perception
-                data = np.array([teacher_present_perception, teacher_type_perception, student_type_perception, challenge_completion_perception, python_error_streak_perception, python_error_new_perception, evaluation_error_streak_perception, evaluation_error_new_perception, bored_perception, standing_perception])
-                labels = ["teacher_present_perception", "teacher_type_perception", "student_type_perception", "challenge_completion_perception", "python_error_streak_perception", "python_error_new_perception", "evaluation_error_streak_perception", "evaluation_error_new_perception", "bored_perception", "standing_perception"]
+                data = np.array([teacher_present_perception, teacher_type_perception, student_type_perception, challenge_completion_perception, python_error_streak_perception, is_python_low_used_perception, is_python_high_used_perception, evaluation_error_streak_perception, is_evaluation_low_used_perception, is_evaluation_high_used_perception, bored_perception, standing_perception])
+                labels = ["teacher_present_perception", "teacher_type_perception", "student_type_perception", "challenge_completion_perception", "python_error_streak_perception", "is_python_low_used_perception", "is_python_high_used_perception", "evaluation_error_streak_perception", "is_evaluation_low_used_perception", "is_evaluation_high_used_perception", "bored_perception", "standing_perception"]
         else:
             data = np.array([self.reading.data])
             labels = ["data"]

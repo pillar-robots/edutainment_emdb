@@ -13,9 +13,11 @@ TOPICS = [
     (Float32,   "student_type_perception", "/student/type", 0.0, 0.0, 1.0),
     (Float32,   "challenge_completion_perception", "/student/challenge_completion", 0.0, 0.0, 1.0),
     (Float32,   "python_error_streak_perception", "/student/python_error_streak", 0.0, 0.0, 1.0),
-    (Float32,   "python_error_new_perception", "/student/is_new_python_error", 0.0, 0.0, 1.0),
+    (Float32,   "is_python_low_used_perception", "/student/is_python_low_used", 0.0, 0.0, 1.0),
+    (Float32,   "is_python_high_used_perception", "/student/is_python_high_used", 0.0, 0.0, 1.0),
     (Float32,   "evaluation_error_streak_perception", "/student/evaluation_error_streak", 0.0, 0.0, 1.0),
-    (Float32,   "evaluation_error_new_perception", "/student/is_new_evaluation_error", 0.0, 0.0, 1.0),
+    (Float32,   "is_evaluation_low_used_perception", "/student/is_evaluation_low_used", 0.0, 0.0, 1.0),
+    (Float32,   "is_evaluation_high_used_perception", "/student/is_evaluation_high_used", 0.0, 0.0, 1.0),
     (Float32,   "bored_perception", "/student/bored", 0.0, 0.0, 1.0),
     (Float32,   "standing_perception", "/student/standing", 0.0, 0.0, 1.0)
     ]
@@ -144,7 +146,7 @@ class SliderApp:
         # -------------------------
         # Bool -> checkbox
         # -------------------------
-        if key == "teacher_present_perception" or key == "python_error_new_perception" or key == "evaluation_error_new_perception":
+        if key == "teacher_present_perception" or key == "is_python_low_used_perception" or key == "is_python_high_used_perception" or key == "is_evaluation_low_used_perception" or key == "is_evaluation_high_used_perception":
             var = tk.BooleanVar(value=bool(default))
             self._vars[key] = var
             cb = ttk.Checkbutton(

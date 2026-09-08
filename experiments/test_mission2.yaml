@@ -113,11 +113,17 @@ LTM:
                   default_msg: std_msgs.msg.Float32
                   default_topic: /student/python_error_streak
             -
-                name: python_error_new_perception
+                name: is_python_low_used_perception
                 class_name: edutainment_emdb.perceptions.EdutainmentPerception
                 parameters:
                   default_msg: std_msgs.msg.Float32
-                  default_topic: /student/is_new_python_error
+                  default_topic: /student/is_python_low_used
+            -
+                name: is_python_high_used_perception
+                class_name: edutainment_emdb.perceptions.EdutainmentPerception
+                parameters:
+                  default_msg: std_msgs.msg.Float32
+                  default_topic: /student/is_python_high_used
             -
                 name: evaluation_error_streak_perception
                 class_name: edutainment_emdb.perceptions.EdutainmentPerception
@@ -125,11 +131,17 @@ LTM:
                   default_msg: std_msgs.msg.Float32
                   default_topic: /student/evaluation_error_streak
             -
-                name: evaluation_error_new_perception
+                name: is_evaluation_low_used_perception
                 class_name: edutainment_emdb.perceptions.EdutainmentPerception
                 parameters:
                   default_msg: std_msgs.msg.Float32
-                  default_topic: /student/is_new_evaluation_error
+                  default_topic: /student/is_evaluation_low_used
+            -
+                name: is_evaluation_high_used_perception
+                class_name: edutainment_emdb.perceptions.EdutainmentPerception
+                parameters:
+                  default_msg: std_msgs.msg.Float32
+                  default_topic: /student/is_evaluation_high_used
             -
                 name: bored_perception
                 class_name: edutainment_emdb.perceptions.EdutainmentPerception
