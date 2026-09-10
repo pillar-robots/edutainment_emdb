@@ -68,12 +68,24 @@ LTM:
         -
             data: PNode
             default_class: cognitive_nodes.pnode.PNode
+            parameters:
+                space_class: cognitive_nodes.space.SVMSpace
+                space_size: 50000
+                history_size: 100
         -
             data: CNode
             default_class: cognitive_nodes.cnode.CNode
+            parameters:
+                history_size: 40
+                track_competence: True
         -
             data: Goal
             default_class: cognitive_nodes.goal.GoalLearnedSpace # cognitive_nodes.goal.Goal
+            space_class: cognitive_nodes.space.SVMSpace
+                space_size: 50000
+                history_size: 300  
+                min_confidence: 0.94  
+                ltm_id: ltm_0
         -
             data: WorldModel
             default_class: cognitive_nodes.world_model.WorldModel
@@ -171,6 +183,14 @@ LTM:
                 parameters:
                     neighbors: [{"name": "student_type_perception", "node_type": "Perception"}]
         RobotPurpose: 
+            ### Novelty
+            - 
+                name: novelty_need
+                class_name: cognitive_nodes.robot_purpose.RobotPurpose
+                parameters:
+                    weight: 0.1
+                    drive_id: 'novelty_drive'
+                    purpose_type: 'Need'
             ### MX.1
             -
                 name: student_exercise_teacher_old_present_purpose # M1.1
@@ -205,6 +225,12 @@ LTM:
                     purpose_type: 'Mission'
                     terminal: False
         Drive:
+            ### Novelty
+            -
+                name: novelty_drive
+                class_name: cognitive_nodes.novelty.DriveNovelty
+                parameters:
+                    neighbors: [{"name": "novelty_need", "node_type": "RobotPurpose"}]
             ### DX.1
             -
                 name: student_exercise_teacher_old_present_drive # D1.1
@@ -239,6 +265,13 @@ LTM:
                     min_eval: 0.8
                     neighbors: [{"name": "student_exercise_teacher_modern_absent_purpose", "node_type": "RobotPurpose"}] # M4.1
         Goal:
+            ### Novelty
+            -
+                name: novelty_goal
+                class_name: cognitive_nodes.goal.GoalMotiven
+                parameters:
+                    neighbors: [{"name": "novelty_drive", "node_type": "Drive"}]
+            ### GX
             -
                 name: exercise_finished_goal # G1
                 class_name: cognitive_nodes.goal.GoalMotiven
@@ -248,6 +281,12 @@ LTM:
                                 {"name": "student_exercise_teacher_old_absent_drive", "node_type": "Drive"}, #D3.1
                                 {"name": "student_exercise_teacher_modern_absent_drive", "node_type": "Drive"}] #D4.1
         PNode:
+            ### Novelty
+            -
+                name: novelty_pnode
+                class_name: dummy_nodes.dummy_pnodes.ActivatedDummyPNode
+                parameters:
+                    space_class: cognitive_nodes.space.ActivatedDummySpace
             ### Pn0
             -
                 name: idle_pnode # Pn0
@@ -338,6 +377,14 @@ LTM:
                                 {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
                                 {"name": "python_evaluation_errors_present_pnode", "node_type": "PNode"}] # Pn1.3
         Policy:
+            ### Novelty
+            -
+                name: novelty_policy
+                class_name: my_controll.novelty.PolicyNovelty
+                parameters:
+                    neighbors: [{"name": "novelty_cnode", "node_type": "CNode"}]
+                    ltm_id: ltm_0
+            ### SX
             -
                 name: skill_0_idle_policy #S0
                 class_name: edutainment_emdb.policies.PolicySkill0

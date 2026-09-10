@@ -68,12 +68,24 @@ LTM:
         -
             data: PNode
             default_class: cognitive_nodes.pnode.PNode
+            parameters:
+                space_class: cognitive_nodes.space.SVMSpace
+                space_size: 50000
+                history_size: 100
         -
             data: CNode
             default_class: cognitive_nodes.cnode.CNode
+            parameters:
+                history_size: 40
+                track_competence: True
         -
             data: Goal
             default_class: cognitive_nodes.goal.GoalLearnedSpace # cognitive_nodes.goal.Goal
+            space_class: cognitive_nodes.space.SVMSpace
+                space_size: 50000
+                history_size: 300  
+                min_confidence: 0.94  
+                ltm_id: ltm_0
         -
             data: WorldModel
             default_class: cognitive_nodes.world_model.WorldModel
