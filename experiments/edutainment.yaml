@@ -688,7 +688,7 @@ LTM:
             ### Novelty
             -
                 name: novelty_policy
-                class_name: my_controll.novelty.PolicyNovelty
+                class_name: edutainment_emdb.novelty.PolicyNovelty
                 parameters:
                     neighbors: [{"name": "novelty_cnode", "node_type": "CNode"}]
                     ltm_id: ltm_0
