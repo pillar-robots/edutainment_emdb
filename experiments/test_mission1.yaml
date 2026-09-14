@@ -82,6 +82,7 @@ LTM:
             data: Goal
             default_class: cognitive_nodes.goal.GoalLearnedSpace # cognitive_nodes.goal.Goal
             space_class: cognitive_nodes.space.SVMSpace
+            parameters:
                 space_size: 50000
                 history_size: 300  
                 min_confidence: 0.94  
