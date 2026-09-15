@@ -391,7 +391,7 @@ LTM:
                 name: novelty_policy
                 class_name: edutainment_emdb.novelty.PolicyNovelty
                 parameters:
-                    neighbors: [{"name": "novelty_cnode", "node_type": "CNode"}]
+                    neighbors: [{"name": "novelty_cnode", "node_type": "CNode"}] # Novelty
                     ltm_id: ltm_0
             ### SX
             -
