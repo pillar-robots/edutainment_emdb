@@ -325,6 +325,14 @@ LTM:
                                 {"name": "teacher_present_perception", "node_type": "Perception"},
                                 {"name": "standing_perception", "node_type": "Perception"}]
         CNode:
+            ### Novelty
+            -
+                name: novelty_cnode
+                class_name: cognitive_nodes.cnode.CNode
+                parameters:
+                    neighbors: [{"name": "GENERAL_WM", "node_type": "WorldModel"}, # WM3
+                                {"name": "novelty_goal", "node_type": "Goal"}, # Novelty
+                                {"name": "novelty_pnode", "node_type": "PNode"}] # Novelty
             ### C3.X
             -
                 name: idle_expert_seated_cnode # C0 WM1 G3 Pn0
