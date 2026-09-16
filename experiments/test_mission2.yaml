@@ -362,13 +362,6 @@ LTM:
                                 {"name": "awake_goal", "node_type": "Goal"}, # G2
                                 {"name": "bored_high_pnode", "node_type": "PNode"}] # Pn2.3
         Policy:
-            ### Novelty
-            -
-                name: novelty_policy
-                class_name: edutainment_emdb.novelty.PolicyNovelty
-                parameters:
-                    neighbors: [{"name": "novelty_cnode", "node_type": "CNode"}] # Novelty
-                    ltm_id: ltm_0
             ### SX
             -
                 name: skill_0_idle_policy #S0
@@ -426,3 +419,10 @@ LTM:
                     neighbors: [{"name": "bored_low_expert_cnode", "node_type": "CNode"}] #, # C2.1 WM1
                                 #{"name": "standing_high_absent_old_expert_cnode", "node_type": "CNode"}, # C3.3 WM1
                                 #{"name": "standing_high_absent_old_amateur_cnode", "node_type": "CNode"}] # C3.3 WM2
+            ### Novelty
+            -
+                name: novelty_policy
+                class_name: edutainment_emdb.novelty.PolicyNovelty
+                parameters:
+                    neighbors: [{"name": "novelty_cnode", "node_type": "CNode"}] # Novelty
+                    ltm_id: ltm_0

@@ -386,13 +386,6 @@ LTM:
                                 {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
                                 {"name": "python_evaluation_errors_present_pnode", "node_type": "PNode"}] # Pn1.3
         Policy:
-            ### Novelty
-            -
-                name: novelty_policy
-                class_name: edutainment_emdb.novelty.PolicyNovelty
-                parameters:
-                    neighbors: [{"name": "novelty_cnode", "node_type": "CNode"}] # Novelty
-                    ltm_id: ltm_0
             ### SX
             -
                 name: skill_0_idle_policy #S0
@@ -434,3 +427,10 @@ LTM:
                                 #{"name": "bored_high_amateur_cnode", "node_type": "CNode"}, # C2.3 WM2
                                 #{"name": "standing_high_present_expert_cnode", "node_type": "CNode"}, # C3.2 WM1
                                 #{"name": "standing_high_present_amateur_cnode", "node_type": "CNode"}] # C3.2 WM2
+            ### Novelty
+            -
+                name: novelty_policy
+                class_name: edutainment_emdb.novelty.PolicyNovelty
+                parameters:
+                    neighbors: [{"name": "novelty_cnode", "node_type": "CNode"}] # Novelty
+                    ltm_id: ltm_0
