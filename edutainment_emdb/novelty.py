@@ -32,7 +32,7 @@ class PolicyNovelty(Policy):
         self.exclude_list.append(self.name)
         self.setup()
         self.counter=0
-        self.ltm_subscriber = self.create_subscription(String, "/state", self.ltm_change_callback, 1, callback_group=self.cbgroup_client)
+        self.ltm_subscriber = self.create_subscription(String, f"/{self.LTM_id}/state", self.ltm_change_callback, 1, callback_group=self.cbgroup_client)
         
     def setup(self):
         """
@@ -71,6 +71,12 @@ class PolicyNovelty(Policy):
         self.configure_policies(ltm)
 
     def configure_policies(self, ltm_cache):
+        """
+        Creates a list of eligible policies to be executed and shuffles it.
+
+        :param ltm_cache: LTM cache.
+        :type ltm_cache: dict
+        """        
         target_policies_set = set()
         base_goals = ["exercise_finished_goal", "awake_goal", "seated_goal"]
         target_goals = set(base_goals)
@@ -105,6 +111,8 @@ class PolicyNovelty(Policy):
         target_policies = list(target_policies_set)
         self.get_logger().info(f"LTM Policies': {target_policies}") 
         changes = self.policies.merge(target_policies)
+        if not target_policies:
+            self.get_logger().warning("No executable novelty policies found in the LTM.")
         if changes:
             self.policies.shuffle(self.rng)
             self.counter = 0  
@@ -117,6 +125,10 @@ class PolicyNovelty(Policy):
         :return: Selected policy.
         :rtype: str
         """        
+        if self.policies.isEmpty():
+            self.get_logger().warning("Novelty policy requested before the LTM provided executable policies.")
+            return None
+
         policy=self.policies.select_policy()
         self.counter+=1
 
@@ -158,6 +170,10 @@ class PolicyNovelty(Policy):
         :rtype: cognitive_node_interfaces.srv.Execute.Response
         """        
         policy = self.select_policy()
+        if policy is None:
+            response.policy = ""
+            return response
+
         if policy not in self.node_clients:
             self.node_clients[policy] = ServiceClientAsync(self, Execute, f"policy/{policy}/execute", callback_group=self.cbgroup_client)
         self.get_logger().info('Executing policy: ' + policy + '...')
