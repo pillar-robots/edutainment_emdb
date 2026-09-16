@@ -700,6 +700,11 @@ LTM:
                 parameters:
                     neighbors: [{"name": "novelty_cnode", "node_type": "CNode"}] # Novelty
                     ltm_id: ltm_0
+            -
+                name: novelty_empty_policy
+                class_name: edutainment_emdb.policies.PolicySkill0
+                parameters:
+                    neighbors: []
             ### SX
             -
                 name: skill_0_idle_policy #S0
