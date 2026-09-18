@@ -4,7 +4,7 @@ Experiment:
     new_executor: True
     threads: 2
     parameters: 
-        iterations: 30 #10000
+        iterations: 20 #10000
         trials: 20
         subgoals: False
         softmax_selection: False #True
@@ -466,7 +466,8 @@ LTM:
             ### Novelty
             -
                 name: novelty_policy
-                class_name: edutainment_emdb.novelty.PolicyNovelty # PolicyNovelty SHOULD BE THE LAST, AS IT SELECTS FROM THE LTM THE PREVIOUS POLICIES
+                class_name: edutainment_emdb.novelty.PolicyNovelty # PolicyNovelty SHOULD AFTER THE SELECTABLE POLICIES
                 parameters:
+                    exclude_list: ["skill_0_idle_policy"]
                     neighbors: [{"name": "novelty_cnode", "node_type": "CNode"}] # Novelty
                     ltm_id: ltm_0
