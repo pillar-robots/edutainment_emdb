@@ -120,3 +120,36 @@ class PolicySkill7(Policy):
         node.destroy_node()
         response.policy = self.name
         return response
+
+class PolicySkill8(Policy):
+    def __init__(self, name='skill_8_policy', class_name='cognitive_nodes.policy.Policy', service_msg=None, service_name=None, **params):
+        super().__init__(name=name, class_name=class_name, **params)
+    async def execute_callback(self, request, response):
+        #requests.post("http://localhost:2727/api/skills/8")
+        node = ServiceClient(name=self.name, service_name='pillar_control/skill_8')
+        node.call_service()
+        node.destroy_node()
+        response.policy = self.name
+        return response
+
+class PolicySkill9(Policy):
+    def __init__(self, name='skill_9_policy', class_name='cognitive_nodes.policy.Policy', service_msg=None, service_name=None, **params):
+        super().__init__(name=name, class_name=class_name, **params)
+    async def execute_callback(self, request, response):
+        #requests.post("http://localhost:2727/api/skills/9")
+        node = ServiceClient(name=self.name, service_name='pillar_control/skill_9')
+        node.call_service()
+        node.destroy_node()
+        response.policy = self.name
+        return response
+
+class PolicySkill10(Policy):
+    def __init__(self, name='skill_10_policy', class_name='cognitive_nodes.policy.Policy', service_msg=None, service_name=None, **params):
+        super().__init__(name=name, class_name=class_name, **params)
+    async def execute_callback(self, request, response):
+        #requests.post("http://localhost:2727/api/skills/10")
+        node = ServiceClient(name=self.name, service_name='pillar_control/skill_10')
+        node.call_service()
+        node.destroy_node()
+        response.policy = self.name
+        return response

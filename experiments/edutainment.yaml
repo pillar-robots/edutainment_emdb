@@ -717,12 +717,16 @@ LTM:
                     neighbors: [{"name": "evaluation_errors_expert_cnode", "node_type": "CNode"}, # C1.2 WM1
                                 {"name": "evaluation_errors_amateur_cnode", "node_type": "CNode"}] # C1.2 WM2
             -
-                name: skill_3_teacher_policy #S3
+                name: skill_3_teacher_exercise_policy #S3 # Divided in two, so we can exclude one of them on the novelty policy
                 class_name: edutainment_emdb.policies.PolicySkill3
                 parameters:
                     neighbors: [{"name": "python_evaluation_errors_present_expert_cnode", "node_type": "CNode"}, # C1.3 WM1
-                                {"name": "python_evaluation_errors_present_amateur_cnode", "node_type": "CNode"}, # C1.3 WM2
-                                {"name": "bored_high_expert_cnode", "node_type": "CNode"}, # C2.3 WM1
+                                {"name": "python_evaluation_errors_present_amateur_cnode", "node_type": "CNode"}] # C1.3 WM2
+            -
+                name: skill_3_teacher_bored_standing_policy #S3
+                class_name: edutainment_emdb.policies.PolicySkill3
+                parameters:
+                    neighbors: [{"name": "bored_high_expert_cnode", "node_type": "CNode"}, # C2.3 WM1
                                 {"name": "bored_high_amateur_cnode", "node_type": "CNode"}, # C2.3 WM2
                                 {"name": "standing_high_present_expert_cnode", "node_type": "CNode"}, # C3.2 WM1
                                 {"name": "standing_high_present_amateur_cnode", "node_type": "CNode"}] # C3.2 WM2
@@ -750,11 +754,28 @@ LTM:
                     neighbors: [{"name": "bored_low_expert_cnode", "node_type": "CNode"}, # C2.1 WM1
                                 {"name": "standing_high_absent_old_expert_cnode", "node_type": "CNode"}, # C3.3 WM1
                                 {"name": "standing_high_absent_old_amateur_cnode", "node_type": "CNode"}] # C3.3 WM2
+            -
+                name: skill_8_policy #S8
+                class_name: edutainment_emdb.policies.PolicySkill8
+                parameters:
+                    neighbors: []
+
+            -
+                name: skill_9_policy #S9
+                class_name: edutainment_emdb.policies.PolicySkill9
+                parameters:
+                    neighbors: []
+            
+            -
+                name: skill_10_policy #S10
+                class_name: edutainment_emdb.policies.PolicySkill10
+                parameters:
+                    neighbors: []
             ### Novelty
             -
                 name: novelty_policy
                 class_name: edutainment_emdb.novelty.PolicyNovelty # PolicyNovelty SHOULD AFTER THE SELECTABLE POLICIES
                 parameters:
-                    exclude_list: ["skill_0_idle_policy", "skill_1_python_policy", "skill_2_evaluation_policy"]
+                    exclude_list: ["skill_0_idle_policy", "skill_1_python_policy", "skill_2_evaluation_policy", "skill_3_teacher_exercise_policy"]
                     neighbors: [{"name": "novelty_cnode", "node_type": "CNode"}] # Novelty
                     ltm_id: ltm_0
