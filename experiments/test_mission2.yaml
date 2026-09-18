@@ -422,7 +422,7 @@ LTM:
             ### Novelty
             -
                 name: novelty_policy
-                class_name: edutainment_emdb.novelty.PolicyNovelty
+                class_name: edutainment_emdb.novelty.PolicyNovelty # PolicyNovelty SHOULD BE THE LAST, AS IT SELECTS FROM THE LTM THE PREVIOUS POLICIES
                 parameters:
                     neighbors: [{"name": "novelty_cnode", "node_type": "CNode"}] # Novelty
                     ltm_id: ltm_0

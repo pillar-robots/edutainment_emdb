@@ -72,13 +72,13 @@ class PolicyNovelty(Policy):
 
     def configure_policies(self, ltm_cache):
         target_policies_set = set()
-        base_goals = ["exercise_finished_goal", "awake_goal", "seated_goal"]
+        base_goals = ["awake_goal", "seated_goal"]
         target_goals = set(base_goals)
 
         for goal in base_goals:
             for i in range(6):
                 target_goals.add(f"{goal}_dup_{i}")
-        target_goals = {"exercise_finished_goal", "awake_goal", "seated_goal"}
+        target_goals = {"awake_goal", "seated_goal"}
         
         policies_in_cache = ltm_cache.get("Policy", {})
         
