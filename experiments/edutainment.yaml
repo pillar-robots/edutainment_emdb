@@ -523,14 +523,14 @@ LTM:
                                 {"name": "novelty_pnode", "node_type": "PNode"}] # Novelty
             ### C1.X
             -
-                name: idle_expert_exercise_cnode # C0 WM1 G1 Pn0
+                name: idle_python_errors_expert_cnode # C0 WM1 G1 Pn0
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
                     neighbors: [{"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
                                 {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
                                 {"name": "idle_pnode", "node_type": "PNode"}] # Pn0
             -
-                name: idle_amateur_exercise_cnode # C0 WM2 G1 Pn0
+                name: idle_python_errors_amateur_cnode # C0 WM2 G1 Pn0
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
                     neighbors: [{"name": "AMATEUR_WM", "node_type": "WorldModel"}, # WM2
@@ -580,14 +580,14 @@ LTM:
                                 {"name": "python_evaluation_errors_present_pnode", "node_type": "PNode"}] # Pn1.3
             ### C2.X
             -
-                name: idle_expert_awake_cnode # C0 WM1 G2 Pn0
+                name: idle_bored_expert_cnode # C0 WM1 G2 Pn0
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
                     neighbors: [{"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
                                 {"name": "awake_goal", "node_type": "Goal"}, # G2
                                 {"name": "idle_pnode", "node_type": "PNode"}] # Pn0
             -
-                name: idle_amateur_awake_cnode # C0 WM2 G2 Pn0
+                name: idle_bored_amateur_cnode # C0 WM2 G2 Pn0
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
                     neighbors: [{"name": "AMATEUR_WM", "node_type": "WorldModel"}, # WM2
@@ -623,14 +623,14 @@ LTM:
                                 {"name": "bored_high_pnode", "node_type": "PNode"}] # Pn2.3
             ### C3.X
             -
-                name: idle_expert_seated_cnode # C0 WM1 G3 Pn0
+                name: idle_standing_expert_cnode # C0 WM1 G3 Pn0
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
                     neighbors: [{"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
                                 {"name": "seated_goal", "node_type": "Goal"}, # G3
                                 {"name": "idle_pnode", "node_type": "PNode"}] # Pn0
             -
-                name: idle_amateur_seated_cnode # C0 WM1 G3 Pn0
+                name: idle_standing_amateur_cnode # C0 WM1 G3 Pn0
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
                     neighbors: [{"name": "AMATEUR_WM", "node_type": "WorldModel"}, # WM2
@@ -695,15 +695,19 @@ LTM:
         Policy:
             ### SX
             -
-                name: skill_0_idle_policy #S0
+                name: skill_0_idle_python_errors_policy #S0 # Divided in two, so we can exclude one of them on the novelty policy
                 class_name: edutainment_emdb.policies.PolicySkill0
                 parameters:
-                    neighbors: [{"name": "idle_expert_exercise_cnode", "node_type": "CNode"}, # C0 WM1 G1 Pn0
-                                {"name": "idle_amateur_exercise_cnode", "node_type": "CNode"}, # C0 WM2 G1 Pn0
-                                {"name": "idle_expert_awake_cnode", "node_type": "CNode"}, # C0 WM1 G2 Pn0
-                                {"name": "idle_amateur_awake_cnode", "node_type": "CNode"}, # C0 WM2 G2 Pn0
-                                {"name": "idle_expert_seated_cnode", "node_type": "CNode"}, # C0 WM1 G3 Pn0
-                                {"name": "idle_amateur_seated_cnode", "node_type": "CNode"}] # C0 WM1 G3 Pn0
+                    neighbors: [{"name": "idle_python_errors_expert_cnode", "node_type": "CNode"}, # C0 WM1 G1 Pn0
+                                {"name": "idle_python_errors_amateur_cnode", "node_type": "CNode"}] # C0 WM2 G1 Pn0
+            -
+                name: skill_0_idle_bored_standing_policy #S0
+                class_name: edutainment_emdb.policies.PolicySkill0
+                parameters:
+                    neighbors: [{"name": "idle_bored_expert_cnode", "node_type": "CNode"}, # C0 WM1 G2 Pn0
+                                {"name": "idle_bored_amateur_cnode", "node_type": "CNode"}, # C0 WM2 G2 Pn0
+                                {"name": "idle_standing_expert_cnode", "node_type": "CNode"}, # C0 WM1 G3 Pn0
+                                {"name": "idle_standing_amateur_cnode", "node_type": "CNode"}] # C0 WM1 G3 Pn0
             -
                 name: skill_1_python_policy #S1
                 class_name: edutainment_emdb.policies.PolicySkill1
@@ -717,7 +721,7 @@ LTM:
                     neighbors: [{"name": "evaluation_errors_expert_cnode", "node_type": "CNode"}, # C1.2 WM1
                                 {"name": "evaluation_errors_amateur_cnode", "node_type": "CNode"}] # C1.2 WM2
             -
-                name: skill_3_teacher_exercise_policy #S3 # Divided in two, so we can exclude one of them on the novelty policy
+                name: skill_3_teacher_errors_policy #S3 # Divided in two, so we can exclude one of them on the novelty policy
                 class_name: edutainment_emdb.policies.PolicySkill3
                 parameters:
                     neighbors: [{"name": "python_evaluation_errors_present_expert_cnode", "node_type": "CNode"}, # C1.3 WM1
@@ -776,6 +780,6 @@ LTM:
                 name: novelty_policy
                 class_name: edutainment_emdb.novelty.PolicyNovelty # PolicyNovelty SHOULD AFTER THE SELECTABLE POLICIES
                 parameters:
-                    exclude_list: ["skill_0_idle_policy", "skill_1_python_policy", "skill_2_evaluation_policy", "skill_3_teacher_exercise_policy"]
+                    exclude_list: ["skill_0_idle_python_errors_policy", "skill_1_python_policy", "skill_2_evaluation_policy", "skill_3_teacher_errors_policy"]
                     neighbors: [{"name": "novelty_cnode", "node_type": "CNode"}] # Novelty
                     ltm_id: ltm_0
