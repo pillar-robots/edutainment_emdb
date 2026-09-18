@@ -4,7 +4,7 @@ Experiment:
     new_executor: True
     threads: 2
     parameters: 
-        iterations: 100 #10000
+        iterations: 20 #10000
         trials: 20
         subgoals: False
         softmax_selection: False #True
@@ -693,29 +693,7 @@ LTM:
                                 {"name": "seated_goal", "node_type": "Goal"}, # G3
                                 {"name": "standing_high_absent_modern_pnode", "node_type": "PNode"}] # Pn3.4
         Policy:
-            ### SX
-            -
-                name: skill_0_idle_policy #S0
-                class_name: edutainment_emdb.policies.PolicySkill0
-                parameters:
-                    neighbors: [{"name": "idle_expert_exercise_cnode", "node_type": "CNode"}, # C0 WM1 G1 Pn0
-                                {"name": "idle_amateur_exercise_cnode", "node_type": "CNode"}, # C0 WM2 G1 Pn0
-                                {"name": "idle_expert_awake_cnode", "node_type": "CNode"}, # C0 WM1 G2 Pn0
-                                {"name": "idle_amateur_awake_cnode", "node_type": "CNode"}, # C0 WM2 G2 Pn0
-                                {"name": "idle_expert_seated_cnode", "node_type": "CNode"}, # C0 WM1 G3 Pn0
-                                {"name": "idle_amateur_seated_cnode", "node_type": "CNode"}] # C0 WM1 G3 Pn0
-            -
-                name: skill_1_python_policy #S1
-                class_name: edutainment_emdb.policies.PolicySkill1
-                parameters:
-                    neighbors: [{"name": "python_errors_expert_cnode", "node_type": "CNode"}, # C1.1 WM1
-                                {"name": "python_errors_amateur_cnode", "node_type": "CNode"}] # C1.1 WM2
-            -
-                name: skill_2_evaluation_policy #S2
-                class_name: edutainment_emdb.policies.PolicySkill2
-                parameters:
-                    neighbors: [{"name": "evaluation_errors_expert_cnode", "node_type": "CNode"}, # C1.2 WM1
-                                {"name": "evaluation_errors_amateur_cnode", "node_type": "CNode"}] # C1.2 WM2
+            ### Skills selectable by novelty
             -
                 name: skill_3_teacher_policy #S3
                 class_name: edutainment_emdb.policies.PolicySkill3
@@ -753,7 +731,30 @@ LTM:
             ### Novelty
             -
                 name: novelty_policy
-                class_name: edutainment_emdb.novelty.PolicyNovelty # PolicyNovelty SHOULD BE THE LAST, AS IT SELECTS FROM THE LTM THE PREVIOUS POLICIES
+                class_name: edutainment_emdb.novelty.PolicyNovelty # PolicyNovelty SHOULD BE THE AFTER THE SELECTABLE POLICIES
                 parameters:
                     neighbors: [{"name": "novelty_cnode", "node_type": "CNode"}] # Novelty
                     ltm_id: ltm_0
+            ### Skills nonselectable by novelty
+            -
+                name: skill_0_idle_policy #S0
+                class_name: edutainment_emdb.policies.PolicySkill0
+                parameters:
+                    neighbors: [{"name": "idle_expert_exercise_cnode", "node_type": "CNode"}, # C0 WM1 G1 Pn0
+                                {"name": "idle_amateur_exercise_cnode", "node_type": "CNode"}, # C0 WM2 G1 Pn0
+                                {"name": "idle_expert_awake_cnode", "node_type": "CNode"}, # C0 WM1 G2 Pn0
+                                {"name": "idle_amateur_awake_cnode", "node_type": "CNode"}, # C0 WM2 G2 Pn0
+                                {"name": "idle_expert_seated_cnode", "node_type": "CNode"}, # C0 WM1 G3 Pn0
+                                {"name": "idle_amateur_seated_cnode", "node_type": "CNode"}] # C0 WM1 G3 Pn0
+            -
+                name: skill_1_python_policy #S1
+                class_name: edutainment_emdb.policies.PolicySkill1
+                parameters:
+                    neighbors: [{"name": "python_errors_expert_cnode", "node_type": "CNode"}, # C1.1 WM1
+                                {"name": "python_errors_amateur_cnode", "node_type": "CNode"}] # C1.1 WM2
+            -
+                name: skill_2_evaluation_policy #S2
+                class_name: edutainment_emdb.policies.PolicySkill2
+                parameters:
+                    neighbors: [{"name": "evaluation_errors_expert_cnode", "node_type": "CNode"}, # C1.2 WM1
+                                {"name": "evaluation_errors_amateur_cnode", "node_type": "CNode"}] # C1.2 WM2
