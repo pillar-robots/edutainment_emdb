@@ -156,11 +156,23 @@ LTM:
                   default_msg: std_msgs.msg.Float32
                   default_topic: /student/is_evaluation_high_used
             -
+                name: engaged_perception
+                class_name: edutainment_emdb.perceptions.EdutainmentPerception
+                parameters:
+                  default_msg: std_msgs.msg.Float32
+                  default_topic: /student/engaged
+            -
                 name: bored_perception
                 class_name: edutainment_emdb.perceptions.EdutainmentPerception
                 parameters:
                   default_msg: std_msgs.msg.Float32
                   default_topic: /student/bored
+            -
+                name: seated_perception
+                class_name: edutainment_emdb.perceptions.EdutainmentPerception
+                parameters:
+                  default_msg: std_msgs.msg.Float32
+                  default_topic: /student/seated
             -
                 name: standing_perception
                 class_name: edutainment_emdb.perceptions.EdutainmentPerception

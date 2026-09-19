@@ -156,11 +156,23 @@ LTM:
                   default_msg: std_msgs.msg.Float32
                   default_topic: /student/is_evaluation_high_used
             -
+                name: engaged_perception
+                class_name: edutainment_emdb.perceptions.EdutainmentPerception
+                parameters:
+                  default_msg: std_msgs.msg.Float32
+                  default_topic: /student/engaged
+            -
                 name: bored_perception
                 class_name: edutainment_emdb.perceptions.EdutainmentPerception
                 parameters:
                   default_msg: std_msgs.msg.Float32
                   default_topic: /student/bored
+            -
+                name: seated_perception
+                class_name: edutainment_emdb.perceptions.EdutainmentPerception
+                parameters:
+                  default_msg: std_msgs.msg.Float32
+                  default_topic: /student/seated
             -
                 name: standing_perception
                 class_name: edutainment_emdb.perceptions.EdutainmentPerception
@@ -235,33 +247,33 @@ LTM:
             ### DX.3
             -
                 name: student_seated_teacher_old_present_drive # D1.3
-                class_name: edutainment_emdb.drives.DriveExponentialOpo # DriveExponentialOpo: 1 active, 0 inactive (satisfied)
+                class_name: cognitive_nodes.drive.DriveExponential # DriveExponential: 0 active, 1 inactive (satisfied)
                 parameters:
-                    input_topic: /student/standing
+                    input_topic: /student/seated
                     input_msg: std_msgs.msg.Float32
                     min_eval: 0.8
                     neighbors: [{"name": "student_seated_teacher_old_present_purpose", "node_type": "RobotPurpose"}] # M1.3
             -
                 name: student_seated_teacher_modern_present_drive # D2.3
-                class_name: edutainment_emdb.drives.DriveExponentialOpo # DriveExponentialOpo: 1 active, 0 inactive (satisfied)
+                class_name: cognitive_nodes.drive.DriveExponential # DriveExponential: 0 active, 1 inactive (satisfied)
                 parameters:
-                    input_topic: /student/standing
+                    input_topic: /student/seated
                     input_msg: std_msgs.msg.Float32
                     min_eval: 0.8
                     neighbors: [{"name": "student_seated_teacher_modern_present_purpose", "node_type": "RobotPurpose"}] # M2.3
             -
                 name: student_seated_teacher_old_absent_drive # D3.3
-                class_name: edutainment_emdb.drives.DriveExponentialOpo # DriveExponentialOpo: 1 active, 0 inactive (satisfied)
+                class_name: cognitive_nodes.drive.DriveExponential # DriveExponential: 0 active, 1 inactive (satisfied)
                 parameters:
-                    input_topic: /student/standing
+                    input_topic: /student/seated
                     input_msg: std_msgs.msg.Float32
                     min_eval: 0.8
                     neighbors: [{"name": "student_seated_teacher_old_absent_purpose", "node_type": "RobotPurpose"}] # M3.3
             -
                 name: student_seated_teacher_modern_absent_drive # D4.3
-                class_name: edutainment_emdb.drives.DriveExponentialOpo # DriveExponentialOpo: 1 active, 0 inactive (satisfied)
+                class_name: cognitive_nodes.drive.DriveExponential # DriveExponential: 0 active, 1 inactive (satisfied)
                 parameters:
-                    input_topic: /student/standing
+                    input_topic: /student/seated
                     input_msg: std_msgs.msg.Float32
                     min_eval: 0.8
                     neighbors: [{"name": "student_seated_teacher_modern_absent_purpose", "node_type": "RobotPurpose"}]

@@ -18,7 +18,9 @@ TOPICS = [
     (Float32,   "evaluation_error_streak_perception", "/student/evaluation_error_streak", 0.0, 0.0, 1.0),
     (Float32,   "is_evaluation_low_used_perception", "/student/is_evaluation_low_used", 0.0, 0.0, 1.0),
     (Float32,   "is_evaluation_high_used_perception", "/student/is_evaluation_high_used", 0.0, 0.0, 1.0),
+    (Float32,   "engaged_perception", "/student/engaged", 0.0, 0.0, 1.0),
     (Float32,   "bored_perception", "/student/bored", 0.0, 0.0, 1.0),
+    (Float32,   "seated_perception", "/student/seated", 0.0, 0.0, 1.0),
     (Float32,   "standing_perception", "/student/standing", 0.0, 0.0, 1.0)
     ]
 
