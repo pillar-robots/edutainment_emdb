@@ -9,12 +9,16 @@ TEACHER_PRESENT_THRESHOLD = 1.0
 TEACHER_TYPE_UNDEFINED_THRESHOLD = 0.0
 TEACHER_TYPE_MODERN_THRESHOLD = 0.21 # To avoid rounding errors.
 TEACHER_TYPE_OLD_THRESHOLD = 0.8
-PYTHON_ERRORS_LOW_THRESHOLD = 0.5
-PYTHON_ERRORS_HIGH_THRESHOLD = 0.8
+PYTHON_ERRORS_LOW_THRESHOLD_WM1 = 0.3 # (2 % 6)/6 = 0.3333
+PYTHON_ERRORS_LOW_THRESHOLD_WM2 = 0.5 # (3 % 6)/6 = 0.5
+PYTHON_ERRORS_LOW_THRESHOLD_WM3 = 0.6 # (4 % 6)/6 = 0.6666
+PYTHON_ERRORS_HIGH_THRESHOLD = 0.8 # (5 % 6)/6 = 0.8333
 PYTHON_LOW_USED_THRESHOLD = 1.0
 PYTHON_HIGH_USED_THRESHOLD = 1.0
-EVALUATION_ERRORS_LOW_THRESHOLD = 0.5
-EVALUATION_ERRORS_HIGH_THRESHOLD = 0.8
+EVALUATION_ERRORS_LOW_THRESHOLD_WM1 = 0.3 # (2 % 6)/6 = 0.3333
+EVALUATION_ERRORS_LOW_THRESHOLD_WM2 = 0.5 # (3 % 6)/6 = 0.5
+EVALUATION_ERRORS_LOW_THRESHOLD_WM3 = 0.6 # (4 % 6)/6 = 0.6666
+EVALUATION_ERRORS_HIGH_THRESHOLD = 0.8 # (5 % 6)/6 = 0.8333
 EVALUATION_LOW_USED_THRESHOLD = 1.0
 EVALUATION_HIGH_USED_THRESHOLD = 1.0
 BORED_LOW_THRESHOLD = 0.5
@@ -36,7 +40,7 @@ class PNodeIdle(PNode): #Pn0
         self.activation.timestamp = self.get_clock().now().to_msg()
         return self.activation
 
-class PNodePythonErrors(PNode): #Pn1.1
+class PNodePythonErrors1(PNode): #Pn1.1.1
     """
     PNode that represents Python errors
     """
@@ -64,7 +68,7 @@ class PNodePythonErrors(PNode): #Pn1.1
 
             # Pn1.1: New Python error and Python errors >= low threshold and Python errors < high threshold
             if value != PYTHON_LOW_USED_THRESHOLD:
-                if value_2 >= PYTHON_ERRORS_LOW_THRESHOLD and value_2 < PYTHON_ERRORS_HIGH_THRESHOLD:
+                if value_2 >= PYTHON_ERRORS_LOW_THRESHOLD_WM1 and value_2 < PYTHON_ERRORS_HIGH_THRESHOLD:
                     self.activation.activation = 0.95
                     self.get_logger().debug(f"PNODE DEBUG: python_errors_pnode: {value}")
                 else:
@@ -75,7 +79,85 @@ class PNodePythonErrors(PNode): #Pn1.1
             self.activation.timestamp = self.get_clock().now().to_msg()
         return self.activation
 
-class PNodeEvaluationErrors(PNode): #Pn1.2
+class PNodePythonErrors2(PNode): #Pn1.1.2
+    """
+    PNode that represents Python errors
+    """
+    def __init__(self, name='python_errors_pnode', class_name='cognitive_nodes.pnode.PNode', space_class=None, space=None, history_size=100, **params):
+        super().__init__(name=name, class_name=class_name, space_class=space_class, space=space, history_size=history_size, **params)
+    def calculate_activation(self, perception=None, activation_list=None):
+        if activation_list!=None:
+            data = [activation_list[sensor]['data'] for sensor in activation_list]
+            if self.perception is None and len(data)>0:
+                self.perception = consolidate_containers(data, name="perception", container_type="perception")
+            elif len(data)==0: # Activation list may be empty when initializing the P-Node.
+                self.activation.activation = 0.0
+                self.activation.timestamp = self.get_clock().now().to_msg()
+                return self.activation
+            else:
+                consolidate_containers(data, write_container=self.perception)
+            perception = self.perception
+        activation_value = 0.0
+
+        if perception:
+            value_raw = perception.read().sel(features=["is_python_low_used_perception:data"]).values[-1] if "is_python_low_used_perception:data" in perception.feature_labels else 0.0
+            value_raw_2 = perception.read().sel(features=["python_error_streak_perception:data"]).values[-1] if "python_error_streak_perception:data" in perception.feature_labels else 0.0
+            value = round(float(value_raw), 1)
+            value_2 = round(float(value_raw_2), 1)
+
+            # Pn1.1: New Python error and Python errors >= low threshold and Python errors < high threshold
+            if value != PYTHON_LOW_USED_THRESHOLD:
+                if value_2 >= PYTHON_ERRORS_LOW_THRESHOLD_WM2 and value_2 < PYTHON_ERRORS_HIGH_THRESHOLD:
+                    self.activation.activation = 0.95
+                    self.get_logger().debug(f"PNODE DEBUG: python_errors_pnode: {value}")
+                else:
+                    self.activation.activation = 0.0
+            else:
+                self.activation.activation = 0.0
+            
+            self.activation.timestamp = self.get_clock().now().to_msg()
+        return self.activation
+
+class PNodePythonErrors3(PNode): #Pn1.1.3
+    """
+    PNode that represents Python errors
+    """
+    def __init__(self, name='python_errors_pnode', class_name='cognitive_nodes.pnode.PNode', space_class=None, space=None, history_size=100, **params):
+        super().__init__(name=name, class_name=class_name, space_class=space_class, space=space, history_size=history_size, **params)
+    def calculate_activation(self, perception=None, activation_list=None):
+        if activation_list!=None:
+            data = [activation_list[sensor]['data'] for sensor in activation_list]
+            if self.perception is None and len(data)>0:
+                self.perception = consolidate_containers(data, name="perception", container_type="perception")
+            elif len(data)==0: # Activation list may be empty when initializing the P-Node.
+                self.activation.activation = 0.0
+                self.activation.timestamp = self.get_clock().now().to_msg()
+                return self.activation
+            else:
+                consolidate_containers(data, write_container=self.perception)
+            perception = self.perception
+        activation_value = 0.0
+
+        if perception:
+            value_raw = perception.read().sel(features=["is_python_low_used_perception:data"]).values[-1] if "is_python_low_used_perception:data" in perception.feature_labels else 0.0
+            value_raw_2 = perception.read().sel(features=["python_error_streak_perception:data"]).values[-1] if "python_error_streak_perception:data" in perception.feature_labels else 0.0
+            value = round(float(value_raw), 1)
+            value_2 = round(float(value_raw_2), 1)
+
+            # Pn1.1: New Python error and Python errors >= low threshold and Python errors < high threshold
+            if value != PYTHON_LOW_USED_THRESHOLD:
+                if value_2 >= PYTHON_ERRORS_LOW_THRESHOLD_WM3 and value_2 < PYTHON_ERRORS_HIGH_THRESHOLD:
+                    self.activation.activation = 0.95
+                    self.get_logger().debug(f"PNODE DEBUG: python_errors_pnode: {value}")
+                else:
+                    self.activation.activation = 0.0
+            else:
+                self.activation.activation = 0.0
+            
+            self.activation.timestamp = self.get_clock().now().to_msg()
+        return self.activation
+
+class PNodeEvaluationErrors1(PNode): #Pn1.2.1
     """
     PNode that represents evaluation errors
     """
@@ -103,7 +185,85 @@ class PNodeEvaluationErrors(PNode): #Pn1.2
 
             # Pn1.2: New evaluation error and evaluation errors >= low threshold and evaluation errors < high threshold
             if value != EVALUATION_LOW_USED_THRESHOLD:
-                if value_2 >= EVALUATION_ERRORS_LOW_THRESHOLD and value_2 < EVALUATION_ERRORS_HIGH_THRESHOLD:
+                if value_2 >= EVALUATION_ERRORS_LOW_THRESHOLD_WM1 and value_2 < EVALUATION_ERRORS_HIGH_THRESHOLD:
+                    self.activation.activation = 0.95
+                    self.get_logger().debug(f"PNODE DEBUG: evaluation_errors_pnode: {value}")
+                else:
+                    self.activation.activation = 0.0
+            else:
+                self.activation.activation = 0.0
+            
+            self.activation.timestamp = self.get_clock().now().to_msg()
+        return self.activation
+
+class PNodeEvaluationErrors2(PNode): #Pn1.2.2
+    """
+    PNode that represents evaluation errors
+    """
+    def __init__(self, name='evaluation_errors_pnode', class_name='cognitive_nodes.pnode.PNode', space_class=None, space=None, history_size=100, **params):
+        super().__init__(name=name, class_name=class_name, space_class=space_class, space=space, history_size=history_size, **params)
+    def calculate_activation(self, perception=None, activation_list=None):
+        if activation_list!=None:
+            data = [activation_list[sensor]['data'] for sensor in activation_list]
+            if self.perception is None and len(data)>0:
+                self.perception = consolidate_containers(data, name="perception", container_type="perception")
+            elif len(data)==0: # Activation list may be empty when initializing the P-Node.
+                self.activation.activation = 0.0
+                self.activation.timestamp = self.get_clock().now().to_msg()
+                return self.activation
+            else:
+                consolidate_containers(data, write_container=self.perception)
+            perception = self.perception
+        activation_value = 0.0
+
+        if perception:
+            value_raw = perception.read().sel(features=["is_evaluation_low_used_perception:data"]).values[-1] if "is_evaluation_low_used_perception:data" in perception.feature_labels else 0.0
+            value_raw_2 = perception.read().sel(features=["evaluation_error_streak_perception:data"]).values[-1] if "evaluation_error_streak_perception:data" in perception.feature_labels else 0.0
+            value = round(float(value_raw), 1)
+            value_2 = round(float(value_raw_2), 1)
+
+            # Pn1.2: New evaluation error and evaluation errors >= low threshold and evaluation errors < high threshold
+            if value != EVALUATION_LOW_USED_THRESHOLD:
+                if value_2 >= EVALUATION_ERRORS_LOW_THRESHOLD_WM2 and value_2 < EVALUATION_ERRORS_HIGH_THRESHOLD:
+                    self.activation.activation = 0.95
+                    self.get_logger().debug(f"PNODE DEBUG: evaluation_errors_pnode: {value}")
+                else:
+                    self.activation.activation = 0.0
+            else:
+                self.activation.activation = 0.0
+            
+            self.activation.timestamp = self.get_clock().now().to_msg()
+        return self.activation
+
+class PNodeEvaluationErrors3(PNode): #Pn1.2.3
+    """
+    PNode that represents evaluation errors
+    """
+    def __init__(self, name='evaluation_errors_pnode', class_name='cognitive_nodes.pnode.PNode', space_class=None, space=None, history_size=100, **params):
+        super().__init__(name=name, class_name=class_name, space_class=space_class, space=space, history_size=history_size, **params)
+    def calculate_activation(self, perception=None, activation_list=None):
+        if activation_list!=None:
+            data = [activation_list[sensor]['data'] for sensor in activation_list]
+            if self.perception is None and len(data)>0:
+                self.perception = consolidate_containers(data, name="perception", container_type="perception")
+            elif len(data)==0: # Activation list may be empty when initializing the P-Node.
+                self.activation.activation = 0.0
+                self.activation.timestamp = self.get_clock().now().to_msg()
+                return self.activation
+            else:
+                consolidate_containers(data, write_container=self.perception)
+            perception = self.perception
+        activation_value = 0.0
+
+        if perception:
+            value_raw = perception.read().sel(features=["is_evaluation_low_used_perception:data"]).values[-1] if "is_evaluation_low_used_perception:data" in perception.feature_labels else 0.0
+            value_raw_2 = perception.read().sel(features=["evaluation_error_streak_perception:data"]).values[-1] if "evaluation_error_streak_perception:data" in perception.feature_labels else 0.0
+            value = round(float(value_raw), 1)
+            value_2 = round(float(value_raw_2), 1)
+
+            # Pn1.2: New evaluation error and evaluation errors >= low threshold and evaluation errors < high threshold
+            if value != EVALUATION_LOW_USED_THRESHOLD:
+                if value_2 >= EVALUATION_ERRORS_LOW_THRESHOLD_WM3 and value_2 < EVALUATION_ERRORS_HIGH_THRESHOLD:
                     self.activation.activation = 0.95
                     self.get_logger().debug(f"PNODE DEBUG: evaluation_errors_pnode: {value}")
                 else:

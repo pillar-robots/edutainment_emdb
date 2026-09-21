@@ -220,8 +220,8 @@ LTM:
                     space_class: cognitive_nodes.space.ActivatedDummySpace
             ### Pn1.X
             -
-                name: python_errors_pnode # Pn1.1
-                class_name: edutainment_emdb.pnodes.PNodePythonErrors
+                name: python_errors_expert_pnode # Pn1.1.1
+                class_name: edutainment_emdb.pnodes.PNodePythonErrors1
                 parameters:
                     space_class: cognitive_nodes.space.ActivatedDummySpace
                     neighbors: [{"name": "is_python_low_used_perception", "node_type": "Perception"},
@@ -229,7 +229,7 @@ LTM:
         CNode:
             ### C0
             -
-                name: idle_expert_cnode # C0 WM1
+                name: idle_python_errors_expert_cnode # C0 WM1 G1 Pn0
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
                     neighbors: [{"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
@@ -242,13 +242,13 @@ LTM:
                 parameters:
                     neighbors: [{"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
                                 {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
-                                {"name": "python_errors_pnode", "node_type": "PNode"}] # Pn1.1
+                                {"name": "python_errors_expert_pnode", "node_type": "PNode"}] # Pn1.1.1
         Policy:
             -
-                name: skill_0_idle_policy #S0
+                name: skill_0_idle_python_errors_policy #S0 # Divided in two, so we can exclude one of them on the novelty policy
                 class_name: edutainment_emdb.policies.PolicySkill0
                 parameters:
-                    neighbors: [{"name": "idle_expert_cnode", "node_type": "CNode"}] # C0 WM1
+                    neighbors: [{"name": "idle_python_errors_expert_cnode", "node_type": "CNode"}] # C0 WM1 G1 Pn0
             -
                 name: skill_1_python_policy #S1
                 class_name: edutainment_emdb.policies.PolicySkill1
@@ -258,4 +258,4 @@ LTM:
                 name: skill_2_evaluation_policy #S2
                 class_name: edutainment_emdb.policies.PolicySkill2
                 parameters:
-                    neighbors: [ ]
+                    neighbors: [{"name": "evaluation_errors_expert_cnode", "node_type": "CNode"}] # C1.2 WM1
