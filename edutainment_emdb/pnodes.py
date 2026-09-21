@@ -66,7 +66,7 @@ class PNodePythonErrors1(PNode): #Pn1.1.1
             value = round(float(value_raw), 1)
             value_2 = round(float(value_raw_2), 1)
 
-            # Pn1.1: New Python error and Python errors >= low threshold and Python errors < high threshold
+            # Pn1.1.1: New Python error and Python errors >= low threshold and Python errors < high threshold
             if value != PYTHON_LOW_USED_THRESHOLD:
                 if value_2 >= PYTHON_ERRORS_LOW_THRESHOLD_WM1 and value_2 < PYTHON_ERRORS_HIGH_THRESHOLD:
                     self.activation.activation = 0.95
@@ -105,7 +105,7 @@ class PNodePythonErrors2(PNode): #Pn1.1.2
             value = round(float(value_raw), 1)
             value_2 = round(float(value_raw_2), 1)
 
-            # Pn1.1: New Python error and Python errors >= low threshold and Python errors < high threshold
+            # Pn1.1.2: New Python error and Python errors >= low threshold and Python errors < high threshold
             if value != PYTHON_LOW_USED_THRESHOLD:
                 if value_2 >= PYTHON_ERRORS_LOW_THRESHOLD_WM2 and value_2 < PYTHON_ERRORS_HIGH_THRESHOLD:
                     self.activation.activation = 0.95
@@ -144,7 +144,7 @@ class PNodePythonErrors3(PNode): #Pn1.1.3
             value = round(float(value_raw), 1)
             value_2 = round(float(value_raw_2), 1)
 
-            # Pn1.1: New Python error and Python errors >= low threshold and Python errors < high threshold
+            # Pn1.1.3: New Python error and Python errors >= low threshold and Python errors < high threshold
             if value != PYTHON_LOW_USED_THRESHOLD:
                 if value_2 >= PYTHON_ERRORS_LOW_THRESHOLD_WM3 and value_2 < PYTHON_ERRORS_HIGH_THRESHOLD:
                     self.activation.activation = 0.95
