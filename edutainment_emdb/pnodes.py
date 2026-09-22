@@ -9,15 +9,15 @@ TEACHER_PRESENT_THRESHOLD = 1.0
 TEACHER_TYPE_UNDEFINED_THRESHOLD = 0.0
 TEACHER_TYPE_MODERN_THRESHOLD = 0.21 # To avoid rounding errors.
 TEACHER_TYPE_OLD_THRESHOLD = 0.8
-PYTHON_ERRORS_LOW_THRESHOLD_WM1 = 0.3 # (2 % 6)/6 = 0.3333
-PYTHON_ERRORS_LOW_THRESHOLD_WM2 = 0.5 # (3 % 6)/6 = 0.5
-PYTHON_ERRORS_LOW_THRESHOLD_WM3 = 0.6 # (4 % 6)/6 = 0.6666
+PYTHON_ERRORS_LOW_THRESHOLD_WM1 = 0.6 # (4 % 6)/6 = 0.6666
+PYTHON_ERRORS_LOW_THRESHOLD_WM2 = 0.3 # (2 % 6)/6 = 0.3333
+PYTHON_ERRORS_LOW_THRESHOLD_WM3 = 0.5 # (3 % 6)/6 = 0.5
 PYTHON_ERRORS_HIGH_THRESHOLD = 0.8 # (5 % 6)/6 = 0.8333
 PYTHON_LOW_USED_THRESHOLD = 1.0
 PYTHON_HIGH_USED_THRESHOLD = 1.0
-EVALUATION_ERRORS_LOW_THRESHOLD_WM1 = 0.3 # (2 % 6)/6 = 0.3333
-EVALUATION_ERRORS_LOW_THRESHOLD_WM2 = 0.5 # (3 % 6)/6 = 0.5
-EVALUATION_ERRORS_LOW_THRESHOLD_WM3 = 0.6 # (4 % 6)/6 = 0.6666
+EVALUATION_ERRORS_LOW_THRESHOLD_WM1 = 0.6 # (4 % 6)/6 = 0.6666
+EVALUATION_ERRORS_LOW_THRESHOLD_WM2 = 0.3 # (2 % 6)/6 = 0.3333
+EVALUATION_ERRORS_LOW_THRESHOLD_WM3 = 0.5 # (3 % 6)/6 = 0.5
 EVALUATION_ERRORS_HIGH_THRESHOLD = 0.8 # (5 % 6)/6 = 0.8333
 EVALUATION_LOW_USED_THRESHOLD = 1.0
 EVALUATION_HIGH_USED_THRESHOLD = 1.0
@@ -382,7 +382,7 @@ class PNodeBoredHigh(PNode): # Pn2.3
             value_3 = round(float(value_raw_3), 1)
 
             # Pn2.3: USER2 & any USER present & student not engaged >= high threshold
-            if TEACHER_TYPE_UNDEFINED_THRESHOLD < value <= TEACHER_TYPE_MODERN_THRESHOLD and value_2 == TEACHER_PRESENT_THRESHOLD and value_3 >= BORED_HIGH_THRESHOLD:
+            if TEACHER_TYPE_UNDEFINED_THRESHOLD <= value <= TEACHER_TYPE_MODERN_THRESHOLD and value_2 == TEACHER_PRESENT_THRESHOLD and value_3 >= BORED_HIGH_THRESHOLD:
                 self.activation.activation = 0.97
                 self.get_logger().debug(f"PNODE DEBUG: bored_high_pnode: {value}")
             else:
@@ -528,7 +528,7 @@ class PNodeStandingHighAbsentModern(PNode): # Pn3.4
             value_3 = round(float(value_raw_3), 1)
 
             # Pn3.4: USER2 & not USER present & student standing up >= high threshold
-            if TEACHER_TYPE_UNDEFINED_THRESHOLD < value <= TEACHER_TYPE_MODERN_THRESHOLD and value_2 == TEACHER_ABSENT_THRESHOLD and value_3 >= STANDING_HIGH_THRESHOLD:
+            if TEACHER_TYPE_UNDEFINED_THRESHOLD <= value <= TEACHER_TYPE_MODERN_THRESHOLD and value_2 == TEACHER_ABSENT_THRESHOLD and value_3 >= STANDING_HIGH_THRESHOLD:
                 self.activation.activation = 0.98
                 self.get_logger().debug(f"PNODE DEBUG: standing_high_absent_modern_pnode: {value}")
             else:

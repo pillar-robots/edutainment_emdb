@@ -117,7 +117,7 @@ class EdutainmentStudentAmateur(WorldModel):
             value = round(float(value_raw), 1)
 
             # WM 2
-            if STUDENT_TYPE_UNDEFINED_THRESHOLD < value <= STUDENT_TYPE_AMATEUR_THRESHOLD:
+            if STUDENT_TYPE_UNDEFINED_THRESHOLD <= value <= STUDENT_TYPE_AMATEUR_THRESHOLD:
                 activation_value = 1.0
             else:
                 activation_value = 0.0
