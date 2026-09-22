@@ -496,6 +496,6 @@ LTM:
                 name: novelty_policy
                 class_name: edutainment_emdb.novelty.PolicyNovelty # PolicyNovelty SHOULD AFTER THE SELECTABLE POLICIES
                 parameters:
-                    exclude_list: ["skill_0_idle_python_errors_policy", "skill_0_idle_bored_standing_policy", "skill_1_python_policy", "skill_2_evaluation_policy", "skill_3_teacher_errors_policy"]
+                    exclude_list: ["skill_0_idle_python_errors_policy", "skill_1_python_policy", "skill_2_evaluation_policy", "skill_3_teacher_errors_policy"]
                     neighbors: [{"name": "novelty_cnode", "node_type": "CNode"}] # Novelty
                     ltm_id: ltm_0
