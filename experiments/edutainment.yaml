@@ -576,13 +576,13 @@ LTM:
                     neighbors: [{"name": "AMATEUR_WM", "node_type": "WorldModel"}, # WM2
                                 {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
                                 {"name": "idle_pnode", "node_type": "PNode"}] # Pn0
-            -
-                name: idle_python_errors_general_cnode # C0 WM3 G1 Pn0
-                class_name: cognitive_nodes.cnode.CNode
-                parameters:
-                    neighbors: [{"name": "GENERAL_WM", "node_type": "WorldModel"}, # WM3
-                                {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
-                                {"name": "idle_pnode", "node_type": "PNode"}] # Pn0
+            # -
+            #     name: idle_python_errors_general_cnode # C0 WM3 G1 Pn0 # Commented: instead of idle, do novelty.
+            #     class_name: cognitive_nodes.cnode.CNode
+            #     parameters:
+            #         neighbors: [{"name": "GENERAL_WM", "node_type": "WorldModel"}, # WM3
+            #                     {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
+            #                     {"name": "idle_pnode", "node_type": "PNode"}] # Pn0
             -
                 name: python_errors_expert_cnode # C1.1 WM1
                 class_name: cognitive_nodes.cnode.CNode
@@ -767,8 +767,8 @@ LTM:
                 class_name: edutainment_emdb.policies.PolicySkill0
                 parameters:
                     neighbors: [{"name": "idle_python_errors_expert_cnode", "node_type": "CNode"}, # C0 WM1 G1 Pn0
-                                {"name": "idle_python_errors_amateur_cnode", "node_type": "CNode"}, # C0 WM2 G1 Pn0
-                                {"name": "idle_python_errors_general_cnode", "node_type": "CNode"}] # C0 WM3 G1 Pn0
+                                {"name": "idle_python_errors_amateur_cnode", "node_type": "CNode"}] #, # C0 WM2 G1 Pn0
+                                #{"name": "idle_python_errors_general_cnode", "node_type": "CNode"}] # C0 WM3 G1 Pn0 # Commented: instead of idle, do novelty.
             -
                 name: skill_0_idle_bored_standing_policy #S0
                 class_name: edutainment_emdb.policies.PolicySkill0
