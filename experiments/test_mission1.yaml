@@ -446,6 +446,13 @@ LTM:
                     neighbors: [{"name": "AMATEUR_WM", "node_type": "WorldModel"}, # WM2
                                 {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
                                 {"name": "python_evaluation_errors_present_pnode", "node_type": "PNode"}] # Pn1.3
+            -
+                name: python_evaluation_errors_present_general_cnode # C1.3 WM3
+                class_name: cognitive_nodes.cnode.CNode
+                parameters:
+                    neighbors: [{"name": "GENERAL_WM", "node_type": "WorldModel"}, # WM3
+                                {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
+                                {"name": "python_evaluation_errors_present_pnode", "node_type": "PNode"}] # Pn1.3
         Policy:
             ### SX
             -
@@ -482,7 +489,8 @@ LTM:
                 class_name: edutainment_emdb.policies.PolicySkill3
                 parameters:
                     neighbors: [{"name": "python_evaluation_errors_present_expert_cnode", "node_type": "CNode"}, # C1.3 WM1
-                                {"name": "python_evaluation_errors_present_amateur_cnode", "node_type": "CNode"}] # C1.3 WM2
+                                {"name": "python_evaluation_errors_present_amateur_cnode", "node_type": "CNode"}, # C1.3 WM2
+                                {"name": "python_evaluation_errors_present_general_cnode", "node_type": "CNode"}] # C1.3 WM3
             # -
             #     name: skill_3_teacher_bored_standing_policy #S3
             #     class_name: edutainment_emdb.policies.PolicySkill3
