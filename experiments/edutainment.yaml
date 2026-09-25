@@ -198,7 +198,7 @@ LTM:
         RobotPurpose: 
             ### Novelty
             - 
-                name: novelty_need
+                name: novelty_need # NN
                 class_name: cognitive_nodes.robot_purpose.RobotPurpose
                 parameters:
                     weight: 0.1
@@ -306,7 +306,7 @@ LTM:
         Drive:
             ### Novelty
             -
-                name: novelty_drive
+                name: novelty_drive # DN
                 class_name: cognitive_nodes.novelty.DriveNovelty
                 parameters:
                     neighbors: [{"name": "novelty_need", "node_type": "RobotPurpose"}]
@@ -412,7 +412,7 @@ LTM:
         Goal:
             ### Novelty
             -
-                name: novelty_goal
+                name: novelty_goal # GN
                 class_name: cognitive_nodes.goal.GoalMotiven
                 parameters:
                     neighbors: [{"name": "novelty_drive", "node_type": "Drive"}]
@@ -444,7 +444,7 @@ LTM:
         PNode:
             ### Novelty
             -
-                name: novelty_pnode
+                name: novelty_pnode # PnN
                 class_name: dummy_nodes.dummy_pnodes.ActivatedDummyPNode
                 parameters:
                     space_class: cognitive_nodes.space.ActivatedDummySpace
@@ -555,7 +555,7 @@ LTM:
         CNode:
             ### Novelty
             -
-                name: novelty_cnode
+                name: novelty_cnode # CN
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
                     neighbors: [{"name": "GENERAL_WM", "node_type": "WorldModel"}, # WM3
@@ -584,42 +584,42 @@ LTM:
             #                     {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
             #                     {"name": "idle_pnode", "node_type": "PNode"}] # Pn0
             -
-                name: python_errors_expert_cnode # C1.1 WM1
+                name: python_errors_expert_cnode # C1.1.1 WM1
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
                     neighbors: [{"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
                                 {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
                                 {"name": "python_errors_expert_pnode", "node_type": "PNode"}] # Pn1.1.1
             -
-                name: python_errors_amateur_cnode # C1.1 WM2
+                name: python_errors_amateur_cnode # C1.1.2 WM2
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
                     neighbors: [{"name": "AMATEUR_WM", "node_type": "WorldModel"}, # WM2
                                 {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
                                 {"name": "python_errors_amateur_pnode", "node_type": "PNode"}] # Pn1.1.2
             -
-                name: python_errors_general_cnode # C1.1 WM3
+                name: python_errors_general_cnode # C1.1.3 WM3
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
                     neighbors: [{"name": "GENERAL_WM", "node_type": "WorldModel"}, # WM3
                                 {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
                                 {"name": "python_errors_general_pnode", "node_type": "PNode"}] # Pn1.1.3
             -
-                name: evaluation_errors_expert_cnode # C1.2 WM1
+                name: evaluation_errors_expert_cnode # C1.2.1 WM1
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
                     neighbors: [{"name": "EXPERT_WM", "node_type": "WorldModel"}, # WM1
                                 {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
                                 {"name": "evaluation_errors_expert_pnode", "node_type": "PNode"}] # Pn1.2.1
             -
-                name: evaluation_errors_amateur_cnode # C1.2 WM2
+                name: evaluation_errors_amateur_cnode # C1.2.2 WM2
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
                     neighbors: [{"name": "AMATEUR_WM", "node_type": "WorldModel"}, # WM2
                                 {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
                                 {"name": "evaluation_errors_amateur_pnode", "node_type": "PNode"}] # Pn1.2.2
             -
-                name: evaluation_errors_general_cnode # C1.2 WM3
+                name: evaluation_errors_general_cnode # C1.2.1 WM3
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
                     neighbors: [{"name": "GENERAL_WM", "node_type": "WorldModel"}, # WM3
@@ -781,16 +781,16 @@ LTM:
                 name: skill_1_python_policy #S1
                 class_name: edutainment_emdb.policies.PolicySkill1
                 parameters:
-                    neighbors: [{"name": "python_errors_expert_cnode", "node_type": "CNode"}, # C1.1 WM1
-                                {"name": "python_errors_amateur_cnode", "node_type": "CNode"}, # C1.1 WM2
-                                {"name": "python_errors_general_cnode", "node_type": "CNode"}] # C1.1 WM3
+                    neighbors: [{"name": "python_errors_expert_cnode", "node_type": "CNode"}, # C1.1.1 WM1
+                                {"name": "python_errors_amateur_cnode", "node_type": "CNode"}, # C1.1.2 WM2
+                                {"name": "python_errors_general_cnode", "node_type": "CNode"}] # C1.1.3 WM3
             -
                 name: skill_2_evaluation_policy #S2
                 class_name: edutainment_emdb.policies.PolicySkill2
                 parameters:
-                    neighbors: [{"name": "evaluation_errors_expert_cnode", "node_type": "CNode"}, # C1.2 WM1
-                                {"name": "evaluation_errors_amateur_cnode", "node_type": "CNode"}, # C1.2 WM2
-                                {"name": "evaluation_errors_general_cnode", "node_type": "CNode"}] # C1.2 WM3
+                    neighbors: [{"name": "evaluation_errors_expert_cnode", "node_type": "CNode"}, # C1.2.1 WM1
+                                {"name": "evaluation_errors_amateur_cnode", "node_type": "CNode"}, # C1.2.2 WM2
+                                {"name": "evaluation_errors_general_cnode", "node_type": "CNode"}] # C1.2.3 WM3
             -
                 name: skill_3_teacher_errors_policy #S3 # Divided in two, so we can exclude one of them on the novelty policy
                 class_name: edutainment_emdb.policies.PolicySkill3
@@ -847,7 +847,7 @@ LTM:
                     neighbors: []
             ### Novelty
             -
-                name: novelty_policy
+                name: novelty_policy #SN
                 class_name: edutainment_emdb.novelty.PolicyNovelty # PolicyNovelty SHOULD AFTER THE SELECTABLE POLICIES
                 parameters:
                     exclude_list: ["skill_0_idle_python_errors_policy", "skill_1_python_policy", "skill_2_evaluation_policy", "skill_3_teacher_errors_policy"]
