@@ -619,7 +619,7 @@ LTM:
                                 {"name": "exercise_finished_goal", "node_type": "Goal"}, # G1
                                 {"name": "evaluation_errors_amateur_pnode", "node_type": "PNode"}] # Pn1.2.2
             -
-                name: evaluation_errors_general_cnode # C1.2.1 WM3
+                name: evaluation_errors_general_cnode # C1.2.3 WM3
                 class_name: cognitive_nodes.cnode.CNode
                 parameters:
                     neighbors: [{"name": "GENERAL_WM", "node_type": "WorldModel"}, # WM3
