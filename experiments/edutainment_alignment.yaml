@@ -971,7 +971,9 @@ LTM:
                 name: skill_5_break_policy #S5
                 class_name: edutainment_emdb.policies.PolicySkill5
                 parameters:
-                    neighbors: [{"name": "bored_low_amateur_cnode", "node_type": "CNode"}] # C2.2 WM2
+                    neighbors: [{"name": "bored_low_amateur_cnode", "node_type": "CNode"}, # C2.2 WM2
+                                {"name": "standing_high_absent_new_expert_cnode", "node_type": "CNode"},
+                                {"name": "standing_high_absent_new_amateur_cnode", "node_type": "CNode"}]
             -
                 name: skill_6_video_policy #S6
                 class_name: edutainment_emdb.policies.PolicySkill6
