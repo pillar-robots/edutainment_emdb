@@ -536,3 +536,40 @@ class PNodeStandingHighAbsentModern(PNode): # Pn3.4
             
             self.activation.timestamp = self.get_clock().now().to_msg()
         return self.activation
+
+class PNodeStandingHighAbsentNew(PNode):
+    """
+    PNode that represents the student standing for a long time with a new teacher absent
+    """
+    def __init__(self, name='standing_high_absent_new_pnode', class_name='cognitive_nodes.pnode.PNode', space_class=None, space=None, history_size=100, **params):
+        super().__init__(name=name, class_name=class_name, space_class=space_class, space=space, history_size=history_size, **params)
+    def calculate_activation(self, perception=None, activation_list=None):
+        if activation_list!=None:
+            data = [activation_list[sensor]['data'] for sensor in activation_list]
+            if self.perception is None and len(data)>0:
+                self.perception = consolidate_containers(data, name="perception", container_type="perception")
+            elif len(data)==0: # Activation list may be empty when initializing the P-Node.
+                self.activation.activation = 0.0
+                self.activation.timestamp = self.get_clock().now().to_msg()
+                return self.activation
+            else:
+                consolidate_containers(data, write_container=self.perception)
+            perception = self.perception
+        activation_value = 0.0
+
+        if perception:
+            value_raw = perception.read().sel(features=["teacher_type_perception:data"]).values[-1] if "teacher_type_perception:data" in perception.feature_labels else 0.0
+            value_raw_2 = perception.read().sel(features=["teacher_present_perception:data"]).values[-1] if "teacher_present_perception:data" in perception.feature_labels else 0.0
+            value_raw_3 = perception.read().sel(features=["standing_perception:data"]).values[-1] if "standing_perception:data" in perception.feature_labels else 0.0
+            value = round(float(value_raw), 1)
+            value_2 = round(float(value_raw_2), 1)
+            value_3 = round(float(value_raw_3), 1)
+
+            if TEACHER_TYPE_MODERN_THRESHOLD < value < TEACHER_TYPE_OLD_THRESHOLD and value_2 == TEACHER_ABSENT_THRESHOLD and value_3 >= STANDING_HIGH_THRESHOLD:
+                self.activation.activation = 0.98
+                self.get_logger().debug(f"PNODE DEBUG: standing_high_absent_modern_pnode: {value}")
+            else:
+                self.activation.activation = 0.0
+            
+            self.activation.timestamp = self.get_clock().now().to_msg()
+        return self.activation
