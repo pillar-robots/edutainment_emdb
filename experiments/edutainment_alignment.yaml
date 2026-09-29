@@ -328,11 +328,11 @@ LTM:
                     purpose_type: 'Mission'
                     terminal: False
             -
-                name: student_seated_teacher_new_present_purpose # M3.3
+                name: student_seated_teacher_new_present_purpose
                 class_name: cognitive_nodes.robot_purpose.RobotPurpose
                 parameters:
                     weight: 1.0 #0.9
-                    drive_id: 'student_seated_teacher_new_present_drive' # D3.3
+                    drive_id: 'student_seated_teacher_new_present_drive'
                     purpose_type: 'Mission'
                     terminal: False
             -
@@ -559,8 +559,10 @@ LTM:
                 parameters:
                     neighbors: [{"name": "student_seated_teacher_old_present_drive", "node_type": "Drive"}, #D1.3
                                 {"name": "student_seated_teacher_modern_present_drive", "node_type": "Drive"}, #D2.3
+                                {"name": "student_seated_teacher_new_present_drive", "node_type": "Drive"},
                                 {"name": "student_seated_teacher_old_absent_drive", "node_type": "Drive"}, #D3.3
-                                {"name": "student_seated_teacher_modern_absent_drive", "node_type": "Drive"}] #D4.3
+                                {"name": "student_seated_teacher_modern_absent_drive", "node_type": "Drive"}, #D4.3
+                                {"name": "student_seated_teacher_new_absent_drive", "node_type": "Drive"}]
         PNode:
             ### Novelty
             -
