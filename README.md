@@ -1,6 +1,6 @@
 # edutainment_emdb
 
-e-MDB experiment for the edutainmet use case for the PILLAR project.
+e-MDB experiment for the edutainment use case for the PILLAR project.
 
 ## Installation
 
