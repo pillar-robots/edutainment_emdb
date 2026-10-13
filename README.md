@@ -17,6 +17,7 @@ git clone https://github.com/pillar-robots/edutainment_emdb.git
 ```bash
 source /opt/ros/humble/setup.bash
 cd ~/wp8_emdb/
+source install/setup.bash
 colcon build --packages-select edutainment_emdb --symlink-install
 source install/setup.bash
 ```
